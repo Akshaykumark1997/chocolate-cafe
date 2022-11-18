@@ -1,0 +1,45 @@
+<%- include('../partials/userPartial.ejs') %>
+<section>
+  <div class="container">
+    <div class="row d-flex align-items-center justify-content-center">
+      <div
+        class="col-md-6 col-xl-6 d-flex flex-column justify-content-center"
+        style="background-color: #57423f; width: 660px; height: 610px"
+      >
+        <div class="align-self-center text-center">
+          <h2 class="text-light">&nbsp; New To Our Website?</h2>
+          <h5 class="text-light">
+            Get access to your orders ,wishlist <br />and recommandations
+          </h5>
+          <a href="/signup"><button type="button" class="btn border border-light text-light">
+            Create an Account
+          </button></a>
+        </div>
+      </div>
+      <div class="col-md-6 col-xl-6 mt-5 px-5">
+        <form>
+          <div class="form-outline mb-4">
+            <input
+              type="email"
+              id="form1Example13"
+              class="form-control form-control-lg" placeholder="email"
+            />
+            <label class="form-label" for="form1Example13"></label>
+          </div>
+          <div class="form-outline mb-4">
+            <input
+              type="password"
+              id="form1Example23"
+              class="form-control form-control-lg" placeholder="Password"
+            />
+            <label class="form-label" for="form1Example23"></label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+             Login
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('../partials/user-footer.ejs') %>
