@@ -17,40 +17,50 @@
         </div>
       </div>
       <div class="col-md-6 col-xl-6 mt-5 px-5">
-        <form>
+        <form  action="/signup"
+                    method="post"
+                    id="form"  onsubmit="return checkLoginForm(this);">
           <div class="form-outline mb-4">
             <input
-              type="email"
-              id="form1Example13"
+              type="text"
+              id="username"
+              name="username"
               class="form-control form-control-lg" placeholder="username"
             />
             <label class="form-label" for="form1Example13"></label>
+            <p id="nameError" style="color: red"></p>
           </div>
           <div class="form-outline mb-4">
             <input
-              type="password"
-              id="form1Example23"
-              class="form-control form-control-lg" placeholder="email id"
+              type="email"
+              id="email"
+              name="email"
+              class="form-control form-control-lg" placeholder="email"
             />
             <label class="form-label" for="form1Example23"></label>
+            <p id="emailError" style="color: red"></p>
           </div>
            <div class="form-outline mb-4">
             <input
               type="password"
-              id="form1Example23"
+              id="password" name="password"
               class="form-control form-control-lg" placeholder="Password"
             />
             <label class="form-label" for="form1Example23"></label>
+            <p id="passwordError" style="color: red"></p>
           </div>
           <div class="form-outline mb-4">
             <input
               type="password"
-              id="form1Example23"
+              id="confirmpassword" name="confirmpassword"
               class="form-control form-control-lg" placeholder="Confirm Password"
             />
             <label class="form-label" for="form1Example23"></label>
+            <% if(locals.err_message){%>
+                        <p class="text-danger"><%=err_message%></p>
+                        <%}%>
           </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">
+        <button type="submit" value="submit" class="btn btn-primary btn-lg btn-block">
             Sign in
           </button>
         </form>
@@ -58,4 +68,5 @@
     </div>
   </div>
 </section>
+<script src="/user/js/main.js"></script>
 <%- include('../partials/user-footer.ejs') %>
