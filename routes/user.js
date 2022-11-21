@@ -6,4 +6,7 @@ router.get('/',userLogin.getLogin);
 // router.get('/signup',userLogin.signup);
 // router.post('/signup',userLogin.signup);
 router.route('/signup').get(userLogin.getSignup).post(userLogin.postSignup);
+router.get('/products',(req,res)=>{
+    res.render('user/products');
+})
 module.exports = router;

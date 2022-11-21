@@ -26,3 +26,4 @@ mongoose
 app.set("views", "./views");
 // app.use('/admin',adminRouter);
 app.use("/", userRouter);
+app.use('/products',userRouter);
