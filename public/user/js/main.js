@@ -4,6 +4,7 @@ function checkLoginForm(form) {
   let username = document.getElementById("username");
   let email = document.getElementById("email");
   let password = document.getElementById("password");
+  let mobile = document.getElementById("mobile");
 
   var regex = /^[a-zA-Z\s]+$/;
   if (username.value == "") {
@@ -28,6 +29,11 @@ function checkLoginForm(form) {
     document.getElementById("EmailError").innerHTML =
       "please enter a vaild email";
     email.focus();
+    return false;
+  }
+  if(mobile.value == ""){
+    document.getElementById("mobileerror").innerHTML = "please enter your mobile number"
+    mobile.focus();
     return false;
   }
   if (password.value == "") {

@@ -12,6 +12,6 @@ module.exports = {
         "ecmaVersion": "latest"
     },
     "rules": {
-        eslintno-async-promise-executor
+        
     }
 }

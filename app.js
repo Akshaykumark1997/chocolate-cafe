@@ -2,7 +2,10 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
-// const adminRouter = require('./routes/admin');
+const adminRouter = require('./routes/admin');
+const sessions = require("express-session");
+const cookieParser = require("cookie-parser");
+
 
 const app = express();
 app.use(express.json());
@@ -10,6 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use("/image", express.static(path.join(__dirname + "public/user/image")));
 app.set("view engine", "ejs");
+
+app.use(cookieParser());
 mongoose
   .connect("mongodb://localhost:27017/Chocolate_Cafe", {
     useNewUrlParser: true,
@@ -23,7 +28,22 @@ mongoose
   })
   .catch((err) => console.log("error" + err));
 
-app.set("views", "./views");
-// app.use('/admin',adminRouter);
+app.use(
+  sessions({
+    secret: "123",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 3000000 },
+  })
+);
+app.use((req, res, next) => {
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+  next();
+});
+ app.use('/admin',adminRouter);
 app.use("/", userRouter);
-app.use('/products',userRouter);
+
+

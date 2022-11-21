@@ -27,6 +27,11 @@ const userSchema = new Schema(
         "Please fill a valid email address",
       ],
     },
+    mobile:{
+      type:Number,
+      required:true,
+      min:10,
+    },
     password: {
       type: String,
       required: true,

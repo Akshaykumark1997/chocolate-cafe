@@ -1,0 +1,85 @@
+<%- include('../partials/adminPartial.ejs') %>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div
+      class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+      style="background-color: #57423f"
+    >
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span class="fs-5 d-none d-sm-inline">Admin</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          <li class="nav-item">
+            <a href="#" class="nav-link align-middle px-0">
+              <img
+                src="/admin/images/dashboard.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#submenu1"
+              data-bs-toggle="collapse"
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/products.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Products</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="/admin/addproducts"
+              class="nav-link px-0 align-middle"
+            >
+              <img
+                src="/admin/images/add products.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline">Add Products</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="/admin/userDetails"
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="" class="nav-link px-0 align-middle">
+              <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Logout</span>
+            </a>
+          </li>
+        </ul>
+        <hr />
+      </div>
+    </div>
+    <div class="col py-3">
+      
+    </div>
+  </div>
+</div> 
