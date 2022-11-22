@@ -1,4 +1,5 @@
 const products = require('../../model/product');
+const user = require('../../model/userSignUp');
 const users = require('../../model/userSignUp');
 const adminDetails ={
     email:"admin@gmail.com",
@@ -18,7 +19,7 @@ module.exports={
     postLogin:(req,res)=>{
         if(req.body.email === adminDetails.email && req.body.password === adminDetails.password){
             req.session.adminId =req.body.email;
-            console.log(req.session);
+            // console.log(req.session);
             res.redirect('/admin/adminhome');
         }else{
             res.render("admin/adminLogin", {
@@ -33,6 +34,10 @@ module.exports={
         }else{
             res.redirect('/admin');
         }
+    },
+    getLogout:(req,res)=>{
+        req.session.destroy();
+        res.redirect('/admin');
     },
     products:async(req,res)=>{
         if(req.session.adminId){
@@ -56,5 +61,12 @@ module.exports={
         }else{
             res.redirect('/admin');
         }
+    },
+    deleteuser:async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+       const value= await user.deleteOne({_id:id})
+        console.log(value);
+        res.redirect('/admin/userDetails');
     }
 }

@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userLogin = require("../controllers/userController/userController");
 
-router.get('/',userLogin.getLogin);
+router.get('/',userLogin.guestHome);
+router.get('/user',userLogin.getLogin);
 router.get('/userhome',userLogin.gethome);
 router.post('/login',userLogin.postLogin);
 router.get('/logout',userLogin.userLogout);

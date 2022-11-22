@@ -3,25 +3,28 @@ const bcrypt = require("bcrypt");
 const user = require("../../model/userSignUp");
 let session;
 module.exports = {
+  guestHome:(req,res)=>{
+    res.render('user/userHome',{session});
+  },
   getLogin: (req, res) => {
-     session = req.session.userId;
+    session = req.session.userId;
     if (session) {
       res.redirect("/userhome");
     } else {
-      res.render("user/userLogin",{session});
+      res.render("user/userLogin", { session });
     }
   },
   gethome: (req, res) => {
     session = req.session.userId;
     if (session) {
-      res.render("user/products",{session});
+      res.render("user/userHome", { session });
     } else {
-      res.redirect("/");
+      res.redirect("/user");
     }
   },
   postLogin: async (req, res) => {
     let email = req.body.email;
-    console.log(email);
+    // console.log(email);
     const userDetails = await user.find({ email: email });
     console.log(userDetails);
     if (userDetails.length) {
@@ -34,21 +37,23 @@ module.exports = {
         res.redirect("/userhome");
       } else {
         res.render("user/userLogin", {
+          session,
           err_message: "email or password incorrect",
         });
       }
     } else {
       res.render("user/userLogin", {
+        session,
         err_message: "email not registered",
       });
     }
   },
-  userLogout:(req,res)=>{
+  userLogout: (req, res) => {
     req.session.destroy();
-    res.redirect('/');
+    res.redirect("/user");
   },
   getSignup: (req, res) => {
-    res.render("user/userSignup",{session});
+    res.render("user/userSignup", { session });
   },
   postSignup: async (req, res) => {
     if (req.body.password === req.body.confirmpassword) {
@@ -58,7 +63,7 @@ module.exports = {
       let password = await bcrypt.hash(req.body.password, 10);
       User.find({ username: name, email: emailid }).then((result) => {
         if (result.length) {
-          res.render("user/userSignup", {
+          res.render("user/userSignup", {session,
             err_message: "email or username already exists",
           });
         } else {
@@ -71,13 +76,13 @@ module.exports = {
           user
             .save()
             .then(() => {
-              res.redirect("/");
+              res.redirect("/user");
             })
             .catch(() => {
               res.redirect("/signup");
             });
         }
-      }); 
+      });
     } else {
       res.render("user/userSignup", {
         err_message: "password must be same",
