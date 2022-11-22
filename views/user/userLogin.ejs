@@ -21,6 +21,7 @@
           <div class="form-outline mb-4">
             <input
               type="email"
+              name="email"
               id="form1Example13"
               class="form-control form-control-lg" placeholder="email"
             />
@@ -29,10 +30,14 @@
           <div class="form-outline mb-4">
             <input
               type="password"
+              name="password"
               id="form1Example23"
               class="form-control form-control-lg" placeholder="Password"
             />
             <label class="form-label" for="form1Example23"></label>
+            <% if(locals.err_message){%>
+                        <p class="text-danger"><%=err_message%></p>
+                        <%}%>
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block">
              Login

@@ -49,18 +49,21 @@
                     >Home</a
                   >
                 </li>
+                <%if (session) { %>
                 <li class="nav-item me-3">
                   <a class="nav-link active" href="#">Shop</a>
                 </li>
                 <li class="nav-item me-3">
                   <a class="nav-link active" href="#">Order</a>
                 </li>
+                <% } %>
                 <li class="nav-item me-3">
                   <a class="nav-link active" href="#">About us</a>
                 </li>
               </ul>
             </div>
             <div>
+              <%if (session) { %>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
                 <li class="nav-item me-5">
                   <!-- <a class="nav-link active" href=""
@@ -81,7 +84,7 @@
                 </li>
                 <li class="nav-item me-5">
                   <a class="nav-link active" href=""
-                    ><img src="/user/images/wishlist.svg" alt="" 
+                    ><img src="/user/images/wishlist.svg" alt=""
                   /></a>
                 </li>
                 <li class="nav-item me-5">
@@ -94,11 +97,19 @@
                     ><img src="/user/images/account.svg" alt=""
                   /></a>
                 </li>
-                <a class="nav-link active" href=""
+                
+                <a class="nav-link active" href="/logout"
+                  ><button type="button" class="btn btn-primary">
+                    Logout
+                  </button></a
+                >
+                <% }else{ %>
+                <a class="nav-link active" href="/"
                   ><button type="button" class="btn btn-primary">
                     Login
                   </button></a
                 >
+                <%}%>
               </ul>
             </div>
           </div>

@@ -30,7 +30,7 @@ const userSchema = new Schema(
     mobile:{
       type:Number,
       required:true,
-      min:10,
+      enum:10,
     },
     password: {
       type: String,

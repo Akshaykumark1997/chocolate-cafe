@@ -1,5 +1,4 @@
-const { use } = require("../../routes/user");
-
+// eslint-disable-next-line no-unused-vars
 function checkLoginForm(form) {
   let username = document.getElementById("username");
   let email = document.getElementById("email");
@@ -24,7 +23,7 @@ function checkLoginForm(form) {
     return false;
   }
   const re =
-    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   if (!re.test(email.value)) {
     document.getElementById("EmailError").innerHTML =
       "please enter a vaild email";
