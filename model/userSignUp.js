@@ -36,6 +36,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    isBlocked:{
+      type:Boolean,
+      default:false,
+    }
   });
 const user = mongoose.model('userDetails',userSchema);
 module.exports = user;

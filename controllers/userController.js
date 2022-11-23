@@ -1,6 +1,7 @@
-const User = require("../../model/userSignUp");
+const User = require("../model/userSignUp");
 const bcrypt = require("bcrypt");
-const user = require("../../model/userSignUp");
+// const user = require("../../model/userSignUp");
+// const user = require("../../model/userSignUp");
 let session;
 module.exports = {
   guestHome:(req,res)=>{
@@ -24,29 +25,35 @@ module.exports = {
   },
   postLogin: async (req, res) => {
     let email = req.body.email;
-    // console.log(email);
-    const userDetails = await user.find({ email: email });
+    const userDetails = await User.findOne({ email: email });
     console.log(userDetails);
-    if (userDetails.length) {
-      const value = await bcrypt.compare(
-        req.body.password,
-        userDetails[0].password
-      );
-      if (value) {
-        req.session.userId = req.body.email;
-        res.redirect("/userhome");
+    const blocked = userDetails.isBlocked;
+    console.log(blocked);
+    if (blocked === false) {
+      if (userDetails) {
+        const value = await bcrypt.compare(
+          req.body.password,
+          userDetails.password
+        );
+        if (value) {
+          req.session.userId = req.body.email;
+          res.redirect("/userhome");
+        } else {
+          res.render("user/userLogin", {
+            session,
+            err_message: "email or password incorrect",
+          });
+        }
       } else {
         res.render("user/userLogin", {
           session,
-          err_message: "email or password incorrect",
+          err_message: "email not registered",
         });
       }
     } else {
-      res.render("user/userLogin", {
-        session,
-        err_message: "email not registered",
-      });
+      res.render("user/userLogin", { session, err_message: "Blocked" });
     }
+    
   },
   userLogout: (req, res) => {
     req.session.destroy();
@@ -84,7 +91,7 @@ module.exports = {
         }
       });
     } else {
-      res.render("user/userSignup", {
+      res.render("user/userSignup", {session,
         err_message: "password must be same",
       });
     }

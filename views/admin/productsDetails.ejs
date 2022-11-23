@@ -48,7 +48,7 @@
           </li>
           <li>
             <a
-              href="/admin/addproducts"
+              href="/admin/addProducts"
               
               class="nav-link px-0 align-middle"
             >
@@ -91,7 +91,7 @@
                   Product
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Price
+                  Price (Rs.)
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Category
@@ -130,7 +130,7 @@
               <%= allproducts.stock %>
             </td>
              <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-              
+              <img  src="/admin/products/<%= allproducts._id %>.jpg" alt="product image" style="width:5rem;">
             </td>
             <td class="col-3 col-md-3 col-lg-3 col-xl-6 text-center">
               <a href=""

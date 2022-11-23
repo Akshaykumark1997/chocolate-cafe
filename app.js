@@ -5,14 +5,17 @@ const userRouter = require("./routes/user");
 const adminRouter = require('./routes/admin');
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
-
+const fileUpload = require('express-fileupload');
 
 const app = express();
+app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use("/image", express.static(path.join(__dirname + "public/user/image")));
+app.use("/products", express.static(path.join(__dirname + "public/admin/products")));
 app.set("view engine", "ejs");
+
 
 app.use(cookieParser());
 mongoose

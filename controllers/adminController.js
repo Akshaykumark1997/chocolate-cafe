@@ -1,6 +1,7 @@
-const products = require('../../model/product');
-const user = require('../../model/userSignUp');
-const users = require('../../model/userSignUp');
+const products = require('../model/product');
+const user = require('../model/userSignUp');
+const path = require("path");
+
 const adminDetails ={
     email:"admin@gmail.com",
     password:"admin@123"
@@ -19,7 +20,6 @@ module.exports={
     postLogin:(req,res)=>{
         if(req.body.email === adminDetails.email && req.body.password === adminDetails.password){
             req.session.adminId =req.body.email;
-            // console.log(req.session);
             res.redirect('/admin/adminhome');
         }else{
             res.render("admin/adminLogin", {
@@ -54,19 +54,54 @@ module.exports={
             res.redirect('/admin');
         }
     },
+    postProducts:async(req,res)=>{
+        const image = req.files.image;
+        console.log(image);
+        const newProduct = new products ({
+            product : req.body.product,
+            price : req.body.price,
+            category : req.body.category,
+            description : req.body.description,
+            stock : req.body.stock
+        })
+        const productData = await newProduct.save();
+        if(productData){
+            console.log(productData._id);
+            let imagename = productData._id;
+            image.mv(path.join(__dirname, '../public/admin/products/')+imagename+'.jpg',(err)=>{
+                if(!err){
+                    res.redirect("/admin/products");
+                }else{
+                    console.log(err);
+                }
+            });
+            
+        }else{
+            console.error();
+        } 
+    },
     userDetails:async(req,res)=>{
         if(req.session.adminId){
-            const allusers = await users.find();
+            const allusers = await user.find();
             res.render('admin/userDetails',{allusers});
         }else{
             res.redirect('/admin');
         }
     },
-    deleteuser:async(req,res)=>{
+   
+    blockuser:(req,res)=>{
         const id = req.params.id;
         console.log(id);
-       const value= await user.deleteOne({_id:id})
-        console.log(value);
-        res.redirect('/admin/userDetails');
+        user.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
+            res.redirect('/admin/userDetails');
+        })
+    },
+    unblockuser:(req,res)=>{
+        const id = req.params.id;
+        user
+          .updateOne({ _id: id }, { $set: { isBlocked: false } })
+          .then(() => {
+            res.redirect("/admin/userDetails");
+          });
     }
 }

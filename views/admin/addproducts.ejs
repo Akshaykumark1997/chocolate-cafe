@@ -19,7 +19,7 @@
           id="menu"
         >
           <li class="nav-item">
-            <a href="#" class="nav-link align-middle px-0">
+            <a href="/admin/adminhome" class="nav-link align-middle px-0">
               <img
                 src="/admin/images/dashboard.svg"
                 alt=""
@@ -88,38 +88,41 @@
             <div class="card-body p-5">
               <h2 class="text-uppercase text-center mb-5">Add Product</h2>
 
-              <form>
+              <form action="/admin/addproducts" method="post" enctype="multipart/form-data"> 
 
                 <div class="form-outline mb-4">
-                  <input type="text" id="form3Example1cg" class="form-control form-control-lg" />
+                  <input type="text" id="product" name="product" class="form-control form-control-lg" />
                   <label class="form-label" for="form3Example1cg">Product Name</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                  <input type="number" id="price" name="price" class="form-control form-control-lg" />
                   <label class="form-label" for="form3Example3cg">Price</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4cg" class="form-control form-control-lg" />
+                  <input type="text" id="category" name="category" class="form-control form-control-lg" />
                   <label class="form-label" for="form3Example4cg">Category</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" />
+                  <input type="text" id="description" name="description" class="form-control form-control-lg" />
                   <label class="form-label" for="form3Example4cdg">Description</label>
                 </div>
                 <div class="form-outline mb-4">
+                  <input type="number" id="stock" name="stock" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example4cdg">Stock</label>
+                </div>
+                <div class="form-outline mb-4">
                     <label class="form-label" for="customFile">Choose image</label>
-                    <input type="file" class="form-control" id="customFile" />
+                    <input type="file" id="image" name="image" class="form-control"  />
                 </div>
                 
 
                 <div class="d-flex justify-content-center">
-                  <button type="button" class="btn text-white" style="background-color: #57423f">Add Product</button>
+                  <button type="submit" value="submit" class="btn text-white" style="background-color: #57423f">Add Product</button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>

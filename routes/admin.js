@@ -1,5 +1,5 @@
 const router = require('express').Router();
- const adminLogin = require('../controllers/adminController/adminController');
+ const adminLogin = require('../controllers/adminController');
 
 const verifyLogin = (req, res, next) => {
   if (req.session.adminId) {
@@ -14,7 +14,9 @@ router.post('/adminLogin',adminLogin.postLogin);
 router.get('/logout',adminLogin.getLogout);
 router.get('/adminhome',adminLogin.gethome);
 router.get('/products',adminLogin.products);
-router.get('/addproducts',adminLogin.addProducts);
+// router.get('/addproducts',adminLogin.addProducts);
+router.route('/addProducts').get(adminLogin.addProducts).post(adminLogin.postProducts);
 router.get('/userDetails',adminLogin.userDetails);
-router.get('/deleteuser/:id',verifyLogin,adminLogin.deleteuser);
+router.get('/blockuser/:id',verifyLogin,adminLogin.blockuser);
+router.get("/unblockuser/:id", verifyLogin, adminLogin.unblockuser);
 module.exports = router;
