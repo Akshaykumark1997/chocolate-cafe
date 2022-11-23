@@ -80,6 +80,21 @@ module.exports={
             console.error();
         } 
     },
+    editProduct:async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+        const productData = await products.findOne({_id:id});
+        if(productData){
+            res.render('admin/editProduct',{productData});
+        }else{
+            res.redirect('/admin/products');
+        }
+        
+    },
+    postEditProduct:(req,res)=>{
+        
+        res.redirect('/admin/editProduct');
+    }, 
     userDetails:async(req,res)=>{
         if(req.session.adminId){
             const allusers = await user.find();

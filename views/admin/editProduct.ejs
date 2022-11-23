@@ -1,0 +1,183 @@
+<%- include('../partials/adminPartial.ejs') %>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div
+      class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+      style="background-color: #57423f"
+    >
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span class="fs-5 d-none d-sm-inline">Admin</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          <li class="nav-item">
+            <a href="/admin/adminhome" class="nav-link align-middle px-0">
+              <img
+                src="/admin/images/dashboard.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#submenu1"
+              data-bs-toggle="collapse"
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/products.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Products</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/addproducts" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/add products.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline">Add Products</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/userDetails" class="nav-link px-0 align-middle">
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/logout" class="nav-link px-0 align-middle">
+              <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Logout</span>
+            </a>
+          </li>
+        </ul>
+        <hr />
+      </div>
+    </div>
+    <div class="col py-3">
+      <section class="vh-100">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+          <div class="container h-100">
+            <div
+              class="row d-flex justify-content-center align-items-center h-100"
+            >
+              <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card" style="border-radius: 15px">
+                  <div class="card-body p-5">
+                    <h2 class="text-uppercase text-center mb-5">Edit Product</h2>
+
+                    <form
+                      action="/admin/editproduct/<%= productData._id %>"
+                      method="post"
+                      enctype="multipart/form-data"
+                    >
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="product"
+                          name="product" value="<%= productData.product %>"
+                          class="form-control form-control-lg"
+                        />
+                        <label class="form-label" for="form3Example1cg"
+                          >Product Name</label
+                        >
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="price"
+                          name="price" value="<%= productData.price %>"
+                          class="form-control form-control-lg"
+                        />
+                        <label class="form-label" for="form3Example3cg"
+                          >Price</label
+                        >
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="category"
+                          name="category" value="<%= productData.category %>"
+                          class="form-control form-control-lg"
+                        />
+                        <label class="form-label" for="form3Example4cg"
+                          >Category</label
+                        >
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <input
+                          type="text"
+                          id="description"
+                          name="description" value="<%= productData.description %>"
+                          class="form-control form-control-lg"
+                        />
+                        <label class="form-label" for="form3Example4cdg"
+                          >Description</label
+                        >
+                      </div>
+                      <div class="form-outline mb-4">
+                        <input
+                          type="number"
+                          id="stock"
+                          name="stock"
+                          class="form-control form-control-lg" value="<%= productData.stock %>"
+                        />
+                        <label class="form-label" for="form3Example4cdg"
+                          >Stock</label
+                        >
+                      </div>
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="customFile"
+                          >Choose image</label
+                        >
+                        <img src="/admin/products/<%= productData._id %>.jpg" alt="" style="width:5rem;">
+                        <input
+                          type="file"
+                          id="image"
+                          name="image"
+                          class="form-control"
+                        />
+                      </div>
+
+                      <div class="d-flex justify-content-center">
+                        <button
+                          type="submit"
+                          value="submit"
+                          class="btn text-white"
+                          style="background-color: #57423f"
+                        >
+                          Add Product
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
