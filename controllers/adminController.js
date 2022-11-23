@@ -82,7 +82,6 @@ module.exports={
     },
     editProduct:async(req,res)=>{
         const id = req.params.id;
-        console.log(id);
         const productData = await products.findOne({_id:id});
         if(productData){
             res.render('admin/editProduct',{productData});
@@ -91,10 +90,32 @@ module.exports={
         }
         
     },
-    postEditProduct:(req,res)=>{
-        
-        res.redirect('/admin/editProduct');
-    }, 
+    postEditProduct:async(req,res)=>{
+        const id = req.params.id;
+        await products.updateOne({_id:id},{$set:{
+            product:req.body.product,
+            price:req.body.price,
+            category:req.body.category,
+            description:req.body.description,
+            stock:req.body.stock
+        }}); 
+            if (req?.files?.image) {
+              const image = req.files.image;
+              image.mv(
+                path.join(__dirname, "../public/admin/products/") + id + ".jpg"
+              );
+              res.redirect("/admin/products");
+            }else{
+                res.redirect("/admin/products"); 
+            }
+    },
+    deleteProduct:async(req,res)=>{
+        const id = req.params.id;
+        console.log(id);
+        await products.deleteOne({_id:id}).then(()=>{
+            res.redirect('/admin/products');
+        })
+    },  
     userDetails:async(req,res)=>{
         if(req.session.adminId){
             const allusers = await user.find();
@@ -110,7 +131,7 @@ module.exports={
         user.updateOne({_id:id},{$set:{isBlocked:true}}).then(()=>{
             res.redirect('/admin/userDetails');
         })
-    },
+    }, 
     unblockuser:(req,res)=>{
         const id = req.params.id;
         user

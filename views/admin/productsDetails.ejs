@@ -81,8 +81,9 @@
     </div>
     <div class="col py-3">
       <section>
+        <h1>Product Details</h1>
         <div class="container mt-5">
-          <h1>Product Details</h1>
+          
           <table id="table" class="table mt-5 table-hover table-light">
             <thead>
               <tr>
@@ -136,9 +137,27 @@
               <a href="/admin/editProduct/<%= allproducts._id %>"
                 ><button type="button" class="btn btn-info text-white" style="width: 4.5rem;background-color: #57423f">Edit</button></a
               >
-              <a href="" 
-                ><button type="button" class="btn btn-danger" >Delete</button></a
-              >
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-<%= allproducts._id %>">
+                Delete
+              </button>
+              <div class="modal fade" id="staticBackdrop-<%= allproducts._id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Delete Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Want to delete <%= allproducts.product %>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <a href="/admin/deleteProduct/<%= allproducts._id %>"><button type="button" class="btn btn-primary">Confirm</button></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </td>
           </tr>
           <% }) %>

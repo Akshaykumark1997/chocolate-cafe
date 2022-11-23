@@ -16,6 +16,7 @@ router.get('/adminhome',adminLogin.gethome);
 router.get('/products',adminLogin.products);
 router.route('/addProducts').get(verifyLogin,adminLogin.addProducts).post(verifyLogin,adminLogin.postProducts);
 router.route('/editProduct/:id').get(verifyLogin,adminLogin.editProduct).post(verifyLogin,adminLogin.postEditProduct);
+router.get("/deleteProduct/:id", verifyLogin, adminLogin.deleteProduct);
 router.get('/userDetails',adminLogin.userDetails);
 router.get('/blockuser/:id',verifyLogin,adminLogin.blockuser);
 router.get("/unblockuser/:id", verifyLogin, adminLogin.unblockuser);

@@ -1,7 +1,5 @@
 const User = require("../model/userSignUp");
 const bcrypt = require("bcrypt");
-// const user = require("../../model/userSignUp");
-// const user = require("../../model/userSignUp");
 let session;
 module.exports = {
   guestHome:(req,res)=>{
