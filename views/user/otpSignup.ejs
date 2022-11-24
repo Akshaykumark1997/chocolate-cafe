@@ -1,0 +1,65 @@
+<%- include('../partials/userPartial.ejs') %>
+    <section>
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-md-6 col-xl-6 d-flex flex-column justify-content-center"
+                    style="background-color: #57423f; width: 660px; height: 610px">
+                    <div class="align-self-center text-center">
+                        <h2 class="text-light">&nbsp; Alreay have a Account?</h2>
+                        <h5 class="text-light">
+                            Keep connect with Us <br />share your feedback with us..
+                        </h5>
+                        <br />
+                        <a href="/user"><button type="button" class="btn border border-light text-light">
+                                Login
+                            </button></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-xl-6 mt-5 px-5">
+                    <form action="/otpsignup" method="post" id="form">
+                        <div class="form-outline mb-4">
+                            <input type="text" id="username" name="username" class="form-control form-control-lg " readonly
+                                value="<%= data.username %>" />
+                            <label class="form-label" ></label>
+                            
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="email" id="email" name="email" class="form-control form-control-lg" readonly
+                                value="<%= data.email %>" />
+                            <label class="form-label" for="form1Example23"></label>
+                            
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="number" id="mobile" name="mobile" class="form-control form-control-lg" readonly
+                                value="<%= data.mobile %>" />
+                            <label class="form-label" for="form1Example23"></label>
+                            
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" readonly
+                                value="<%= data.password %>" />
+                            <label class="form-label" for="form1Example23"></label>
+                            
+                        </div>
+                        <div class="form-outline mb-4">
+                            <input type="password" id="confirmpassword" name="confirmpassword" readonly 
+                                class="form-control form-control-lg" value="<%= data.confirmpassword %>" />
+                            <label class="form-label" for="form1Example23"></label>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <h5>please enter your OTP</h5>
+                            <input type="password" id="otp" name="otp" class="form-control form-control-lg"/>
+                            <label class="form-label" for="form1Example23"></label>
+                        </div>
+                        <button type="submit" value="submit" class="btn btn-primary btn-lg btn-block">
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <script src="/user/js/main.js"></script>
+    <%- include('../partials/user-footer.ejs') %>

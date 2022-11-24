@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run lint && nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./*.js",
+    "lintFix": "eslint --fix ./*.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +23,7 @@
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
     "mongoose": "^6.7.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "twilio": "^3.83.3"
   }
 }

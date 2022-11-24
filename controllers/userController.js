@@ -1,7 +1,12 @@
 const User = require("../model/userSignUp");
 const products = require("../model/product");
+const otpsign = require("../model/otp");
 const bcrypt = require("bcrypt");
+const user = require("../model/userSignUp");
+const sendOtp = require('../middleware/otpmiddleware.js');
+
 let session;
+
 module.exports = {
   guestHome: async (req, res) => {
     const allProducts = await products.find();
@@ -56,7 +61,7 @@ module.exports = {
       res.render("user/userLogin", { session, err_message: "Blocked" });
     }
   },
-  userLogout: (req, res) => {
+  userLogout: async (req, res) => {
     req.session.destroy();
     res.redirect("/user");
   },
@@ -64,38 +69,66 @@ module.exports = {
     res.render("user/userSignup", { session });
   },
   postSignup: async (req, res) => {
-    if (req.body.password === req.body.confirmpassword) {
-      let name = req.body.username;
-      let emailid = req.body.email;
-      let mobile = req.body.mobile;
-      let password = await bcrypt.hash(req.body.password, 10);
-      User.find({ username: name, email: emailid }).then((result) => {
-        if (result.length) {
-          res.render("user/userSignup", {
-            session,
-            err_message: "email or username already exists",
-          });
-        } else {
-          const user = new User({
-            username: name,
-            email: emailid,
-            mobile: mobile,
-            password: password,
-          });
-          user
-            .save()
-            .then(() => {
-              res.redirect("/user");
-            })
-            .catch(() => {
-              res.redirect("/signup");
+    const data = { ...req.body };
+    if (data.password === data.confirmpassword) {
+      User.find({ $or: [{ mobile: data.mobile }, { email: data.email }] }).then(
+        (result) => {
+          if (result.length) {
+            res.render("user/userSignup", {
+              session,
+              err_message: "already resistered",
             });
+          } else {
+            user.find({ username: data.username }).then((result) => {
+              if (result.length) {
+                res.render("user/userSignup", {
+                  session,
+                  err_message: "username unavilable",
+                });
+              } else {
+                const otpc = Math.floor(100000 + Math.random() * 900000);
+                const tonumber = `+91${data.mobile}`;
+                sendOtp.sendOTP(tonumber, otpc);
+                const newOtp = new otpsign({
+                  otp: otpc,
+                });
+                newOtp.save().then(() => {
+                  res.render("user/otpSignup", { session, data });
+                });
+              }
+            });
+          }
         }
-      });
+      );
     } else {
       res.render("user/userSignup", {
         session,
         err_message: "password must be same",
+      });
+    }
+  },
+  otpSignup: async (req, res) => {
+    console.log(req.body);
+    const data = req.body;
+    const verify = await otpsign.find({ otp: data.otp });
+    if (verify) {
+      await otpsign.deleteOne({_id:verify[0]._id});
+      console.log(verify);
+      let password = await bcrypt.hash(data.password, 10);
+      const newUser = new User({
+        username: data.username,
+        email: data.email,
+        mobile: data.mobile,
+        password: password,
+      });
+      newUser.save().then(() => {
+        res.redirect("/user");
+      });
+    } else {
+      res.render("user/otpSignup", {
+        session,
+        data,
+        err_message: "invalid otp",
       });
     }
   },
@@ -106,3 +139,4 @@ module.exports = {
     });
   },
 };
+
