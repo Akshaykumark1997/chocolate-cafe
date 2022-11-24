@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+
+<defs>
+</defs>
+<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)" >
+	<path d="M 88.516 50.879 H 4.156 c -0.82 0 -1.484 -0.664 -1.484 -1.484 c 0 -0.819 0.664 -1.484 1.484 -1.484 h 84.36 c 0.819 0 1.484 0.664 1.484 1.484 C 90 50.215 89.336 50.879 88.516 50.879 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+	<path d="M 88.516 75.495 H 4.156 c -0.82 0 -1.484 -0.664 -1.484 -1.484 c 0 -0.819 0.664 -1.484 1.484 -1.484 h 84.36 c 0.819 0 1.484 0.664 1.484 1.484 C 90 74.831 89.336 75.495 88.516 75.495 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+	<path d="M 88.516 26.263 H 35.999 c -0.82 0 -1.484 -0.664 -1.484 -1.484 s 0.664 -1.484 1.484 -1.484 h 52.517 c 0.819 0 1.484 0.664 1.484 1.484 S 89.336 26.263 88.516 26.263 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+	<path d="M 10.275 35.054 C 4.609 35.054 0 30.445 0 24.779 s 4.609 -10.275 10.275 -10.275 S 20.55 19.114 20.55 24.779 S 15.941 35.054 10.275 35.054 z M 10.275 17.471 c -4.029 0 -7.308 3.279 -7.308 7.308 s 3.279 7.308 7.308 7.308 s 7.308 -3.279 7.308 -7.308 S 14.304 17.471 10.275 17.471 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+</g>
+</svg>

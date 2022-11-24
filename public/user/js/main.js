@@ -30,8 +30,16 @@ function checkLoginForm(form) {
     email.focus();
     return false;
   }
-  if(mobile.value == ""){
-    document.getElementById("mobileerror").innerHTML = "please enter your mobile number"
+  if (mobile.value == "") {
+    document.getElementById("mobileerror").innerHTML =
+      "please enter your mobile number";
+    mobile.focus();
+    return false;
+  }
+  const mob = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+  if (mob.test(mobile.value) === false) {
+    document.getElementById("mobileerror").innerHTML =
+      "mobile number should be 10 digits";
     mobile.focus();
     return false;
   }

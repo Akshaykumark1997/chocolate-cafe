@@ -84,29 +84,85 @@
     </div>
     <div class="col py-3">
       <section>
-        <h1>Product Details</h1>
         <div class="container mt-5">
-          <table id="table" class="table mt-5 table-hover table-light">
+          <h1>Categories</h1>
+          <div class="d-flex justify-content-end mb-5">
+            <div>
+              <button
+                type="button"
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
+              >
+                Add Categories
+              </button>
+              <div
+                class="modal fade"
+                id="staticBackdrop"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">
+                        Add Category
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <form action="/admin/addCategory" method="post">
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label"
+                            >Category</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="category"
+                            name="category"
+                            aria-describedby="emailHelp"
+                          />
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="submit"
+                          value="submit"
+                          class="btn btn-primary"
+                        >
+                          submit
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table id="table" class="table table-hover table-light">
             <thead>
               <tr>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Id</th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Product
-                </th>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Price (Rs.)
+                  Sl.No
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Category
-                </th>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Description
-                </th>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Stock
-                </th>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Image
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Edit
@@ -114,54 +170,87 @@
               </tr>
             </thead>
             <tbody>
-              <% allproducts.forEach((allproducts)=>{ %>
+              <% allCategories.forEach((allCategories,index)=>{ %>
               <tr>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  <%= allproducts._id %>
+                  <%= index + 1 %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allproducts.product %>
+                  <%= allCategories.category %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allproducts.price %>
-                </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allproducts.category %>
-                </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allproducts.description %>
-                </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allproducts.stock %>
-                </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <img
-                    src="/admin/products/<%= allproducts._id %>.jpg"
-                    alt="product image"
-                    style="width: 5rem"
-                  />
-                </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-6 text-center">
-                  <a href="/admin/editProduct/<%= allproducts._id %>"
-                    ><button
-                      type="button"
-                      class="btn btn-info text-white"
-                      style="width: 4.5rem; background-color: #57423f"
-                    >
-                      Edit
-                    </button></a
-                  >
                   <button
                     type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop-<%= allCategories._id %>"
+                  >
+                    Edit
+                  </button>
+                  <div
+                    class="modal fade"
+                    id="staticBackdrop-<%= allCategories._id %>"
+                    data-bs-backdrop="static"
+                    data-bs-keyboard="false"
+                    tabindex="-1"
+                    aria-labelledby="staticBackdropLabel"
+                    aria-hidden="true"
+                  >
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <form
+                          action="/admin/editCategory/<%= allCategories._id %>"
+                          method="post"
+                        >
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">
+                              Edit Category
+                            </h5>
+                          </div>
+                          <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label"
+                              >Category</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="category"
+                              name="category"
+                              aria-describedby="emailHelp"
+                              value="<%= allCategories.category %>"
+                            />
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
+                              Close
+                            </button>
+                            <button
+                              type="submit"
+                              value="submit"
+                              class="btn btn-primary"
+                            >
+                              Confirm
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type=""
                     class="btn btn-danger"
                     data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop-<%= allproducts._id %>"
+                    data-bs-target="#static-<%= allCategories._id %>"
                   >
                     Delete
                   </button>
                   <div
                     class="modal fade"
-                    id="staticBackdrop-<%= allproducts._id %>"
+                    id="static-<%= allCategories._id %>"
                     data-bs-backdrop="static"
                     data-bs-keyboard="false"
                     tabindex="-1"
@@ -182,7 +271,7 @@
                           ></button>
                         </div>
                         <div class="modal-body">
-                          Want to delete <%= allproducts.product %>
+                          Want to delete <%= allCategories.category %>
                         </div>
                         <div class="modal-footer">
                           <button
@@ -192,7 +281,8 @@
                           >
                             Close
                           </button>
-                          <a href="/admin/deleteProduct/<%= allproducts._id %>"
+                          <a
+                            href="/admin/deleteCategory/<%= allCategories._id %>"
                             ><button type="button" class="btn btn-primary">
                               Confirm
                             </button></a

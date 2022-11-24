@@ -10,22 +10,29 @@
           <h2 class="text-light">&nbsp; Alreay have a Account?</h2>
           <h5 class="text-light">
             Keep connect with Us <br />share your feedback with us..
-          </h5><br>
-          <a href="/user"><button type="button" class="btn border border-light text-light">
-            Login
-          </button></a>
+          </h5>
+          <br />
+          <a href="/user"
+            ><button type="button" class="btn border border-light text-light">
+              Login
+            </button></a
+          >
         </div>
       </div>
       <div class="col-md-6 col-xl-6 mt-5 px-5">
-        <form  action="/signup"
-                    method="post"
-                    id="form"  onsubmit="return checkLoginForm(this);">
+        <form
+          action="/signup"
+          method="post"
+          id="form"
+          onsubmit="return checkLoginForm(this);"
+        >
           <div class="form-outline mb-4">
             <input
               type="text"
               id="username"
               name="username"
-              class="form-control form-control-lg" placeholder="username"
+              class="form-control form-control-lg"
+              placeholder="username"
             />
             <label class="form-label" for="form1Example13"></label>
             <p id="nameError" style="color: red"></p>
@@ -35,7 +42,8 @@
               type="email"
               id="email"
               name="email"
-              class="form-control form-control-lg" placeholder="email"
+              class="form-control form-control-lg"
+              placeholder="email"
             />
             <label class="form-label" for="form1Example23"></label>
             <p id="emailError" style="color: red"></p>
@@ -45,16 +53,19 @@
               type="number"
               id="mobile"
               name="mobile"
-              class="form-control form-control-lg" placeholder="mobile"
+              class="form-control form-control-lg"
+              placeholder="mobile"
             />
             <label class="form-label" for="form1Example23"></label>
             <p id="mobileerror" style="color: red"></p>
           </div>
-           <div class="form-outline mb-4">
+          <div class="form-outline mb-4">
             <input
               type="password"
-              id="password" name="password"
-              class="form-control form-control-lg" placeholder="Password"
+              id="password"
+              name="password"
+              class="form-control form-control-lg"
+              placeholder="Password"
             />
             <label class="form-label" for="form1Example23"></label>
             <p id="passwordError" style="color: red"></p>
@@ -62,15 +73,21 @@
           <div class="form-outline mb-4">
             <input
               type="password"
-              id="confirmpassword" name="confirmpassword"
-              class="form-control form-control-lg" placeholder="Confirm Password"
+              id="confirmpassword"
+              name="confirmpassword"
+              class="form-control form-control-lg"
+              placeholder="Confirm Password"
             />
             <label class="form-label" for="form1Example23"></label>
             <% if(locals.err_message){%>
-                        <p class="text-danger"><%=err_message%></p>
-                        <%}%>
+            <p class="text-danger"><%=err_message%></p>
+            <%}%>
           </div>
-        <button type="submit" value="submit" class="btn btn-primary btn-lg btn-block">
+          <button
+            type="submit"
+            value="submit"
+            class="btn btn-primary btn-lg btn-block"
+          >
             Sign in
           </button>
         </form>

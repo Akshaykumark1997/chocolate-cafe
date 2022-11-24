@@ -1,109 +1,159 @@
 <%- include('../partials/adminPartial.ejs') %>
-  <div class="container-fluid">
-    <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0" style="background-color: #57423f">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-          <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span class="fs-5 d-none d-sm-inline">Admin</span>
-          </a>
-          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-            <li class="nav-item">
-              <a href="/admin/adminhome" class="nav-link align-middle px-0">
-                <img src="/admin/images/dashboard.svg" alt="" style="width: 1rem" /><span
-                  class="ms-1 d-none d-sm-inline">Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
-                <span class="ms-1 d-none d-sm-inline">Order</span>
-              </a>
-            </li>
-            <li>
-              <a href="/admin/products" class="nav-link px-0 align-middle">
-                <img src="/admin/images/products.svg" alt="" style="width: 1rem" /><span
-                  class="ms-1 d-none d-sm-inline">Products</span></a>
-            </li>
-            <li>
-              <a href="/admin/addProducts" class="nav-link px-0 align-middle">
-                <img src="/admin/images/add products.svg" alt="" style="width: 1rem" />
-                <span class="ms-1 d-none d-sm-inline">Add Products</span></a>
-            </li>
-            <li>
-              <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
-                <span class="ms-1 d-none d-sm-inline">Users</span>
-              </a>
-            </li>
-            <li>
-              <a href="/admin/logout" class="nav-link px-0 align-middle">
-                <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
-                <span class="ms-1 d-none d-sm-inline">Logout</span>
-              </a>
-            </li>
-          </ul>
-          <hr />
-        </div>
-      </div>
-      <div class="col py-3">
-        <section>
-          <div class="container mt-5">
-            <h1>User Details</h1>
-            <table id="table" class="table mt-5 table-hover table-light">
-              <thead>
-                <tr>
-                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    UserId
-                  </th>
-                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Username
-                  </th>
-                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Email
-                  </th>
-                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Mobile
-                  </th>
-                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Edit
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <% allusers.forEach((allusers)=>{ %>
-                  <tr>
-                    <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                      <%= allusers._id %>
-                    </td>
-                    <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                      <%= allusers.username %>
-                    </td>
-                    <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                      <%= allusers.email %>
-                    </td>
-                    <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                      <%= allusers.mobile %>
-                    </td>
-                    <td class="col-3 col-md-3 col-lg-3 col-xl-6 text-center">
-                      <% if(allusers.isBlocked === false) { %>
-                      <a href="/admin/blockuser/<%= allusers._id %>">
-                        <button type="button" class="btn btn-info text-white"
-                          style="width: 5rem; background-color: #57423f">
-                          Block
-                        </button></a>
-                        <% }else{ %>
-                        <a href="/admin/unblockuser/<%= allusers._id %>">
-                          <button type="button" class="btn btn-info text-white" style="width: 5rem; background-color: #57423f">
-                            Unblock
-                          </button></a>
-                          <%}%>
-                    </td>
-                  </tr>
-                  <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </section>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div
+      class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+      style="background-color: #57423f"
+    >
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span class="fs-5 d-none d-sm-inline">Admin</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          <li class="nav-item">
+            <a href="/admin/adminhome" class="nav-link align-middle px-0">
+              <img
+                src="/admin/images/dashboard.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#submenu1"
+              data-bs-toggle="collapse"
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/products.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline">Products</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/addProducts" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/add products.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline">Add Products</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/Categories" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/category.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline">Categories</span></a
+            >
+          </li>
+          <li>
+            <a
+              href="/admin/userDetails"
+              data-bs-toggle="collapse"
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/logout" class="nav-link px-0 align-middle">
+              <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline">Logout</span>
+            </a>
+          </li>
+        </ul>
+        <hr />
       </div>
     </div>
+    <div class="col py-3">
+      <section>
+        <div class="container mt-5">
+          <h1>User Details</h1>
+          <table id="table" class="table mt-5 table-hover table-light">
+            <thead>
+              <tr>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  UserId
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Username
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Email
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Mobile
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Edit
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% allusers.forEach((allusers)=>{ %>
+              <tr>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  <%= allusers._id %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= allusers.username %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= allusers.email %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= allusers.mobile %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-6 text-center">
+                  <% if(allusers.isBlocked === false) { %>
+                  <a href="/admin/blockuser/<%= allusers._id %>">
+                    <button
+                      type="button"
+                      class="btn btn-info text-white"
+                      style="width: 5rem; background-color: #57423f"
+                    >
+                      Block
+                    </button></a
+                  >
+                  <% }else{ %>
+                  <a href="/admin/unblockuser/<%= allusers._id %>">
+                    <button
+                      type="button"
+                      class="btn btn-info text-white"
+                      style="width: 5rem; background-color: #57423f"
+                    >
+                      Unblock
+                    </button></a
+                  >
+                  <%}%>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   </div>
+</div>

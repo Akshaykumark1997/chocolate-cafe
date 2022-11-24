@@ -11,9 +11,11 @@
           <h5 class="text-light">
             Get access to your orders ,wishlist <br />and recommandations
           </h5>
-          <a href="/signup"><button type="button" class="btn border border-light text-light">
-            Create an Account
-          </button></a>
+          <a href="/signup"
+            ><button type="button" class="btn border border-light text-light">
+              Create an Account
+            </button></a
+          >
         </div>
       </div>
       <div class="col-md-6 col-xl-6 mt-5 px-5">
@@ -23,7 +25,8 @@
               type="email"
               name="email"
               id="form1Example13"
-              class="form-control form-control-lg" placeholder="email"
+              class="form-control form-control-lg"
+              placeholder="email"
             />
             <label class="form-label" for="form1Example13"></label>
           </div>
@@ -32,15 +35,16 @@
               type="password"
               name="password"
               id="form1Example23"
-              class="form-control form-control-lg" placeholder="Password"
+              class="form-control form-control-lg"
+              placeholder="Password"
             />
             <label class="form-label" for="form1Example23"></label>
             <% if(locals.err_message){%>
-                        <p class="text-danger"><%=err_message%></p>
-                        <%}%>
+            <p class="text-danger"><%=err_message%></p>
+            <%}%>
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block">
-             Login
+            Login
           </button>
         </form>
       </div>

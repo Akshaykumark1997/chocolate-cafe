@@ -1,9 +1,11 @@
 const User = require("../model/userSignUp");
+const products = require("../model/product");
 const bcrypt = require("bcrypt");
 let session;
 module.exports = {
-  guestHome:(req,res)=>{
-    res.render('user/userHome',{session});
+  guestHome: async (req, res) => {
+    const allProducts = await products.find();
+    res.render("user/userHome", { session, allProducts });
   },
   getLogin: (req, res) => {
     session = req.session.userId;
@@ -13,10 +15,12 @@ module.exports = {
       res.render("user/userLogin", { session });
     }
   },
-  gethome: (req, res) => {
+  gethome: async (req, res) => {
     session = req.session.userId;
     if (session) {
-      res.render("user/userHome", { session });
+      const allProducts = await products.find();
+      console.log(allProducts);
+      res.render("user/userHome", { session, allProducts });
     } else {
       res.redirect("/user");
     }
@@ -51,7 +55,6 @@ module.exports = {
     } else {
       res.render("user/userLogin", { session, err_message: "Blocked" });
     }
-    
   },
   userLogout: (req, res) => {
     req.session.destroy();
@@ -68,7 +71,8 @@ module.exports = {
       let password = await bcrypt.hash(req.body.password, 10);
       User.find({ username: name, email: emailid }).then((result) => {
         if (result.length) {
-          res.render("user/userSignup", {session,
+          res.render("user/userSignup", {
+            session,
             err_message: "email or username already exists",
           });
         } else {
@@ -89,9 +93,16 @@ module.exports = {
         }
       });
     } else {
-      res.render("user/userSignup", {session,
+      res.render("user/userSignup", {
+        session,
         err_message: "password must be same",
       });
     }
+  },
+  viewProduct: async (req, res) => {
+    const id = req.params.id;
+    await products.find({ _id: id }).then((data) => {
+      res.render("user/productView", { session, data });
+    });
   },
 };

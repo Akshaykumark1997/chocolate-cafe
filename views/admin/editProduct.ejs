@@ -57,6 +57,16 @@
             >
           </li>
           <li>
+            <a href="/admin/Categories" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/category.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline">Categories</span></a
+            >
+          </li>
+          <li>
             <a href="/admin/userDetails" class="nav-link px-0 align-middle">
               <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline">Users</span>
@@ -73,7 +83,7 @@
       </div>
     </div>
     <div class="col py-3">
-      <section class="vh-100">
+      <section>
         <div class="mask d-flex align-items-center h-100 gradient-custom-3">
           <div class="container h-100">
             <div
@@ -82,7 +92,9 @@
               <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div class="card" style="border-radius: 15px">
                   <div class="card-body p-5">
-                    <h2 class="text-uppercase text-center mb-5">Edit Product</h2>
+                    <h2 class="text-uppercase text-center mb-5">
+                      Edit Product
+                    </h2>
 
                     <form
                       action="/admin/editproduct/<%= productData._id %>"
@@ -93,7 +105,8 @@
                         <input
                           type="text"
                           id="product"
-                          name="product" value="<%= productData.product %>"
+                          name="product"
+                          value="<%= productData.product %>"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form3Example1cg"
@@ -103,9 +116,10 @@
 
                       <div class="form-outline mb-4">
                         <input
-                          type="number"
+                          type="numb"
                           id="price"
-                          name="price" value="<%= productData.price %>"
+                          name="price"
+                          value="<%= productData.price %>"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form3Example3cg"
@@ -117,7 +131,8 @@
                         <input
                           type="text"
                           id="category"
-                          name="category" value="<%= productData.category %>"
+                          name="category"
+                          value="<%= productData.category %>"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form3Example4cg"
@@ -129,7 +144,8 @@
                         <input
                           type="text"
                           id="description"
-                          name="description" value="<%= productData.description %>"
+                          name="description"
+                          value="<%= productData.description %>"
                           class="form-control form-control-lg"
                         />
                         <label class="form-label" for="form3Example4cdg"
@@ -138,10 +154,11 @@
                       </div>
                       <div class="form-outline mb-4">
                         <input
-                          type="number"
+                          type="num"
                           id="stock"
                           name="stock"
-                          class="form-control form-control-lg" value="<%= productData.stock %>"
+                          class="form-control form-control-lg"
+                          value="<%= productData.stock %>"
                         />
                         <label class="form-label" for="form3Example4cdg"
                           >Stock</label
@@ -151,12 +168,17 @@
                         <label class="form-label" for="customFile"
                           >Choose image</label
                         >
-                        <img src="/admin/products/<%= productData._id %>.jpg" alt="" style="width:5rem;">
+                        <img
+                          src="/admin/products/<%= productData._id %>.jpg"
+                          alt=""
+                          style="width: 5rem"
+                        />
                         <input
                           type="file"
                           id="image"
                           name="image"
-                          class="form-control" value="/admin/products/<%= productData._id %>.jpg"
+                          class="form-control"
+                          value="/admin/products/<%= productData._id %>.jpg"
                         />
                       </div>
 
@@ -167,7 +189,7 @@
                           class="btn text-white"
                           style="background-color: #57423f"
                         >
-                          Add Product
+                          Edit Product
                         </button>
                       </div>
                     </form>
