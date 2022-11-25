@@ -116,10 +116,10 @@ module.exports = {
       res.redirect("/admin/products");
     }
   },
-  deleteProduct: async (req, res) => {
+  deleteProduct: (req, res) => {
     const id = req.params.id;
     console.log(id);
-    await products.deleteOne({ _id: id }).then(() => {
+     products.deleteOne({ _id: id }).then(() => {
       res.redirect("/admin/products");
     });
   },
@@ -152,19 +152,19 @@ module.exports = {
       res.render("admin/categories", { allCategories });
     }
   },
-  addCategory: async (req, res) => {
+  addCategory:  (req, res) => {
     const categoryData = req.body.category;
     const newCategory = new category({
       category: categoryData,
     });
-    await newCategory.save().then((data) => {
+     newCategory.save().then((data) => {
       console.log(data);
       res.redirect("/admin/categories");
     });
   },
-  editCategory: async (req, res) => {
+  editCategory:  (req, res) => {
     const id = req.params.id;
-    await category
+     category
       .updateOne(
         { _id: id },
         {
@@ -177,9 +177,9 @@ module.exports = {
         res.redirect("/admin/categories");
       });
   },
-  deleteCategory: async (req, res) => {
+  deleteCategory:(req, res) => {
     const id = req.params.id;
-    await category.deleteOne({ _id: id }).then(() => {
+     category.deleteOne({ _id: id }).then(() => {
       res.redirect("/admin/categories");
     });
   },

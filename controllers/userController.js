@@ -68,7 +68,7 @@ module.exports = {
   getSignup: (req, res) => {
     res.render("user/userSignup", { session });
   },
-  postSignup: async (req, res) => {
+  postSignup:(req, res) => {
     const data = { ...req.body };
     if (data.password === data.confirmpassword) {
       User.find({ $or: [{ mobile: data.mobile }, { email: data.email }] }).then(
@@ -132,9 +132,9 @@ module.exports = {
       });
     }
   },
-  viewProduct: async (req, res) => {
+  viewProduct:  (req, res) => {
     const id = req.params.id;
-    await products.find({ _id: id }).then((data) => {
+     products.find({ _id: id }).then((data) => {
       res.render("user/productView", { session, data });
     });
   },
