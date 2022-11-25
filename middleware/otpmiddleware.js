@@ -1,6 +1,10 @@
+ const dotenv = require("dotenv");
+
+ dotenv.config();
+ 
  const client = require("twilio")(
-   "ACb931a3e463d3bd328719f7ed1b2a8e23",
-   "594c5671f8a048a20559c60d060b4519"
+    process.env.SID,
+   process.env.AUTH
  ); 
  
  module.exports = {

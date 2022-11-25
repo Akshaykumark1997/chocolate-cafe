@@ -5,10 +5,10 @@ const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
-const fileUpload = require("express-fileupload");
+const fileUpload = require("express-fileupload"); 
+const dotenv = require('dotenv');
 
-
-
+dotenv.config();
 const app = express();
 app.use(fileUpload());
 app.use(express.json());
@@ -23,7 +23,7 @@ app.set("view engine", "ejs");
 
 app.use(cookieParser());
 mongoose
-  .connect("mongodb://localhost:27017/Chocolate_Cafe", {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

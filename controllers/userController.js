@@ -8,19 +8,29 @@ const sendOtp = require('../middleware/otpmiddleware.js');
 let session;
 
 module.exports = {
+  
   guestHome: async (req, res) => {
-    const allProducts = await products.find();
-    res.render("user/userHome", { session, allProducts });
+    try {
+      const allProducts = await products.find();
+      res.render("user/userHome", { session, allProducts });
+    } catch {
+      console.error();
+    }
   },
   getLogin: (req, res) => {
+    try{
     session = req.session.userId;
     if (session) {
       res.redirect("/userhome");
     } else {
       res.render("user/userLogin", { session });
     }
+  }catch{
+    console.error();
+  }
   },
   gethome: async (req, res) => {
+    try{
     session = req.session.userId;
     if (session) {
       const allProducts = await products.find();
@@ -29,8 +39,12 @@ module.exports = {
     } else {
       res.redirect("/user");
     }
+  }catch{
+    console.error();
+  }
   },
   postLogin: async (req, res) => {
+    try{
     let email = req.body.email;
     const userDetails = await User.findOne({ email: email });
     console.log(userDetails);
@@ -60,6 +74,9 @@ module.exports = {
     } else {
       res.render("user/userLogin", { session, err_message: "Blocked" });
     }
+  }catch{
+    console.error();
+  }
   },
   userLogout: async (req, res) => {
     req.session.destroy();
@@ -68,7 +85,8 @@ module.exports = {
   getSignup: (req, res) => {
     res.render("user/userSignup", { session });
   },
-  postSignup:(req, res) => {
+  postSignup:(req, res) => { 
+    try{
     const data = { ...req.body };
     if (data.password === data.confirmpassword) {
       User.find({ $or: [{ mobile: data.mobile }, { email: data.email }] }).then(
@@ -100,14 +118,18 @@ module.exports = {
           }
         }
       );
-    } else {
+    } else { 
       res.render("user/userSignup", {
         session,
         err_message: "password must be same",
       });
     }
+  }catch{
+    console.error();
+  }
   },
   otpSignup: async (req, res) => {
+    try{
     console.log(req.body);
     const data = req.body;
     const verify = await otpsign.find({ otp: data.otp });
@@ -131,12 +153,19 @@ module.exports = {
         err_message: "invalid otp",
       });
     }
+  }catch{
+    console.error();
+  }
   },
   viewProduct:  (req, res) => {
+    try{
     const id = req.params.id;
      products.find({ _id: id }).then((data) => {
       res.render("user/productView", { session, data });
     });
+  }catch{
+    console.error();
+  }
   },
 };
 
