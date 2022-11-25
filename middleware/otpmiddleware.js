@@ -12,7 +12,7 @@
   client.messages
     .create({
       to: number,
-      from: "+13514449787",
+      from: process.env.MOB,
       body: `your otp is ${otp}`,
     })
     .then((messages) => {
