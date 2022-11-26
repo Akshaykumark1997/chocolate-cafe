@@ -3,80 +3,84 @@ const products = require("../model/product");
 const otpsign = require("../model/otp");
 const bcrypt = require("bcrypt");
 const user = require("../model/userSignUp");
-const sendOtp = require('../middleware/otpmiddleware.js');
+const sendOtp = require("../middleware/otpmiddleware.js");
+const cart = require("../model/cart");
+const mongoose = require("mongoose");
 
 let session;
-
+var count = 0;
 module.exports = {
-  
   guestHome: async (req, res) => {
     try {
-      const allProducts = await products.find();
-      res.render("user/userHome", { session, allProducts });
+      const allProducts = await products.find({ isDeleted: false });
+      res.render("user/userHome", { session, allProducts, count });
     } catch {
       console.error();
     }
   },
   getLogin: (req, res) => {
-    try{
-    session = req.session.userId;
-    if (session) {
-      res.redirect("/userhome");
-    } else {
-      res.render("user/userLogin", { session });
+    try {
+      session = req.session.userId;
+      if (session) {
+        res.redirect("/userhome");
+      } else {
+        res.render("user/userLogin", { session });
+      }
+    } catch {
+      console.error();
     }
-  }catch{
-    console.error();
-  }
   },
   gethome: async (req, res) => {
-    try{
-    session = req.session.userId;
-    if (session) {
-      const allProducts = await products.find();
-      console.log(allProducts);
-      res.render("user/userHome", { session, allProducts });
-    } else {
-      res.redirect("/user");
+    try {
+      session = req.session.userId;
+
+      if (session) {
+        const userData = await user.findOne({ email: session });
+        cart.find({ userId: userData._id }).then((data) => {
+          count = data[0].product.length;
+        });
+        products.find({ isDeleted: false }).then((allProducts) => {
+          res.render("user/userHome", { session, allProducts, count });
+        });
+      } else {
+        res.redirect("/user");
+      }
+    } catch {
+      console.error();
     }
-  }catch{
-    console.error();
-  }
   },
   postLogin: async (req, res) => {
-    try{
-    let email = req.body.email;
-    const userDetails = await User.findOne({ email: email });
-    console.log(userDetails);
-    const blocked = userDetails.isBlocked;
-    console.log(blocked);
-    if (blocked === false) {
-      if (userDetails) {
-        const value = await bcrypt.compare(
-          req.body.password,
-          userDetails.password
-        );
-        if (value) {
-          req.session.userId = req.body.email;
-          res.redirect("/userhome");
+    try {
+      let email = req.body.email;
+      const userDetails = await User.findOne({ email: email });
+      const blocked = userDetails.isBlocked;
+      if (blocked === false) {
+        if (userDetails) {
+          const value = await bcrypt.compare(
+            req.body.password,
+            userDetails.password
+          );
+          if (value) {
+            req.session.userId = req.body.email;
+            res.redirect("/userhome");
+          } else {
+            res.render("user/userLogin", {
+              session,
+              err_message: "email or password incorrect",
+            });
+          }
         } else {
           res.render("user/userLogin", {
             session,
-            err_message: "email or password incorrect",
+            err_message: "email not registered",
           });
         }
       } else {
-        res.render("user/userLogin", {
-          session,
-          err_message: "email not registered",
-        });
+        res.render("user/userLogin", { session, err_message: "Blocked" });
       }
-    } else {
-      res.render("user/userLogin", { session, err_message: "Blocked" });
+    } catch {
+      console.error();
     }
-  }catch{
-    console.error();
-  }
   },
   userLogout: async (req, res) => {
     req.session.destroy();
@@ -85,12 +89,13 @@ module.exports = {
   getSignup: (req, res) => {
     res.render("user/userSignup", { session });
   },
-  postSignup:(req, res) => { 
-    try{
-    const data = { ...req.body };
-    if (data.password === data.confirmpassword) {
-      User.find({ $or: [{ mobile: data.mobile }, { email: data.email }] }).then(
-        (result) => {
+  postSignup: (req, res) => {
+    try {
+      const data = { ...req.body };
+      if (data.password === data.confirmpassword) {
+        User.find({
+          $or: [{ mobile: data.mobile }, { email: data.email }],
+        }).then((result) => {
           if (result.length) {
             res.render("user/userSignup", {
               session,
@@ -116,56 +121,141 @@ module.exports = {
               }
             });
           }
-        }
-      );
-    } else { 
-      res.render("user/userSignup", {
-        session,
-        err_message: "password must be same",
-      });
+        });
+      } else {
+        res.render("user/userSignup", {
+          session,
+          err_message: "password must be same",
+        });
+      }
+    } catch {
+      console.error();
     }
-  }catch{
-    console.error();
-  }
   },
   otpSignup: async (req, res) => {
-    try{
-    console.log(req.body);
-    const data = req.body;
-    const verify = await otpsign.find({ otp: data.otp });
-    if (verify) {
-      await otpsign.deleteOne({_id:verify[0]._id});
-      console.log(verify);
-      let password = await bcrypt.hash(data.password, 10);
-      const newUser = new User({
-        username: data.username,
-        email: data.email,
-        mobile: data.mobile,
-        password: password,
+    try {
+      const data = req.body;
+      const verify = await otpsign.find({ otp: data.otp });
+      if (verify) {
+        await otpsign.deleteOne({ _id: verify[0]._id });
+        console.log(verify);
+        let password = await bcrypt.hash(data.password, 10);
+        const newUser = new User({
+          username: data.username,
+          email: data.email,
+          mobile: data.mobile,
+          password: password,
+        });
+        newUser.save().then(() => {
+          res.redirect("/user");
+        });
+      } else {
+        res.render("user/otpSignup", {
+          session,
+          data,
+          err_message: "invalid otp",
+        });
+      }
+    } catch {
+      console.error();
+    }
+  },
+  viewProduct: (req, res) => {
+    try {
+      const id = req.params.id;
+      products.find({ _id: id }).then((data) => {
+        res.render("user/productView", { session, data, count });
       });
-      newUser.save().then(() => {
-        res.redirect("/user");
-      });
+    } catch {
+      console.error();
+    }
+  },
+
+  addCart: async (req, res) => {
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id);
+    console.log(objId);
+    const userId = req.session.userId;
+    let proObj = {
+      productId: objId,
+      quantity: 1,
+    };
+    const userData = await user.findOne({ email: userId });
+    const userCart = await cart.findOne({ userId: userData._id });
+    if (userCart) {
+      let proExist = userCart.product.findIndex(
+        (product) => product.productId == id
+      );
+      if (proExist != -1) {
+        console.log("hoooooi");
+        await cart.aggregate([
+          {
+            $unwind: "$product",
+          },
+        ]);
+        await cart.updateOne(
+          { userId: userData._id, "product.productId": objId },
+          { $inc: { "product.$.quantity": 1 } }
+        );
+        res.redirect("/userhome");
+      } else {
+        await cart.updateOne(
+          { userId: userData._id },
+          { $push: { product: proObj } }
+        );
+        res.redirect("/userhome");
+      }
     } else {
-      res.render("user/otpSignup", {
-        session,
-        data,
-        err_message: "invalid otp",
+      const newCart = new cart({
+        userId: userData._id,
+        product: [
+          {
+            productId: objId,
+            quantity: 1,
+          },
+        ],
+      });
+      newCart.save().then((data) => {
+        console.log(data);
+        res.redirect("/userhome");
       });
     }
-  }catch{
-    console.error();
-  }
   },
-  viewProduct:  (req, res) => {
-    try{
-    const id = req.params.id;
-     products.find({ _id: id }).then((data) => {
-      res.render("user/productView", { session, data });
-    });
-  }catch{
-    console.error();
-  }
+  viewCart: async (req, res) => {
+    const userId = req.session.userId;
+    const userData = await user.findOne({ email: userId });
+    const productData = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
+          },
+        },
+        {
+          $lookup: {
+            from: "productdetails",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          },
+        },
+      ])
+      .exec();
+    console.log(productData);
+    res.render("user/cart", { session, productData, count });
   },
 };
-

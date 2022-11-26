@@ -67,12 +67,11 @@ module.exports = {
   }
   },
   addProducts: (req, res) => {
-    try{
-    if (req.session.adminId) {
-      res.render("admin/addproducts");
-    } else {
-      res.redirect("/admin");
-    }
+  try{
+      category.find().then((categories)=>{
+        res.render("admin/addproducts",{categories});
+      })
+      
   }catch{
     console.error();
   }
@@ -80,7 +79,6 @@ module.exports = {
   postProducts: async (req, res) => {
     try{
     const image = req.files.image;
-    console.log(image);
     const newProduct = new products({
       product: req.body.product,
       price: req.body.price,
@@ -90,7 +88,6 @@ module.exports = {
     });
     const productData = await newProduct.save();
     if (productData) {
-      console.log(productData._id);
       let imagename = productData._id;
       image.mv(
         path.join(__dirname, "../public/admin/products/") + imagename + ".jpg",
@@ -112,9 +109,10 @@ module.exports = {
   editProduct: async (req, res) => {
     try{
     const id = req.params.id;
+    const categories = await category.find();
     const productData = await products.findOne({ _id: id });
     if (productData) {
-      res.render("admin/editProduct", { productData });
+      res.render("admin/editProduct", { productData,categories });
     } else {
       res.redirect("/admin/products");
     }
@@ -152,7 +150,7 @@ module.exports = {
     try{
     const id = req.params.id;
     console.log(id);
-     products.deleteOne({ _id: id }).then(() => {
+     products.updateOne({ _id: id },{$set:{isDeleted:true}}).then(() => {
       res.redirect("/admin/products");
     });
   }catch{
@@ -175,7 +173,6 @@ module.exports = {
   blockuser: (req, res) => {
     try{
     const id = req.params.id;
-    console.log(id);
     user.updateOne({ _id: id }, { $set: { isBlocked: true } }).then(() => {
       res.redirect("/admin/userDetails");
     });
@@ -197,7 +194,6 @@ module.exports = {
     try{
     const allCategories = await category.find();
     if (allCategories) {
-      console.log(allCategories);
       res.render("admin/categories", { allCategories });
     }
   }catch{
@@ -210,8 +206,7 @@ module.exports = {
     const newCategory = new category({
       category: categoryData,
     });
-     newCategory.save().then((data) => {
-      console.log(data);
+     newCategory.save().then(() => {
       res.redirect("/admin/categories");
     });
   }catch{

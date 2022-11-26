@@ -102,6 +102,9 @@
                       enctype="multipart/form-data"
                     >
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example1cg"
+                          >Product Name</label
+                        >
                         <input
                           type="text"
                           id="product"
@@ -109,12 +112,12 @@
                           value="<%= productData.product %>"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example1cg"
-                          >Product Name</label
-                        >
                       </div>
 
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example3cg"
+                          >Price</label
+                        >
                         <input
                           type="numb"
                           id="price"
@@ -122,25 +125,31 @@
                           value="<%= productData.price %>"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example3cg"
-                          >Price</label
-                        >
                       </div>
 
                       <div class="form-outline mb-4">
-                        <input
-                          type="text"
-                          id="category"
-                          name="category"
-                          value="<%= productData.category %>"
-                          class="form-control form-control-lg"
-                        />
                         <label class="form-label" for="form3Example4cg"
                           >Category</label
                         >
+                        <select
+                          class="form-select"  id="category"
+                            name="category"
+                          aria-label="Default select example"
+                        >
+                          <% categories.forEach((category)=>{ %>
+                          <option name="category"
+                             selected="<%= productData.category %>"
+                          >
+                            <%= category.category %>
+                          </option>
+                          <% }) %>
+                        </select>
                       </div>
 
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example4cdg"
+                          >Description</label
+                        >
                         <input
                           type="text"
                           id="description"
@@ -148,11 +157,11 @@
                           value="<%= productData.description %>"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example4cdg"
-                          >Description</label
-                        >
                       </div>
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example4cdg"
+                          >Stock</label
+                        >
                         <input
                           type="num"
                           id="stock"
@@ -160,9 +169,6 @@
                           class="form-control form-control-lg"
                           value="<%= productData.stock %>"
                         />
-                        <label class="form-label" for="form3Example4cdg"
-                          >Stock</label
-                        >
                       </div>
                       <div class="form-outline mb-4">
                         <label class="form-label" for="customFile"

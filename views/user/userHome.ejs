@@ -21,55 +21,6 @@
           </div>
         </div>
       </div>
-      <div class="carousel-item">
-        <div class="box">
-          <img
-            class="img-responsive"
-            src="/user/images/hero1.jpg"
-            width="100%"
-            alt="header image"
-          />
-          <div class="img-title">
-            <h1 class="display-4 fw-bold" style="color: #57423f">
-              Delicious sweet and Chocolate
-            </h1>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="box">
-          <img
-            class="img-responsive"
-            src="/user/images/hero1.jpg"
-            width="100%"
-            alt="header image"
-          />
-          <div class="img-title">
-            <h1 class="display-4 fw-bold" style="color: #57423f">
-              Delicious sweet and Chocolate
-            </h1>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#carouselExampleControls"
-      data-bs-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#carouselExampleControls"
-      data-bs-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
   </div>
 </section>
 
@@ -117,6 +68,9 @@
         <% allProducts.forEach((allProducts)=>{ %>
         <div class="col mb-5">
           <div class="card h-100">
+            <div class="text-end"> 
+              <a href=""><img class="px-2" src="/user/images/wishlist.svg" alt=""></a>
+            </div>
             <a
               class="text-decoration-none text-dark"
               href="/viewProduct/<%= allProducts._id %>"
@@ -141,7 +95,7 @@
             </div>
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
               <div class="text-center">
-                <a class="btn btn-outline-dark mt-auto" href="#">Add to Cart</a>
+                <a class="btn btn-outline-dark mt-auto" href="/addCart/<%= allProducts._id %>">Add to Cart</a>
               </div>
             </div>
           </div>

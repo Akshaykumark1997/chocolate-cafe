@@ -85,11 +85,11 @@
     <div class="col py-3">
       <section>
         <h1>Product Details</h1>
-        <div class="container mt-5">
+        <div class="container mt-5 table-responsive">
           <table id="table" class="table mt-5 table-hover table-light">
             <thead>
               <tr>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Id</th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Sl.No</th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Product
                 </th>
@@ -106,6 +106,9 @@
                   Stock
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  deleteStatus
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Image
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
@@ -114,10 +117,10 @@
               </tr>
             </thead>
             <tbody>
-              <% allproducts.forEach((allproducts)=>{ %>
+              <% allproducts.forEach((allproducts,index)=>{ %>
               <tr>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  <%= allproducts._id %>
+                <%= index + 1 %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= allproducts.product %>
@@ -133,6 +136,9 @@
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= allproducts.stock %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= allproducts.isDeleted %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <img

@@ -100,62 +100,66 @@
                       enctype="multipart/form-data"
                     >
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example1cg"
+                          >Product Name</label
+                        >
                         <input
                           type="text"
                           id="product"
                           name="product"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example1cg"
-                          >Product Name</label
-                        >
                       </div>
 
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example3cg"
+                          >Price</label
+                        >
                         <input
                           type="num"
                           id="price"
                           name="price"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example3cg"
-                          >Price</label
-                        >
                       </div>
 
                       <div class="form-outline mb-4">
-                        <input
-                          type="text"
-                          id="category"
-                          name="category"
-                          class="form-control form-control-lg"
-                        />
                         <label class="form-label" for="form3Example4cg"
                           >Category</label
                         >
+                        <select
+                          class="form-select" id="category" name="category"
+                          aria-label="Default select example"
+                        >
+                          <% categories.forEach((category)=>{ %>
+                          <option >
+                            <%= category.category %>
+                          </option>
+                          <% }) %>
+                        </select>
                       </div>
 
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example4cdg"
+                          >Description</label
+                        >
                         <input
                           type="text"
                           id="description"
                           name="description"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example4cdg"
-                          >Description</label
-                        >
                       </div>
                       <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example4cdg"
+                          >Stock</label
+                        >
                         <input
                           type="num"
                           id="stock"
                           name="stock"
                           class="form-control form-control-lg"
                         />
-                        <label class="form-label" for="form3Example4cdg"
-                          >Stock</label
-                        >
                       </div>
                       <div class="form-outline mb-4">
                         <label class="form-label" for="customFile"

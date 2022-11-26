@@ -11,6 +11,7 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="/user/css/userCss.css">
     <script
       src="https://kit.fontawesome.com/7c940f0205.js"
       crossorigin="anonymous"
@@ -21,7 +22,7 @@
     <div class="container">
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#"
+          <a class="navbar-brand" href="/"
             ><img
               src="/user/images/Chocolat Cafe Simple Design.png"
               alt="logo"
@@ -44,11 +45,17 @@
           >
             <div>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
+                <%if (session) { %>
                 <li class="nav-item me-3">
-                  <a class="nav-link active" aria-current="page" href="#"
+                  <a class="nav-link active" aria-current="page" href="/userhome"
                     >Home</a
                   >
                 </li>
+                <% }else{ %>
+                <li class="nav-item me-3">
+                  <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <% } %>
                 <%if (session) { %>
                 <li class="nav-item me-3">
                   <a class="nav-link active" href="#">Shop</a>
@@ -88,9 +95,11 @@
                   /></a>
                 </li>
                 <li class="nav-item me-5">
-                  <a class="nav-link active" href=""
+                  <a class="nav-link active" href="/cart"
                     ><img src="/user/images/cart.svg" alt=""
-                  /></a>
+                  /> <span class=" badge rounded-pill bg-danger ">
+                    <%= count %>
+                  </span></a>
                 </li>
                 <li class="nav-item me-5">
                   <a class="nav-link active" href=""

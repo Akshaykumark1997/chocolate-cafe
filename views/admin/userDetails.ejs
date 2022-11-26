@@ -88,7 +88,7 @@
     </div>
     <div class="col py-3">
       <section>
-        <div class="container mt-5">
+        <div class="container mt-5 table-responsive">
           <h1>User Details</h1>
           <table id="table" class="table mt-5 table-hover table-light">
             <thead>
@@ -113,7 +113,7 @@
             <tbody>
               <% allusers.forEach((allusers)=>{ %>
               <tr>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= allusers._id %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
@@ -125,7 +125,7 @@
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= allusers.mobile %>
                 </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-6 text-center">
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <% if(allusers.isBlocked === false) { %>
                   <a href="/admin/blockuser/<%= allusers._id %>">
                     <button
