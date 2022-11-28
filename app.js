@@ -1,12 +1,12 @@
 const express = require("express");
 const path = require("path");
-const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload"); 
 const dotenv = require('dotenv');
+const dbconnect = require('./config/connection');
 
 dotenv.config();
 const app = express();
@@ -22,19 +22,10 @@ app.use(
 app.set("view engine", "ejs");
 
 app.use(cookieParser());
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("database connected successfully");
-    app.listen(8000, () => {
-      console.log("server started listening to port 8000");
+dbconnect.dbconnect();
+app.listen(process.env.PORTNO, () => {
+      console.log("server started listening to port");
     });
-  })
-  .catch((err) => console.log("error" + err));
-
 app.use(
   sessions({
     secret: "123",

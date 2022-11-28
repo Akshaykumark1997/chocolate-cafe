@@ -33,12 +33,15 @@ module.exports = {
   gethome: async (req, res) => {
     try {
       session = req.session.userId;
-
       if (session) {
         const userData = await user.findOne({ email: session });
-        cart.find({ userId: userData._id }).then((data) => {
-          count = data[0].product.length;
-        });
+        const productDAta = await cart.find({ userId: userData._id });
+        console.log(productDAta);
+        if (productDAta.length) {
+          count = productDAta[0].product.length;
+        } else {
+          count = null;
+        }
         products.find({ isDeleted: false }).then((allProducts) => {
           res.render("user/userHome", { session, allProducts, count });
         });
@@ -53,30 +56,37 @@ module.exports = {
     try {
       let email = req.body.email;
       const userDetails = await User.findOne({ email: email });
-      const blocked = userDetails.isBlocked;
-      if (blocked === false) {
-        if (userDetails) {
-          const value = await bcrypt.compare(
-            req.body.password,
-            userDetails.password
-          );
-          if (value) {
-            req.session.userId = req.body.email;
-            res.redirect("/userhome");
+      if (userDetails) {
+        const blocked = userDetails.isBlocked;
+        if (blocked === false) {
+          if (userDetails) {
+            const value = await bcrypt.compare(
+              req.body.password,
+              userDetails.password
+            );
+            if (value) {
+              req.session.userId = req.body.email;
+              res.redirect("/userhome");
+            } else {
+              res.render("user/userLogin", {
+                session,
+                err_message: "email or password incorrect",
+              });
+            }
           } else {
             res.render("user/userLogin", {
               session,
-              err_message: "email or password incorrect",
+              err_message: "email not registered",
             });
           }
         } else {
-          res.render("user/userLogin", {
-            session,
-            err_message: "email not registered",
-          });
+          res.render("user/userLogin", { session, err_message: "Blocked" });
         }
       } else {
-        res.render("user/userLogin", { session, err_message: "Blocked" });
+        res.render("user/userLogin", {
+          session,
+          err_message: "email or password incorrect",
+        });
       }
     } catch {
       console.error();
@@ -187,7 +197,6 @@ module.exports = {
         (product) => product.productId == id
       );
       if (proExist != -1) {
-        console.log("hoooooi");
         await cart.aggregate([
           {
             $unwind: "$product",
@@ -199,11 +208,11 @@ module.exports = {
         );
         res.redirect("/userhome");
       } else {
-        await cart.updateOne(
-          { userId: userData._id },
-          { $push: { product: proObj } }
-        );
-        res.redirect("/userhome");
+        cart
+          .updateOne({ userId: userData._id }, { $push: { product: proObj } })
+          .then(() => {
+            res.json({ status: true });
+          });
       }
     } else {
       const newCart = new cart({
@@ -224,6 +233,13 @@ module.exports = {
   viewCart: async (req, res) => {
     const userId = req.session.userId;
     const userData = await user.findOne({ email: userId });
+    const productDAta = await cart.find({ userId: userData._id });
+    console.log(productDAta);
+    if (productDAta.length) {
+      count = productDAta[0].product.length;
+    } else {
+      count = null;
+    }
     const productData = await cart
       .aggregate([
         {

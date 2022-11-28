@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // eslint-disable-next-line no-unused-vars
 function checkLoginForm(form) {
   let username = document.getElementById("username");
@@ -50,4 +51,19 @@ function checkLoginForm(form) {
     return false;
   }
   return true;
+}
+
+// eslint-disable-next-line no-unused-vars
+function addToCart(proId) {
+  $.ajax({
+    url: "/addCart/" + proId,
+    method: "get",
+    success: (response) => {
+      if (response.status) {
+        let count = $("#cartCount").html();
+        count = parseInt(count) + 1;
+        $("#cartCount").html(count);
+      }
+    },
+  });
 }

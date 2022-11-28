@@ -32,3 +32,16 @@
         border-bottom-right-radius: 16px;
     }
 }
+.box {
+    position: relative;
+}
+
+.img-title {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    left: 0;
+    right: 0;
+    top: 10%;
+    letter-spacing: 3px;
+}

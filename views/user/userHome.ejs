@@ -95,7 +95,8 @@
             </div>
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
               <div class="text-center">
-                <a class="btn btn-outline-dark mt-auto" href="/addCart/<%= allProducts._id %>">Add to Cart</a>
+                <!-- <a class="btn btn-outline-dark mt-auto" href="/addCart/<%= allProducts._id %>">Add to Cart</a> -->
+                <button class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= allProducts._id %>')">Add to Cart</button>
               </div>
             </div>
           </div>
@@ -107,18 +108,19 @@
 </main>
 
 <%- include('../partials/user-footer.ejs') %>
-<style>
-  .box {
-    position: relative;
-  }
 
-  .img-title {
-    position: absolute;
-    color: #fff;
-    text-align: center;
-    left: 0;
-    right: 0;
-    top: 10%;
-    letter-spacing: 3px;
+<!-- <script>
+  function addToCart (proId){
+    $.ajax({
+      url:'/addCart/'+proId,
+      method:'get',
+      success:(response)=>{
+        if(response.status){
+          let count = $ ('#cartCount').html()
+          count = parseInt(count)+1
+          $('cartCount').html(count);
+        }
+      }
+    })
   }
-</style>
+</script> -->
