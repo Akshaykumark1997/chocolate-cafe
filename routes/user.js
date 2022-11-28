@@ -13,4 +13,6 @@ router.post('/otpsignup',userLogin.otpSignup);
 router.get("/viewProduct/:id", userLogin.viewProduct);
 router.get('/cart',verifyLogin.verifyLoginUser,userLogin.viewCart);
 router.get('/addCart/:id',verifyLogin.verifyLoginUser,userLogin.addCart);
+router.post('/changeQuantity',verifyLogin.verifyLoginUser,userLogin.changeQuantity);
+router.post('/removeProduct',verifyLogin.verifyLoginUser,userLogin.removeProduct);
 module.exports = router;

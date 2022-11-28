@@ -133,12 +133,14 @@
                         >
                         <select
                           class="form-select"  id="category"
-                            name="category"
+                            name="category" 
                           aria-label="Default select example"
                         >
+                          
+                            <option name="category" disabled selected><%= productData.category %>
+                            </option>
                           <% categories.forEach((category)=>{ %>
                           <option name="category"
-                             selected="<%= productData.category %>"
                           >
                             <%= category.category %>
                           </option>

@@ -8,7 +8,7 @@ const cart = require("../model/cart");
 const mongoose = require("mongoose");
 
 let session;
-var count = 0;
+var count;
 module.exports = {
   guestHome: async (req, res) => {
     try {
@@ -36,11 +36,10 @@ module.exports = {
       if (session) {
         const userData = await user.findOne({ email: session });
         const productDAta = await cart.find({ userId: userData._id });
-        console.log(productDAta);
         if (productDAta.length) {
           count = productDAta[0].product.length;
         } else {
-          count = null;
+          count = 0;
         }
         products.find({ isDeleted: false }).then((allProducts) => {
           res.render("user/userHome", { session, allProducts, count });
@@ -184,7 +183,6 @@ module.exports = {
   addCart: async (req, res) => {
     const id = req.params.id;
     const objId = mongoose.Types.ObjectId(id);
-    console.log(objId);
     const userId = req.session.userId;
     let proObj = {
       productId: objId,
@@ -224,22 +222,16 @@ module.exports = {
           },
         ],
       });
-      newCart.save().then((data) => {
-        console.log(data);
-        res.redirect("/userhome");
+      newCart.save().then(() => {
+        
+        // res.redirect("/userhome");
+        res.json({ status: true });
       });
     }
   },
   viewCart: async (req, res) => {
     const userId = req.session.userId;
     const userData = await user.findOne({ email: userId });
-    const productDAta = await cart.find({ userId: userData._id });
-    console.log(productDAta);
-    if (productDAta.length) {
-      count = productDAta[0].product.length;
-    } else {
-      count = null;
-    }
     const productData = await cart
       .aggregate([
         {
@@ -270,8 +262,46 @@ module.exports = {
           },
         },
       ])
-      .exec();
-    console.log(productData);
+      .exec(); 
+      count = productData.length;
     res.render("user/cart", { session, productData, count });
   },
+  changeQuantity:async(req,res)=>{
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.product);
+    await cart
+      .aggregate([
+        {
+          $unwind: "$product",
+        },
+      ])
+      .then((data) => {
+        console.log(data);
+      });
+     await cart.updateOne(
+      { _id: data.cart, "product.productId": objId },
+      { $inc: { "product.$.quantity": data.count } }
+    ).then(()=>{
+      res.json({status:true});
+    })
+     
+  },
+  removeProduct:async(req,res)=>{
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.product);
+    await cart.aggregate([
+      {
+        $unwind:"$product"
+      }
+    ])
+    await cart
+      .updateOne(
+        { _id: data.cart, "product.productId": objId },
+        { $pull: { product: { productId: objId } } }
+      )
+      .then(() => {
+        res.json({status:true});
+      });
+
+  }
 };

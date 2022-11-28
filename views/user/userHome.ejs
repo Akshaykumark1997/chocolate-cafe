@@ -1,31 +1,29 @@
 <%- include('../partials/userPartial.ejs') %>
-<section>
-  <div
-    id="carouselExampleControls"
-    class="carousel slide"
-    data-bs-ride="carousel"
-  >
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="box">
-          <img
-            class="img-responsive"
-            src="/user/images/hero1.jpg"
-            width="100%"
-            alt="header image"
-          />
-          <div class="img-title">
-            <h1 class="display-4 fw-bold" style="color: #57423f">
-              Delicious sweet and Chocolate
-            </h1>
-          </div>
+
+<div
+  id="carouselExampleControls"
+  class="carousel slide"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <div class="box">
+        <img
+          class="img-responsive"
+          src="/user/images/hero1.jpg"
+          width="100%"
+          alt="header image"
+        />
+        <div class="img-title">
+          <h1 class="display-4 fw-bold" style="color: #57423f">
+            Delicious sweet and Chocolate
+          </h1>
         </div>
       </div>
+    </div>
   </div>
-</section>
-
-<main class="mt-5 pt-3">
-  <div class="container">
+  <main class="mt-5 pt-3">
+    <div class="container">
       <div class="row">
         <div class="col-md-6 gx-5 mb-4">
           <div
@@ -59,68 +57,59 @@
           </p>
         </div>
       </div>
-  </div>
-  <section class="py-5 bg-light">
-    <div class="container px-4 px-lg-5 mt-5">
-      <div
-        class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-center"
-      >
-        <% allProducts.forEach((allProducts)=>{ %>
-        <div class="col mb-5">
-          <div class="card h-100">
-            <div class="text-end"> 
-              <a href=""><img class="px-2" src="/user/images/wishlist.svg" alt=""></a>
-            </div>
-            <a
-              class="text-decoration-none text-dark"
-              href="/viewProduct/<%= allProducts._id %>"
-              ><img
-                class="card-img-top"
-                src="/admin/products/<%= allProducts._id %>.jpg"
-                alt="..."
-            /></a>
-            <div class="card-body p-4">
-              <div class="text-center">
-                <a
-                  class="text-decoration-none text-dark"
-                  href="/viewProduct/<%= allProducts._id %>"
-                  ><h5 class="fw-bolder"><%= allProducts.product %></h5></a
-                >
+    </div>
+    <section class="py-5 bg-light">
+      <div class="container px-4 px-lg-5 mt-5">
+        <div
+          class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-center"
+        >
+          <% allProducts.forEach((allProducts)=>{ %>
+          <div class="col mb-5">
+            <div class="card h-100">
+              <div class="text-end">
+                <a href=""
+                  ><img class="px-2" src="/user/images/wishlist.svg" alt=""
+                /></a>
               </div>
-            </div>
-            <div class="card-body">
-              <div class="text-center">
-                <h5 class="fw-bolder">Rs.<%= allProducts.price %></h5>
+              <a
+                class="text-decoration-none text-dark"
+                href="/viewProduct/<%= allProducts._id %>"
+                ><img
+                  class="card-img-top"
+                  src="/admin/products/<%= allProducts._id %>.jpg"
+                  alt="..."
+              /></a>
+              <div class="card-body p-4">
+                <div class="text-center">
+                  <a
+                    class="text-decoration-none text-dark"
+                    href="/viewProduct/<%= allProducts._id %>"
+                    ><h5 class="fw-bolder"><%= allProducts.product %></h5></a
+                  >
+                </div>
               </div>
-            </div>
-            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-              <div class="text-center">
-                <!-- <a class="btn btn-outline-dark mt-auto" href="/addCart/<%= allProducts._id %>">Add to Cart</a> -->
-                <button class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= allProducts._id %>')">Add to Cart</button>
+              <div class="card-body">
+                <div class="text-center">
+                  <h5 class="fw-bolder">Rs.<%= allProducts.price %></h5>
+                </div>
+              </div>
+              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center">
+                  <a href="/viewProduct/<%= allProducts._id %>"><button
+                    class="btn btn-outline-dark mt-auto" 
+                    
+                  >
+                    view product
+                  </button></a>
+                </div>
               </div>
             </div>
           </div>
+          <% })%>
         </div>
-        <% })%>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
 
-<%- include('../partials/user-footer.ejs') %>
-
-<!-- <script>
-  function addToCart (proId){
-    $.ajax({
-      url:'/addCart/'+proId,
-      method:'get',
-      success:(response)=>{
-        if(response.status){
-          let count = $ ('#cartCount').html()
-          count = parseInt(count)+1
-          $('cartCount').html(count);
-        }
-      }
-    })
-  }
-</script> -->
+  <%- include('../partials/user-footer.ejs') %>
+</div>

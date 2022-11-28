@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 // eslint-disable-next-line no-unused-vars
 function checkLoginForm(form) {
@@ -53,7 +54,7 @@ function checkLoginForm(form) {
   return true;
 }
 
-// eslint-disable-next-line no-unused-vars
+
 function addToCart(proId) {
   $.ajax({
     url: "/addCart/" + proId,
@@ -66,4 +67,49 @@ function addToCart(proId) {
       }
     },
   });
+  // fetch("http://localhost:8000/addCart/" + proId, {
+  //   method: "get"
+  // })
+  // .then((res) => res.json())
+  // .then((res) => {
+  //   if (res.status) {
+  //     const toastLiveExample = document.getElementById("liveToast");
+  //     const toast = new bootstrap.Toast(toastLiveExample);
+
+  //           toast.show();
+  //   }
+  // }).catch(err => {
+  //   console.log(err)
+  // })
 }
+
+    
+    function changeQuantity(cartId, productId, count) {
+      let quantity = parseInt(document.getElementById("quantity").innerHTML);
+      $.ajax({
+        url: "/changeQuantity",
+        data: {
+          cart: cartId,
+          product: productId,
+          count: count,
+        },
+        method: "post",
+        success: () => {
+          document.getElementById("quantity").innerHTML = quantity + count;
+          location.reload();
+        },
+      });
+    }
+    function removeProduct(cartId, productId) {
+      $.ajax({
+        url: "/removeProduct",
+        data: {
+          cart: cartId,
+          product: productId,
+        },
+        method: "post",
+        success: () => {
+          location.reload();
+        },
+      });
+    }
