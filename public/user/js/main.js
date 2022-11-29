@@ -67,20 +67,6 @@ function addToCart(proId) {
       }
     },
   });
-  // fetch("http://localhost:8000/addCart/" + proId, {
-  //   method: "get"
-  // })
-  // .then((res) => res.json())
-  // .then((res) => {
-  //   if (res.status) {
-  //     const toastLiveExample = document.getElementById("liveToast");
-  //     const toast = new bootstrap.Toast(toastLiveExample);
-
-  //           toast.show();
-  //   }
-  // }).catch(err => {
-  //   console.log(err)
-  // })
 }
 
     

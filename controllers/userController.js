@@ -223,8 +223,6 @@ module.exports = {
         ],
       });
       newCart.save().then(() => {
-        
-        // res.redirect("/userhome");
         res.json({ status: true });
       });
     }
@@ -261,12 +259,22 @@ module.exports = {
             productDetail: { $arrayElemAt: ["$productDetail", 0] },
           },
         },
+        {
+          $addFields: {
+            productPrice: {
+              $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
+            },
+          },
+        },
       ])
-      .exec(); 
-      count = productData.length;
-    res.render("user/cart", { session, productData, count });
+      .exec();
+    const sum = productData.reduce((accumulator, object) => {
+      return accumulator + object.productPrice;
+    }, 0);
+    count = productData.length;
+    res.render("user/cart", { session, productData, count, sum });
   },
-  changeQuantity:async(req,res)=>{
+  changeQuantity: async (req, res) => {
     const data = req.body;
     const objId = mongoose.Types.ObjectId(data.product);
     await cart
@@ -278,30 +286,109 @@ module.exports = {
       .then((data) => {
         console.log(data);
       });
-     await cart.updateOne(
-      { _id: data.cart, "product.productId": objId },
-      { $inc: { "product.$.quantity": data.count } }
-    ).then(()=>{
-      res.json({status:true});
-    })
-     
+    await cart
+      .updateOne(
+        { _id: data.cart, "product.productId": objId },
+        { $inc: { "product.$.quantity": data.count } }
+      )
+      .then(() => {
+        res.json({ status: true });
+      });
   },
-  removeProduct:async(req,res)=>{
+  removeProduct: async (req, res) => {
     const data = req.body;
     const objId = mongoose.Types.ObjectId(data.product);
     await cart.aggregate([
       {
-        $unwind:"$product"
-      }
-    ])
+        $unwind: "$product",
+      },
+    ]);
     await cart
       .updateOne(
         { _id: data.cart, "product.productId": objId },
         { $pull: { product: { productId: objId } } }
       )
       .then(() => {
-        res.json({status:true});
+        res.json({ status: true });
       });
+  },
+  totalAmount: async (req) => {
+    const userId = req.session.userId;
+    const userData = await user.findOne({ email: userId });
+    const totalAmount = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
+          },
+        },
+        {
+          $lookup: {
+            from: "productdetails",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
+            },
+          },
+        },
+      ])
+      .exec();
+    console.log(totalAmount);
+  },
+  checkout: (req, res) => {
+    res.render("user/checkout", { session, count });
+  },
+  account: async (req, res) => {
+     const userData = await user.findOne({ email: session });
+    res.render("user/accountDetails", { userData, session, count });
+  },
+  editAccount: async (req, res) => {
+    const userData = await user.findOne({ email: session });
+    res.render("user/editAccount", { userData, session, count });
+  },
+  postEditAccount:async (req, res) => {
+    console.log(req.body);
+    const data = req.body;
+    const newData = await user.updateOne({email:session},{$set:{
+      fullname:data.fullname,
+      username:data.username,
+      email:data.email,
+      password:data.password,
+      mobile:data.mobile,
+      addressDetails:[
+        {
+          housename:data.housename,
+          area:data.area,
+          landmark:data.landmark,
+          city:data.city,
+          state:data.state,
+          pincode:data.pincode
+        }
+      ]
 
-  }
+    }});
+    console.log(newData);
+    res.redirect('/account')
+  },
 };

@@ -62,7 +62,7 @@
                       </h6>
                     </div>
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <button class="btn btn-outline-none" onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')">
+                      <button class="btn btn-outline-none" onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>'-1)">
                         <i class="fas fa-times"></i
                       ></button>
                     </div>
@@ -71,7 +71,7 @@
                   <hr class="my-4" />
                   <div class="pt-5">
                     <h6 class="mb-0">
-                      <a href="#!" class="text-body"
+                      <a href="/userhome" class="text-body"
                         ><i class="fas fa-long-arrow-alt-left me-2"></i>Back to
                         shop</a
                       >
@@ -83,15 +83,15 @@
                 <div class="p-5">
                   <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                   <hr class="my-4" />
-
+                  <% productData.forEach((product)=>{ %>
                   <div class="d-flex justify-content-between mb-4">
-                    <h5 class="text-uppercase">items 3</h5>
-                    <h5>€ 132.00</h5>
+                    <p><%= product.productDetail.product %></p>
+                    <p>Rs.<%= product.productPrice %></p>
                   </div>
+                  <% }) %>
+                  <!-- <h5 class="text-uppercase mb-3">Shipping</h5> -->
 
-                  <h5 class="text-uppercase mb-3">Shipping</h5>
-
-                  <div class="mb-4 pb-2">
+                  <!-- <div class="mb-4 pb-2">
                     <select class="select">
                       <option value="1">Standard-Delivery- €5.00</option>
                       <option value="2">Two</option>
@@ -113,22 +113,22 @@
                         >Enter your code</label
                       >
                     </div>
-                  </div>
+                  </div> -->
 
                   <hr class="my-4" />
 
                   <div class="d-flex justify-content-between mb-5">
                     <h5 class="text-uppercase">Total price</h5>
-                    <h5>€ 137.00</h5>
+                    <h5>Rs.<%= sum %></h5>
                   </div>
 
-                  <button
+                  <a href="/checkout"><button
                     type="button"
                     class="btn btn-dark btn-block btn-lg"
                     data-mdb-ripple-color="dark"
                   >
-                    Register
-                  </button>
+                    Proceed to checkout
+                  </button></a>
                 </div>
               </div>
             </div>
@@ -139,6 +139,3 @@
   </div>
 </section>
 <%- include('../partials/user-footer.ejs') %>
-<script>
-    
-</script>
