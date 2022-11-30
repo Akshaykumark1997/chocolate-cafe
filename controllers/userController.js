@@ -6,6 +6,7 @@ const user = require("../model/userSignUp");
 const sendOtp = require("../middleware/otpmiddleware.js");
 const cart = require("../model/cart");
 const mongoose = require("mongoose");
+const order = require('../model/order'); 
 
 let session;
 var count;
@@ -268,6 +269,7 @@ module.exports = {
         },
       ])
       .exec();
+    console.log(productData);
     const sum = productData.reduce((accumulator, object) => {
       return accumulator + object.productPrice;
     }, 0);
@@ -283,8 +285,7 @@ module.exports = {
           $unwind: "$product",
         },
       ])
-      .then((data) => {
-        console.log(data);
+      .then(() => {
       });
     await cart
       .updateOne(
@@ -312,10 +313,10 @@ module.exports = {
         res.json({ status: true });
       });
   },
-  totalAmount: async (req) => {
+  viewCheckout: async (req, res) => {
     const userId = req.session.userId;
     const userData = await user.findOne({ email: userId });
-    const totalAmount = await cart
+    const productDAta = await cart
       .aggregate([
         {
           $match: { userId: userData.id },
@@ -345,50 +346,137 @@ module.exports = {
           },
         },
         {
-          $group: {
-            _id: null,
-            total: {
-              $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
+          $addFields: {
+            productPrice: {
+               $multiply: ["$productQuantity", "$productDetail.price"] 
             },
           },
         },
       ])
       .exec();
-    console.log(totalAmount);
-  },
-  checkout: (req, res) => {
-    res.render("user/checkout", { session, count });
+    const sum = productDAta.reduce((accumulator, object) => {
+      return accumulator + object.productPrice;
+    }, 0);
+    count = productDAta.length;
+    res.render("user/checkout", { session, productDAta, count, sum ,userData});
   },
   account: async (req, res) => {
-     const userData = await user.findOne({ email: session });
+    const userData = await user.findOne({ email: session });
     res.render("user/accountDetails", { userData, session, count });
   },
   editAccount: async (req, res) => {
     const userData = await user.findOne({ email: session });
     res.render("user/editAccount", { userData, session, count });
   },
-  postEditAccount:async (req, res) => {
+  postEditAccount: async (req, res) => {
+    const data = req.body;
+    await user.updateOne(
+      { email: session },
+      {
+        $set: {
+          fullname: data.fullname,
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          mobile: data.mobile,
+          addressDetails: [
+            {
+              housename: data.housename,
+              area: data.area,
+              landmark: data.landmark,
+              city: data.city,
+              state: data.state,
+              pincode: data.pincode,
+            },
+          ],
+        },
+      }
+    );
+    res.redirect("/account");
+  },
+  addAddress: (req, res) => {
     console.log(req.body);
     const data = req.body;
-    const newData = await user.updateOne({email:session},{$set:{
-      fullname:data.fullname,
-      username:data.username,
-      email:data.email,
-      password:data.password,
-      mobile:data.mobile,
-      addressDetails:[
-        {
-          housename:data.housename,
-          area:data.area,
-          landmark:data.landmark,
-          city:data.city,
-          state:data.state,
-          pincode:data.pincode
-        }
-      ]
-
-    }});
-    console.log(newData);
-    res.redirect('/account')
+    const addobj = {
+      housename:data.housename,
+      area:data.area,
+      landmark:data.landmark,
+      city:data.city,
+      state:data.state,
+      pincode:data.pincode
+    }
+    console.log(req.params.id);
+    user.updateOne({email:session},{$push:{addressDetails:addobj}}).then((data)=>{
+      console.log(data);
+      res.redirect("/checkout");
+    })
   },
+  placeOrder:async(req,res)=>{
+    const userData = await user.findOne({email:session})
+    const cartData = await cart.findOne({userId:userData._id});
+    const status = req.body.paymentMethod ==='COD'?'placed':'pending';
+    if(cartData){
+    const productData = await cart
+      .aggregate([
+        {
+          $match: { userId: userData.id },
+        },
+        {
+          $unwind: "$product",
+        },
+        {
+          $project: {
+            productItem: "$product.productId",
+            productQuantity: "$product.quantity",
+          },
+        },
+        {
+          $lookup: {
+            from: "productdetails",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          },
+        },
+        {
+          $addFields: {
+            productPrice: {
+              $multiply: ["$productQuantity", "$productDetail.price"],
+            },
+          },
+        },
+      ])
+      .exec();
+    const sum = productData.reduce((accumulator, object) => {
+      return accumulator + object.productPrice;
+    }, 0);
+    count = productData.length;
+     order.create({
+      userId: userData._id,
+      fullname: userData.fullname,
+      mobile: userData.mobile,
+      address: req.body.address,
+      orderItems:cartData.product,
+      totalAmount:sum, 
+      paymentMethod:req.body.paymentMethod,
+      paymentStatus:status
+    });
+    cart.deleteOne({userId:userData._id}).then(()=>{
+      res.render("user/orderSuccess", { session, count });  
+    })
+  }else{
+    res.redirect('/cart')
+  }
+  },
+  orderDetails:(req,res)=>{
+    res.render('user/orderDetails');
+  }
+  
 };

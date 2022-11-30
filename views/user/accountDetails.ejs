@@ -48,74 +48,39 @@
           </div>
         </div>
         <hr />
-        <div class="row">
+        <% userData.addressDetails.forEach((address,index)=>{ %>
+        <div class="row">  
           <div class="col-sm-3">
-            <p class="mb-0">Address</p>
+            <p class="mb-0">Address <%= index + 1 %></p>
+          </div>
+          <div class="col-sm-9">
+            <p class="text-muted mb-0">
+              <%= address.housename %><br />
+              <%= address.area %><br />
+              <%= address.landmark %><br />
+              <%= address.city %>, <%= address.state %><br />
+              <%= address.pincode %>
+            </p>
           </div>
         </div>
         <hr />
+        <% }) %>
         <div class="row">
           <div class="col-sm-3">
-            <p class="mb-0">house name</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].housename %></p>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Area</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].area %></p>
+            <a href="/editAccount"
+              ><button
+                type="button"
+                class="btn btn-dark btn-block btn-lg"
+                data-mdb-ripple-color="dark"
+              >
+                Edit Profile
+              </button></a
+            >
           </div>
         </div>
-        <hr />
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Landmark</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].landmark %></p>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">City</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].city %></p>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">State</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].state %></p>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col-sm-3">
-            <p class="mb-0">Pincode</p>
-          </div>
-          <div class="col-sm-9">
-            <p class="text-muted mb-0"><%= userData.addressDetails[0].pincode %></p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-3">
-        <a href="/editAccount"><button type="button" class="btn btn-dark btn-block btn-lg" data-mdb-ripple-color="dark">
-            Edit Profile
-          </button></a>
       </div>
     </div>
   </div>
 </div>
 <%- include('../partials/user-footer.ejs') %>
+   

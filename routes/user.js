@@ -23,11 +23,14 @@ router.post(
   verifyLogin.verifyLoginUser,
   userLogin.removeProduct
 );
-router.get("/totalAmount", verifyLogin.verifyLoginUser, userLogin.totalAmount);
-router.get("/checkout", verifyLogin.verifyLoginUser, userLogin.checkout);
+router.get("/checkout", verifyLogin.verifyLoginUser, userLogin.viewCheckout);
 router.get("/account", verifyLogin.verifyLoginUser, userLogin.account);
 router
   .route("/editAccount")
   .get(verifyLogin.verifyLoginUser, userLogin.editAccount)
   .post(verifyLogin.verifyLoginUser, userLogin.postEditAccount);
+
+router.post('/addAddress/:id',verifyLogin.verifyLoginUser,userLogin.addAddress);
+router.post('/placeOrder',verifyLogin.verifyLoginUser,userLogin.placeOrder);
+router.get('/orderDetails',verifyLogin.verifyLoginUser,userLogin.orderDetails);
 module.exports = router;

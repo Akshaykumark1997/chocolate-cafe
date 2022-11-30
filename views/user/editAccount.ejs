@@ -9,14 +9,14 @@
               <div class="card-body p-5">
                 <h5 class="text-uppercase text-center mb-5">Edit Account</h5>
 
-                <form action="/editAccount" method="post">
+                <form action="/editAccount" method="post" onsubmit="return eiditForm(this);">
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example1cg"
                       >Full name</label
                     >
                     <input
                       type="text"
-                      id="product"
+                      id="fullname"
                       name="fullname"
                       value="<%= userData.fullname %>"
                       class="form-control form-control-lg"

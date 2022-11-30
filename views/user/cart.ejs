@@ -16,8 +16,28 @@
                   >
                     <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
                   </div>
+                  <% if(productData.length === 0){ %>
 
-                  <% productData.forEach((product)=>{ %>
+                  <center>
+                    <h1 style="color: red">Sorry your cart is empty</h1>
+                    <img
+                      src="https://alphapharmaexhibitions.com/images/cartempty1.png"
+                      alt=""
+                      style="width: 300px"
+                    /><br />
+                    <a
+                      class="btn btn-succes"
+                      href="/userhome"
+                      style="
+                        margin-top: 17px;
+                        color: green;
+                        border: solid green;
+                      "
+                      >SHOP NOW</a
+                    >
+                  </center>
+
+                  <% }else{ %> <% productData.forEach((product)=>{ %>
                   <hr class="my-4" />
                   <div
                     class="row mb-4 d-flex justify-content-between align-items-center"
@@ -39,7 +59,7 @@
                         style="pointer-events: none;
                          cursor: not-allowed;"
                           <% } %>'
-                       onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)" >
+                                    onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)" >
                         <i class="fas fa-minus"></i>
                       </button>
 
@@ -52,7 +72,10 @@
                         class="form-control form-control-sm"
                       />
 
-                      <button class="btn btn-link px-2" onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)">
+                      <button
+                        class="btn btn-link px-2"
+                        onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)"
+                      >
                         <i class="fas fa-plus"></i>
                       </button>
                     </div>
@@ -62,12 +85,15 @@
                       </h6>
                     </div>
                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                      <button class="btn btn-outline-none" onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>'-1)">
-                        <i class="fas fa-times"></i
-                      ></button>
+                      <button
+                        class="btn btn-outline-none"
+                        onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
                     </div>
                   </div>
-                  <% }) %>
+                  <% }) %> <% } %>
                   <hr class="my-4" />
                   <div class="pt-5">
                     <h6 class="mb-0">
@@ -121,14 +147,17 @@
                     <h5 class="text-uppercase">Total price</h5>
                     <h5>Rs.<%= sum %></h5>
                   </div>
-
-                  <a href="/checkout"><button
-                    type="button"
-                    class="btn btn-dark btn-block btn-lg"
-                    data-mdb-ripple-color="dark"
+                  <% if(productData.length!==0){ %>
+                  <a href="/checkout"
+                    ><button
+                      type="button"
+                      class="btn btn-dark btn-block btn-lg"
+                      data-mdb-ripple-color="dark"
+                    >
+                      Proceed to checkout
+                    </button></a
                   >
-                    Proceed to checkout
-                  </button></a>
+                  <% } %>
                 </div>
               </div>
             </div>
@@ -139,3 +168,4 @@
   </div>
 </section>
 <%- include('../partials/user-footer.ejs') %>
+<script></script>
