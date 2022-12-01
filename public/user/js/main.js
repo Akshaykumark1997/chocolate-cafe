@@ -7,7 +7,6 @@ function checkLoginForm(form) {
   let password = document.getElementById("password");
   let mobile = document.getElementById("mobile");
 
-
   var regex = /^[a-zA-Z\s]+$/;
   if (username.value == "") {
     document.getElementById("nameError").innerHTML = "please enter your name";
@@ -52,10 +51,9 @@ function checkLoginForm(form) {
     password.focus();
     return false;
   }
- 
+
   return true;
 }
-
 
 function addToCart(proId) {
   $.ajax({
@@ -71,217 +69,205 @@ function addToCart(proId) {
   });
 }
 
-    
-    function changeQuantity(cartId, productId, count) {
-      let quantity = parseInt(document.getElementById("quantity").innerHTML);
-      $.ajax({
-        url: "/changeQuantity",
-        data: {
-          cart: cartId,
-          product: productId,
-          count: count,
-        },
-        method: "post",
-        success: () => {
-          document.getElementById("quantity").innerHTML = quantity + count;
-          location.reload();
-        },
-      });
-    }
-    function removeProduct(cartId, productId) {
-      $.ajax({
-        url: "/removeProduct",
-        data: {
-          cart: cartId,
-          product: productId,
-        },
-        method: "post",
-        success: () => {
-          location.reload();
-        },
-      });
-    }
+function changeQuantity(cartId, productId, count) {
+  let quantity = parseInt(document.getElementById("quantity").innerHTML);
+  $.ajax({
+    url: "/changeQuantity",
+    data: {
+      cart: cartId,
+      product: productId,
+      count: count,
+    },
+    method: "post",
+    success: () => {
+      document.getElementById("quantity").innerHTML = quantity + count;
+      window.location.reload();
+    },
+  });
+}
+function removeProduct(cartId, productId) {
+  $.ajax({
+    url: "/removeProduct",
+    data: {
+      cart: cartId,
+      product: productId,
+    },
+    method: "post",
+    success: () => {
+      location.reload();
+    },
+  });
+}
 
-    function eiditForm(form) {
-      
-      let fullname = document.getElementById("fullname");
-      let housename = document.getElementById("housename");
-      let area = document.getElementById("area");
-      let landmark = document.getElementById("landmark");
-      let city = document.getElementById("city");
-      let state = document.getElementById("state");
-      let pincode = document.getElementById("pincode");
+function eiditForm(form) {
+  let fullname = document.getElementById("fullname");
+  let housename = document.getElementById("housename");
+  let area = document.getElementById("area");
+  let landmark = document.getElementById("landmark");
+  let city = document.getElementById("city");
+  let state = document.getElementById("state");
+  let pincode = document.getElementById("pincode");
 
-      var regex = /^[a-zA-Z\s]+$/;
-      if (fullname.value == "") {
-        document.getElementById("nameError").innerHTML =
-          "please enter your full name";
-        fullname.focus();
-        return false;
-      }  
-      if (regex.test(fullname.value) === false) {
-        document.getElementById("nameError").innerHTML =
-          "fullname should be alphabets";
-        fullname.focus();
-        return false;
-      }
-      if (housename.value == "") {
-        document.getElementById("houseError").innerHTML =
-          "please enter your house name";
-              housename.focus();
-              return false;
-      }
-      if (regex.test(housename.value) === false) {
-        document.getElementById("houseError").innerHTML =
-          "housename should be alphabets";
-        housename.focus();
-        return false;
-      }
-      if(area.value == ""){
-        document.getElementById("areaError").innerHTML = "please enter your area";
-        area.focus();
-        return false;
-      }
-      if (regex.test(area.value) === false) {
-       document.getElementById("areaError").innerHTML =
-         "area should be alphabets";
-       area.focus();
-       return false;
-      }
-      if (landmark.value == "") {
-        document.getElementById("landmarkError").innerHTML =
-          "please enter your landmark";
-        landmark.focus();
-        return false;
-      }
-      if (regex.test(landmark.value) === false) {
-        document.getElementById("landmarkError").innerHTML =
-          "landmark should be alphabets";
-        landmark.focus();
-        return false;
-      }
-      if (city.value == "") {
-        document.getElementById("cityError").innerHTML =
-          "please enter your city";
-        city.focus();
-        return false;
-      }
-      if (regex.test(city.value) === false) {
-        document.getElementById("cityError").innerHTML =
-          "city should be alphabets";
-        city.focus();
-        return false;
-      }
-       if (state.value == "") {
-              document.getElementById("stateError").innerHTML =
-                "please enter your state";
-              state.focus();
-              return false;
-       }
-       if (regex.test(state.value) === false) {
-              document.getElementById("stateError").innerHTML =
-                "state should be alphabets";
-              state.focus();
-              return false;
-       }
-       if (pincode.value == "") {
-         document.getElementById("pincodeError").innerHTML =
-           "please enter your pincode";
-         pincode.focus();
-         return false;
-       }
-      
-       if (isNaN(pincode.value)) {
-         document.getElementById("pincodeError").innerHTML =
-           "pincode should be digits";
-         pincode.focus();
-         return false;
-       }
-      return true;
-    }
+  var regex = /^[a-zA-Z\s]+$/;
+  if (fullname.value == "") {
+    document.getElementById("nameError").innerHTML =
+      "please enter your full name";
+    fullname.focus();
+    return false;
+  }
+  if (regex.test(fullname.value) === false) {
+    document.getElementById("nameError").innerHTML =
+      "fullname should be alphabets";
+    fullname.focus();
+    return false;
+  }
+  if (housename.value == "") {
+    document.getElementById("houseError").innerHTML =
+      "please enter your house name";
+    housename.focus();
+    return false;
+  }
+  if (regex.test(housename.value) === false) {
+    document.getElementById("houseError").innerHTML =
+      "housename should be alphabets";
+    housename.focus();
+    return false;
+  }
+  if (area.value == "") {
+    document.getElementById("areaError").innerHTML = "please enter your area";
+    area.focus();
+    return false;
+  }
+  if (regex.test(area.value) === false) {
+    document.getElementById("areaError").innerHTML = "area should be alphabets";
+    area.focus();
+    return false;
+  }
+  if (landmark.value == "") {
+    document.getElementById("landmarkError").innerHTML =
+      "please enter your landmark";
+    landmark.focus();
+    return false;
+  }
+  if (regex.test(landmark.value) === false) {
+    document.getElementById("landmarkError").innerHTML =
+      "landmark should be alphabets";
+    landmark.focus();
+    return false;
+  }
+  if (city.value == "") {
+    document.getElementById("cityError").innerHTML = "please enter your city";
+    city.focus();
+    return false;
+  }
+  if (regex.test(city.value) === false) {
+    document.getElementById("cityError").innerHTML = "city should be alphabets";
+    city.focus();
+    return false;
+  }
+  if (state.value == "") {
+    document.getElementById("stateError").innerHTML = "please enter your state";
+    state.focus();
+    return false;
+  }
+  if (regex.test(state.value) === false) {
+    document.getElementById("stateError").innerHTML =
+      "state should be alphabets";
+    state.focus();
+    return false;
+  }
+  if (pincode.value == "") {
+    document.getElementById("pincodeError").innerHTML =
+      "please enter your pincode";
+    pincode.focus();
+    return false;
+  }
 
-    
-    function addressForm(form) {
-      let housename = document.getElementById("housename");
-      let area = document.getElementById("area");
-      let landmark = document.getElementById("landmark");
-      let city = document.getElementById("city");
-      let state = document.getElementById("state");
-      let pincode = document.getElementById("pincode");
+  if (isNaN(pincode.value)) {
+    document.getElementById("pincodeError").innerHTML =
+      "pincode should be digits";
+    pincode.focus();
+    return false;
+  }
+  return true;
+}
 
-      var regex = /^[a-zA-Z\s]+$/;
-      if (housename.value == "") {
-        document.getElementById("houseError").innerHTML =
-          "please enter your house name";
-        housename.focus();
-        return false;
-      }
-      if (regex.test(housename.value) === false) {
-        document.getElementById("houseError").innerHTML =
-          "housename should be alphabets";
-        housename.focus();
-        return false;
-      }
-      if (area.value == "") {
-        document.getElementById("areaError").innerHTML =
-          "please enter your area";
-        area.focus();
-        return false;
-      }
-      if (regex.test(area.value) === false) {
-        document.getElementById("areaError").innerHTML =
-          "area should be alphabets";
-        area.focus();
-        return false;
-      }
-      if (landmark.value == "") {
-        document.getElementById("landmarkError").innerHTML =
-          "please enter your landmark";
-        landmark.focus();
-        return false;
-      }
-      if (regex.test(landmark.value) === false) {
-        document.getElementById("landmarkError").innerHTML =
-          "landmark should be alphabets";
-        landmark.focus();
-        return false;
-      }
-      if (city.value == "") {
-        document.getElementById("cityError").innerHTML =
-          "please enter your city";
-        city.focus();
-        return false;
-      }
-      if (regex.test(city.value) === false) {
-        document.getElementById("cityError").innerHTML =
-          "city should be alphabets";
-        city.focus();
-        return false;
-      }
-      if (state.value == "") {
-        document.getElementById("stateError").innerHTML =
-          "please enter your state";
-        state.focus();
-        return false;
-      }
-      if (regex.test(state.value) === false) {
-        document.getElementById("stateError").innerHTML =
-          "state should be alphabets";
-        state.focus();
-        return false;
-      }
-      if (pincode.value == "") {
-        document.getElementById("pincodeError").innerHTML =
-          "please enter your pincode";
-        pincode.focus();
-        return false;
-      }
+function addressForm(form) {
+  let housename = document.getElementById("housename");
+  let area = document.getElementById("area");
+  let landmark = document.getElementById("landmark");
+  let city = document.getElementById("city");
+  let state = document.getElementById("state");
+  let pincode = document.getElementById("pincode");
 
-      if (isNaN(pincode.value)) {
-        document.getElementById("pincodeError").innerHTML =
-          "pincode should be digits";
-        pincode.focus();
-        return false;
-      }
-      return true;
-    }
+  var regex = /^[a-zA-Z\s]+$/;
+  if (housename.value == "") {
+    document.getElementById("houseError").innerHTML =
+      "please enter your house name";
+    housename.focus();
+    return false;
+  }
+  if (regex.test(housename.value) === false) {
+    document.getElementById("houseError").innerHTML =
+      "housename should be alphabets";
+    housename.focus();
+    return false;
+  }
+  if (area.value == "") {
+    document.getElementById("areaError").innerHTML = "please enter your area";
+    area.focus();
+    return false;
+  }
+  if (regex.test(area.value) === false) {
+    document.getElementById("areaError").innerHTML = "area should be alphabets";
+    area.focus();
+    return false;
+  }
+  if (landmark.value == "") {
+    document.getElementById("landmarkError").innerHTML =
+      "please enter your landmark";
+    landmark.focus();
+    return false;
+  }
+  if (regex.test(landmark.value) === false) {
+    document.getElementById("landmarkError").innerHTML =
+      "landmark should be alphabets";
+    landmark.focus();
+    return false;
+  }
+  if (city.value == "") {
+    document.getElementById("cityError").innerHTML = "please enter your city";
+    city.focus();
+    return false;
+  }
+  if (regex.test(city.value) === false) {
+    document.getElementById("cityError").innerHTML = "city should be alphabets";
+    city.focus();
+    return false;
+  }
+  if (state.value == "") {
+    document.getElementById("stateError").innerHTML = "please enter your state";
+    state.focus();
+    return false;
+  }
+  if (regex.test(state.value) === false) {
+    document.getElementById("stateError").innerHTML =
+      "state should be alphabets";
+    state.focus();
+    return false;
+  }
+  if (pincode.value == "") {
+    document.getElementById("pincodeError").innerHTML =
+      "please enter your pincode";
+    pincode.focus();
+    return false;
+  }
+
+  if (isNaN(pincode.value)) {
+    document.getElementById("pincodeError").innerHTML =
+      "pincode should be digits";
+    pincode.focus();
+    return false;
+  }
+  return true;
+}

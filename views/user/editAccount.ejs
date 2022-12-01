@@ -9,7 +9,11 @@
               <div class="card-body p-5">
                 <h5 class="text-uppercase text-center mb-5">Edit Account</h5>
 
-                <form action="/editAccount" method="post" onsubmit="return eiditForm(this);">
+                <form
+                  action="/editAccount"
+                  method="post"
+                  onsubmit="return eiditForm(this);"
+                >
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example1cg"
                       >Full name</label
@@ -31,10 +35,12 @@
                     <input
                       type="numb"
                       id="username"
-                      name="username" readonly
+                      name="username"
+                      readonly
                       value="<%= userData.username %>"
                       class="form-control form-control-lg"
-                    /><p id="userNameError" style="color: red"></p>
+                    />
+                    <p id="userNameError" style="color: red"></p>
                   </div>
 
                   <div class="form-outline mb-4">
@@ -44,10 +50,12 @@
                     <input
                       type="numb"
                       id="email"
-                      name="email" readonly
+                      name="email"
+                      readonly
                       value="<%= userData.email %>"
                       class="form-control form-control-lg"
-                    /><p id="emailError" style="color: red"></p>
+                    />
+                    <p id="emailError" style="color: red"></p>
                   </div>
 
                   <div class="form-outline mb-4">
@@ -56,17 +64,19 @@
                     >
                     <input
                       type="text"
-                      id="description" readonly
+                      id="description"
+                      readonly
                       name="mobile"
                       value="<%= userData.mobile %>"
                       class="form-control form-control-lg"
-                    /><p id="mobileError" style="color: red"></p>
+                    />
+                    <p id="mobileError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <input
                       type="hidden"
                       id="description"
-                      name="password" 
+                      name="password"
                       value="<%= userData.password %>"
                       class="form-control form-control-lg"
                     />
@@ -84,7 +94,8 @@
                       name="housename"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].housename %>"
-                    /><p id="houseError" style="color: red"></p>
+                    />
+                    <p id="houseError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example4cdg"
@@ -96,7 +107,8 @@
                       name="area"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].area %>"
-                    /><p id="areaError" style="color: red"></p>
+                    />
+                    <p id="areaError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example4cdg"
@@ -108,7 +120,8 @@
                       name="landmark"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].landmark %>"
-                    /><p id="landmarkError" style="color: red"></p>
+                    />
+                    <p id="landmarkError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example4cdg"
@@ -120,7 +133,8 @@
                       name="city"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].city %>"
-                    /><p id="cityError" style="color: red"></p>
+                    />
+                    <p id="cityError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example4cdg"
@@ -132,7 +146,8 @@
                       name="state"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].state %>"
-                    /><p id="stateError" style="color: red"></p>
+                    />
+                    <p id="stateError" style="color: red"></p>
                   </div>
                   <div class="form-outline mb-4">
                     <label class="form-label" for="form3Example4cdg"
@@ -144,7 +159,8 @@
                       name="pincode"
                       class="form-control form-control-lg"
                       value="<%= userData.addressDetails[0].pincode %>"
-                    /><p id="pincodeError" style="color: red"></p>
+                    />
+                    <p id="pincodeError" style="color: red"></p>
                   </div>
                   <div class="d-flex justify-content-center">
                     <button

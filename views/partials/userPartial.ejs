@@ -11,7 +11,7 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/user/css/userCss.css">
+    <link rel="stylesheet" href="/user/css/userCss.css" />
     <script
       src="https://kit.fontawesome.com/7c940f0205.js"
       crossorigin="anonymous"
@@ -20,7 +20,7 @@
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-expand-lg" >
+      <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand" href="/"
             ><img
@@ -47,21 +47,25 @@
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
                 <%if (session) { %>
                 <li class="nav-item me-3">
-                  <a class="nav-link active" aria-current="page" href="/userhome"
+                  <a
+                    class="nav-link active"
+                    aria-current="page"
+                    href="/userhome"
                     >Home</a
                   >
                 </li>
                 <% }else{ %>
                 <li class="nav-item me-3">
-                  <a class="nav-link active" aria-current="page" href="/">Home</a>
+                  <a class="nav-link active" aria-current="page" href="/"
+                    >Home</a
+                  >
                 </li>
-                <% } %>
-                <%if (session) { %>
+                <% } %> <%if (session) { %>
                 <li class="nav-item me-3">
                   <a class="nav-link active" href="#">Shop</a>
                 </li>
                 <li class="nav-item me-3">
-                  <a class="nav-link active" href="#">Order</a>
+                  <a class="nav-link active" href="/orderDetails">Order</a>
                 </li>
                 <% } %>
                 <li class="nav-item me-3">
@@ -96,10 +100,11 @@
                 </li>
                 <li class="nav-item me-5">
                   <a class="nav-link active" href="/cart"
-                    ><img src="/user/images/cart.svg" alt=""
-                  /> <span class=" badge rounded-pill bg-danger " id="cartCount">
-                    <%= count %>
-                  </span></a>
+                    ><img src="/user/images/cart.svg" alt="" />
+                    <span class="badge rounded-pill bg-danger" id="cartCount">
+                      <%= count %>
+                    </span></a
+                  >
                 </li>
                 <li class="nav-item me-5">
                   <a class="nav-link active" href="/account"
@@ -129,9 +134,9 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
     ></script>
     <script src="/user/js/main.js"></script>
   </body>

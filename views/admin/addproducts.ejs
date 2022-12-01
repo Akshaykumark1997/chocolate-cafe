@@ -128,13 +128,13 @@
                           >Category</label
                         >
                         <select
-                          class="form-select" id="category" name="category"
+                          class="form-select"
+                          id="category"
+                          name="category"
                           aria-label="Default select example"
                         >
                           <% categories.forEach((category)=>{ %>
-                          <option >
-                            <%= category.category %>
-                          </option>
+                          <option><%= category.category %></option>
                           <% }) %>
                         </select>
                       </div>

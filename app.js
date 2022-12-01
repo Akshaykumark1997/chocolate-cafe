@@ -4,9 +4,9 @@ const userRouter = require("./routes/user");
 const adminRouter = require("./routes/admin");
 const sessions = require("express-session");
 const cookieParser = require("cookie-parser");
-const fileUpload = require("express-fileupload"); 
-const dotenv = require('dotenv');
-const dbconnect = require('./config/connection');
+const fileUpload = require("express-fileupload");
+const dotenv = require("dotenv");
+const dbconnect = require("./config/connection");
 
 dotenv.config();
 const app = express();
@@ -24,8 +24,8 @@ app.set("view engine", "ejs");
 app.use(cookieParser());
 dbconnect.dbconnect();
 app.listen(process.env.PORTNO, () => {
-      console.log("server started listening to port");
-    });
+  console.log("server started listening to port");
+});
 app.use(
   sessions({
     secret: "123",

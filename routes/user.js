@@ -30,7 +30,26 @@ router
   .get(verifyLogin.verifyLoginUser, userLogin.editAccount)
   .post(verifyLogin.verifyLoginUser, userLogin.postEditAccount);
 
-router.post('/addAddress/:id',verifyLogin.verifyLoginUser,userLogin.addAddress);
-router.post('/placeOrder',verifyLogin.verifyLoginUser,userLogin.placeOrder);
-router.get('/orderDetails',verifyLogin.verifyLoginUser,userLogin.orderDetails);
+router.post(
+  "/addAddress/:id",
+  verifyLogin.verifyLoginUser,
+  userLogin.addAddress
+);
+router.get(
+  "/changePassword/:id",
+  verifyLogin.verifyLoginUser,
+  userLogin.changePassword
+);
+router.post(
+  "/newPassword",
+  verifyLogin.verifyLoginUser,
+  userLogin.postChangePassword
+);
+router.post("/placeOrder", verifyLogin.verifyLoginUser, userLogin.placeOrder);
+router.get(
+  "/orderDetails",
+  verifyLogin.verifyLoginUser,
+  userLogin.orderDetails
+);
+// router.get('/viewOrderedProduct/:id',verifyLogin.verifyLoginUser,userLogin.viewOrderedProduct);
 module.exports = router;

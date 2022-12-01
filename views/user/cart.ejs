@@ -18,12 +18,13 @@
                   </div>
                   <% if(productData.length === 0){ %>
 
-                  <center>
+                  <center class="col-xl-12 col-md-6 col-sm-4">
                     <h1 style="color: red">Sorry your cart is empty</h1>
                     <img
+                      class="image-fluid col-xl-12 col-md-6 col-sm-4"
                       src="https://alphapharmaexhibitions.com/images/cartempty1.png"
                       alt=""
-                      style="width: 300px"
+                      style="width: 14rem"
                     /><br />
                     <a
                       class="btn btn-succes"
@@ -67,6 +68,7 @@
                         id="quantity"
                         min="0"
                         name="quantity"
+                        readonly
                         value="<%= product.productQuantity %>"
                         type=""
                         class="form-control form-control-sm"
@@ -107,6 +109,7 @@
               </div>
               <div class="col-lg-4 bg-grey">
                 <div class="p-5">
+                  <% if(productData.length!==0){ %>
                   <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                   <hr class="my-4" />
                   <% productData.forEach((product)=>{ %>
@@ -115,6 +118,7 @@
                     <p>Rs.<%= product.productPrice %></p>
                   </div>
                   <% }) %>
+
                   <!-- <h5 class="text-uppercase mb-3">Shipping</h5> -->
 
                   <!-- <div class="mb-4 pb-2">
@@ -157,7 +161,7 @@
                       Proceed to checkout
                     </button></a
                   >
-                  <% } %>
+                  <% } %><% } %>
                 </div>
               </div>
             </div>

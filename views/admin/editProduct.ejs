@@ -132,16 +132,16 @@
                           >Category</label
                         >
                         <select
-                          class="form-select"  id="category"
-                            name="category" 
+                          class="form-select"
+                          id="category"
+                          name="category"
                           aria-label="Default select example"
                         >
-                          
-                            <option name="category" disabled selected><%= productData.category %>
-                            </option>
+                          <option name="category" disabled selected>
+                            <%= productData.category %>
+                          </option>
                           <% categories.forEach((category)=>{ %>
-                          <option name="category"
-                          >
+                          <option name="category">
                             <%= category.category %>
                           </option>
                           <% }) %>
