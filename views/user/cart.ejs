@@ -1,4 +1,16 @@
 <%- include('../partials/userPartial.ejs') %>
+<% if(productData.length===0){ %>
+  <center class="col-xl-12 col-md-6 col-sm-4">
+    <h1 style="color: red">Sorry your cart is empty</h1>
+    <img class="image-fluid col-xl-12 col-md-6 col-sm-4" src="https://alphapharmaexhibitions.com/images/cartempty1.png"
+      alt="" style="width: 14rem" /><br />
+    <a class="btn btn-succes" href="/userhome" style="
+                          margin-top: 17px;
+                          color: green;
+                          border: solid green;
+                        ">SHOP NOW</a>
+  </center>
+  <% }else{ %>
 <section>
   <div class="container py-5">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -16,29 +28,7 @@
                   >
                     <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
                   </div>
-                  <% if(productData.length === 0){ %>
-
-                  <center class="col-xl-12 col-md-6 col-sm-4">
-                    <h1 style="color: red">Sorry your cart is empty</h1>
-                    <img
-                      class="image-fluid col-xl-12 col-md-6 col-sm-4"
-                      src="https://alphapharmaexhibitions.com/images/cartempty1.png"
-                      alt=""
-                      style="width: 14rem"
-                    /><br />
-                    <a
-                      class="btn btn-succes"
-                      href="/userhome"
-                      style="
-                        margin-top: 17px;
-                        color: green;
-                        border: solid green;
-                      "
-                      >SHOP NOW</a
-                    >
-                  </center>
-
-                  <% }else{ %> <% productData.forEach((product)=>{ %>
+                   <% productData.forEach((product)=>{ %>
                   <hr class="my-4" />
                   <div
                     class="row mb-4 d-flex justify-content-between align-items-center"
@@ -95,7 +85,7 @@
                       </button>
                     </div>
                   </div>
-                  <% }) %> <% } %>
+                  <% }) %> 
                   <hr class="my-4" />
                   <div class="pt-5">
                     <h6 class="mb-0">
@@ -171,5 +161,6 @@
     </div>
   </div>
 </section>
+<% } %>
 <%- include('../partials/user-footer.ejs') %>
 <script></script>

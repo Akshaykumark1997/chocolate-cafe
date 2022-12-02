@@ -51,4 +51,5 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.deleteCategory
 );
+router.get('/orders',verifyLogin.verifyLoginAdmin,adminLogin.orders);
 module.exports = router;

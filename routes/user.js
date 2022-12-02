@@ -51,5 +51,5 @@ router.get(
   verifyLogin.verifyLoginUser,
   userLogin.orderDetails
 );
-// router.get('/viewOrderedProduct/:id',verifyLogin.verifyLoginUser,userLogin.viewOrderedProduct);
+ router.get('/cancelOrder/:id',verifyLogin.verifyLoginUser,userLogin.cancelOrder);
 module.exports = router;

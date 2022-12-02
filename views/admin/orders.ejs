@@ -28,11 +28,7 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/orders"
-              
-              class="nav-link px-0 align-middle"
-            >
+            <a href="#submenu1" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline">Order</span>
             </a>
@@ -94,59 +90,68 @@
             <thead>
               <tr>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  UserId
+                  Name
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Username
-                </th>
-                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Email
+                  Address
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Mobile
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Edit
+                  Products
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Payment Status
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  OrderStatus
+                </th>
+                <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                  Option
                 </th>
               </tr>
             </thead>
             <tbody>
-              <% allusers.forEach((allusers)=>{ %>
+              <% orderDetails.forEach((order)=>{ %>
               <tr>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allusers._id %>
+                  <%= order.fullname %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allusers.username %>
+                  <%= order.address %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allusers.email %>
+                  <%= order.mobile %>
+                </td>
+                
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"></td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order.paymentStatus %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= allusers.mobile %>
+                  <%= order.orderStatus %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <% if(allusers.isBlocked === false) { %>
-                  <a href="/admin/blockuser/<%= allusers._id %>">
+                  <a href="">
                     <button
                       type="button"
-                      class="btn btn-outline-danger "
-                      style="width: 5rem; "
+                      class="btn btn-outline-success"
+                      style="width: 5rem"
                     >
-                      Block
+                      Confirm
                     </button></a
                   >
-                  <% }else{ %>
-                  <a href="/admin/unblockuser/<%= allusers._id %>">
+
+                  <a href="">
                     <button
                       type="button"
-                      class="btn btn-outline-success "
-                      style="width: 5rem; "
+                      class="btn btn-outline-danger"
+                      style="width: 5rem"
                     >
-                      Unblock
+                      Cancel
                     </button></a
                   >
-                  <%}%>
                 </td>
               </tr>
               <% }) %>
@@ -157,8 +162,3 @@
     </div>
   </div>
 </div>
-<script>
-  $(document).ready(function () {
-    $("#table").DataTable();
-  });
-</script>

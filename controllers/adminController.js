@@ -1,7 +1,10 @@
 const products = require("../model/product");
 const user = require("../model/userSignUp");
 const category = require("../model/categories");
+const order = require("../model/order");
+const cart = require("../model/cart");
 const path = require("path");
+const mongoose = require("mongoose");
 
 const adminDetails = {
   email: "admin@gmail.com",
@@ -152,11 +155,21 @@ module.exports = {
   deleteProduct: (req, res) => {
     try {
       const id = req.params.id;
-      console.log(id);
+      const objId = mongoose.Types.ObjectId(id);
+      console.log(objId);
       products
         .updateOne({ _id: id }, { $set: { isDeleted: true } })
         .then(() => {
-          res.redirect("/admin/products");
+          cart
+            .updateMany(
+              { "product.productId": objId },
+              {   $pull: { product: { productId: objId } } } ,
+              { multi: true }
+            )
+            .then((data) => {
+              console.log(data);
+              res.redirect("/admin/products");
+            });
         });
     } catch {
       console.error();
@@ -246,5 +259,9 @@ module.exports = {
     } catch {
       console.error();
     }
+  },
+  orders: async (req, res) => {
+    const orderDetails = await order.find();
+    res.render("admin/orders", { orderDetails });
   },
 };

@@ -268,8 +268,7 @@ module.exports = {
           },
         },
       ])
-      .exec();
-    console.log(productData);
+      console.log(productData);
     const sum = productData.reduce((accumulator, object) => {
       return accumulator + object.productPrice;
     }, 0);
@@ -486,28 +485,6 @@ module.exports = {
               },
             },
           },
-          // {
-          //   $addFields: {
-          //     orderDate: {
-          //       $dateToString: {
-          //         format: "%d/%m/%Y",
-          //         Date: "$createdAt",
-          //         timezone: "+05:30",
-          //       },
-          //     },
-          //   },
-          // },
-          // {
-          //   $addFields: {
-          //     deliveryDate: {
-          //       $dateAdd: {
-          //         startDate: "$createdAt",
-          //         unit: "day",
-          //         amount: 3,
-          //       },
-          //     },
-          //   },
-          // },
         ])
         .exec();
       console.log(productData);
@@ -596,7 +573,13 @@ module.exports = {
       });
     });
   },
-  // viewOrderedProduct:(req,res)=>{
-  //   res.render()
-  // }
+  cancelOrder:(req,res)=>{
+    const data = req.params.id;
+    console.log(data);
+    order.updateOne({_id:data},{$set:{orderStatus:"cancelled"}}).then((data)=>{
+      console.log(data);
+      res.redirect("/orderDetails");
+    })
+    
+  }
 };
