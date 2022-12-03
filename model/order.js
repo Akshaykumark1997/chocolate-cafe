@@ -48,6 +48,12 @@ const orderSchema = new Schema(
       type: String,
       default: "not paid",
     },
+    orderDate:{
+      type:Date
+    },
+    deliveryDate:{
+      type:Date
+    }
   },
   {
     timestamps: true,

@@ -58,6 +58,28 @@
         </div>
       </div>
     </div>
+    <section>
+      <div class="container">
+      <nav class="nav  d-flex justify-content-center mt-5">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="text-decoration-none" href="/userhome"><button class="nav-link " id="nav-home-tab"
+              data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+              aria-selected="true">
+              All
+            </button></a>
+            
+          <% Categories.forEach((category)=>{ %>
+            <a class="text-decoration-none" href="/chocolate/<%= category._id %>"><button class="nav-link"
+                id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab"
+                aria-controls="nav-profile" aria-selected="false">
+                <%= category.category %>
+              </button></a>
+            <% }) %>
+            </form>
+        </div>
+      </nav>
+      </div>
+    </section>
     <section class="py-5 bg-light">
       <div class="container px-4 px-lg-5 mt-5">
         <div

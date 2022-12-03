@@ -6,6 +6,11 @@ const verifyLogin = require("../middleware/Session");
 router.get("/", userLogin.guestHome);
 router.get("/user", userLogin.getLogin);
 router.get("/userhome", userLogin.gethome);
+router.get(
+  "/chocolate/:id",
+  
+  userLogin.getCategory
+);
 router.post("/login", userLogin.postLogin);
 router.get("/logout", userLogin.userLogout);
 router.route("/signup").get(userLogin.getSignup).post(userLogin.postSignup);
@@ -46,10 +51,16 @@ router.post(
   userLogin.postChangePassword
 );
 router.post("/placeOrder", verifyLogin.verifyLoginUser, userLogin.placeOrder);
+router.get('/orderSuccess',verifyLogin.verifyLoginUser,userLogin.orderSuccess);
 router.get(
   "/orderDetails",
   verifyLogin.verifyLoginUser,
   userLogin.orderDetails
+);
+router.get(
+  "/viewOrderProducts/:id",
+  verifyLogin.verifyLoginUser,
+  userLogin.viewOrderProducts
 );
  router.get('/cancelOrder/:id',verifyLogin.verifyLoginUser,userLogin.cancelOrder);
 module.exports = router;

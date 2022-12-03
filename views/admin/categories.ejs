@@ -95,6 +95,13 @@
               >
                 Add Categories
               </button>
+              <% if(locals.err_message){%>
+                <div>
+                  <p class="text-danger">
+                    <%=err_message%>
+                  </p>
+                </div>
+                <%}%>
               <div
                 class="modal fade"
                 id="staticBackdrop"

@@ -56,6 +56,7 @@ function checkLoginForm(form) {
 }
 
 function addToCart(proId) {
+  const value = "sorry !!! currently out of stock";
   $.ajax({
     url: "/addCart/" + proId,
     method: "get",
@@ -64,6 +65,9 @@ function addToCart(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
+      }else{
+        $("#stock").html(value);
+          window.location.reload();
       }
     },
   });
@@ -98,6 +102,8 @@ function removeProduct(cartId, productId) {
     },
   });
 }
+
+
 
 function eiditForm(form) {
   let fullname = document.getElementById("fullname");

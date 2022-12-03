@@ -6,6 +6,8 @@ const cart = require("../model/cart");
 const path = require("path");
 const mongoose = require("mongoose");
 
+
+
 const adminDetails = {
   email: "admin@gmail.com",
   password: "admin@123",
@@ -218,22 +220,30 @@ module.exports = {
       console.error();
     }
   },
-  addCategory: (req, res) => {
+  addCategory: async(req, res) => {
     try {
       const categoryData = req.body.category;
+      const allCategories = await category.find();
+      const verify = category.findOne({category:categoryData});
+      if(verify.length){
       const newCategory = new category({
         category: categoryData,
       });
       newCategory.save().then(() => {
         res.redirect("/admin/categories");
       });
+    }else{
+      res.render("admin/categories",{err_message:"category already exists",allCategories});
+    }
     } catch {
       console.error();
     }
   },
-  editCategory: (req, res) => {
+  editCategory:async (req, res) => {
     try {
       const id = req.params.id;
+      const categoryData = await category.findOne({_id:id});
+      console.log(categoryData);
       category
         .updateOne(
           { _id: id },
@@ -244,6 +254,9 @@ module.exports = {
           }
         )
         .then(() => {
+           products.updateMany({category:categoryData.category},{$set:{category:req.body.category}}).then((data)=>{
+            console.log(data);
+           })
           res.redirect("/admin/categories");
         });
     } catch {

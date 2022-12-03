@@ -7,14 +7,16 @@ const sendOtp = require("../middleware/otpmiddleware.js");
 const cart = require("../model/cart");
 const mongoose = require("mongoose");
 const order = require("../model/order");
+const category = require("../model/categories");
 
 let session;
 var count;
 module.exports = {
   guestHome: async (req, res) => {
     try {
+      const Categories = await category.find();
       const allProducts = await products.find({ isDeleted: false });
-      res.render("user/userHome", { session, allProducts, count });
+      res.render("user/userHome", { session, allProducts, count, Categories });
     } catch {
       console.error();
     }
@@ -35,6 +37,7 @@ module.exports = {
     try {
       session = req.session.userId;
       if (session) {
+        const Categories = await category.find();
         const userData = await user.findOne({ email: session });
         const productDAta = await cart.find({ userId: userData._id });
         if (productDAta.length) {
@@ -43,7 +46,12 @@ module.exports = {
           count = 0;
         }
         products.find({ isDeleted: false }).then((allProducts) => {
-          res.render("user/userHome", { session, allProducts, count });
+          res.render("user/userHome", {
+            session,
+            allProducts,
+            count,
+            Categories,
+          });
         });
       } else {
         res.redirect("/user");
@@ -51,6 +59,23 @@ module.exports = {
     } catch {
       console.error();
     }
+  },
+  getCategory:async (req, res) => {
+    const id = req.params.id;
+    const Categories = await category.find();
+    const categoryData = await category.findOne({_id:id});
+    if(categoryData){
+    products.find({category:categoryData.category}).then((allProducts)=>{
+      res.render("user/userHome", {
+        session,
+        allProducts,
+        count,
+        Categories,
+      });
+    })
+  }else{
+    res.redirect('/userhome');
+  }
   },
   postLogin: async (req, res) => {
     try {
@@ -170,10 +195,10 @@ module.exports = {
       console.error();
     }
   },
-  viewProduct: (req, res) => {
+  viewProduct: async (req, res) => {
     try {
       const id = req.params.id;
-      products.find({ _id: id }).then((data) => {
+      products.findOne({ _id: id }).then((data) => {
         res.render("user/productView", { session, data, count });
       });
     } catch {
@@ -183,92 +208,95 @@ module.exports = {
 
   addCart: async (req, res) => {
     const id = req.params.id;
+    const data = await products.findOne({ _id: id });
     const objId = mongoose.Types.ObjectId(id);
     const userId = req.session.userId;
     let proObj = {
       productId: objId,
       quantity: 1,
     };
-    const userData = await user.findOne({ email: userId });
-    const userCart = await cart.findOne({ userId: userData._id });
-    if (userCart) {
-      let proExist = userCart.product.findIndex(
-        (product) => product.productId == id
-      );
-      if (proExist != -1) {
-        await cart.aggregate([
-          {
-            $unwind: "$product",
-          },
-        ]);
-        await cart.updateOne(
-          { userId: userData._id, "product.productId": objId },
-          { $inc: { "product.$.quantity": 1 } }
+    if (data.stock >= 1) {
+      const userData = await user.findOne({ email: userId });
+      const userCart = await cart.findOne({ userId: userData._id });
+      if (userCart) {
+        let proExist = userCart.product.findIndex(
+          (product) => product.productId == id
         );
-        res.redirect("/userhome");
+        if (proExist != -1) {
+          await cart.aggregate([
+            {
+              $unwind: "$product",
+            },
+          ]);
+          await cart.updateOne(
+            { userId: userData._id, "product.productId": objId },
+            { $inc: { "product.$.quantity": 1 } }
+          );
+          res.redirect("/userhome");
+        } else {
+          cart
+            .updateOne({ userId: userData._id }, { $push: { product: proObj } })
+            .then(() => {
+              res.json({ status: true });
+            });
+        }
       } else {
-        cart
-          .updateOne({ userId: userData._id }, { $push: { product: proObj } })
-          .then(() => {
-            res.json({ status: true });
-          });
+        const newCart = new cart({
+          userId: userData._id,
+          product: [
+            {
+              productId: objId,
+              quantity: 1,
+            },
+          ],
+        });
+        newCart.save().then(() => {
+          res.json({ status: true });
+        });
       }
     } else {
-      const newCart = new cart({
-        userId: userData._id,
-        product: [
-          {
-            productId: objId,
-            quantity: 1,
-          },
-        ],
-      });
-      newCart.save().then(() => {
-        res.json({ status: true });
-      });
+      res.json({ status: false });
     }
   },
   viewCart: async (req, res) => {
     const userId = req.session.userId;
     const userData = await user.findOne({ email: userId });
-    const productData = await cart
-      .aggregate([
-        {
-          $match: { userId: userData.id },
+    const productData = await cart.aggregate([
+      {
+        $match: { userId: userData.id },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $project: {
+          productItem: "$product.productId",
+          productQuantity: "$product.quantity",
         },
-        {
-          $unwind: "$product",
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "productItem",
+          foreignField: "_id",
+          as: "productDetail",
         },
-        {
-          $project: {
-            productItem: "$product.productId",
-            productQuantity: "$product.quantity",
+      },
+      {
+        $project: {
+          productItem: 1,
+          productQuantity: 1,
+          productDetail: { $arrayElemAt: ["$productDetail", 0] },
+        },
+      },
+      {
+        $addFields: {
+          productPrice: {
+            $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
           },
         },
-        {
-          $lookup: {
-            from: "productdetails",
-            localField: "productItem",
-            foreignField: "_id",
-            as: "productDetail",
-          },
-        },
-        {
-          $project: {
-            productItem: 1,
-            productQuantity: 1,
-            productDetail: { $arrayElemAt: ["$productDetail", 0] },
-          },
-        },
-        {
-          $addFields: {
-            productPrice: {
-              $sum: { $multiply: ["$productQuantity", "$productDetail.price"] },
-            },
-          },
-        },
-      ])
-      console.log(productData);
+      },
+    ]);
     const sum = productData.reduce((accumulator, object) => {
       return accumulator + object.productPrice;
     }, 0);
@@ -406,8 +434,7 @@ module.exports = {
     console.log(req.params.id);
     user
       .updateOne({ email: session }, { $push: { addressDetails: addobj } })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         res.redirect("/checkout");
       });
   },
@@ -416,10 +443,8 @@ module.exports = {
   },
   postChangePassword: async (req, res) => {
     const data = req.body;
-    console.log(data);
     if (data.newPassword === data.repeatPassword) {
       const userData = await user.findOne({ email: session });
-      console.log(userData);
       const value = await bcrypt.compare(data.password, userData.password);
       if (value) {
         let password = await bcrypt.hash(data.newPassword, 10);
@@ -447,6 +472,7 @@ module.exports = {
   placeOrder: async (req, res) => {
     const userData = await user.findOne({ email: session });
     const cartData = await cart.findOne({ userId: userData._id });
+    console.log(cartData);
     const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
     if (cartData) {
       const productData = await cart
@@ -491,7 +517,11 @@ module.exports = {
       const sum = productData.reduce((accumulator, object) => {
         return accumulator + object.productPrice;
       }, 0);
+      const stocks = productData.map((x) => x.productItem);
+      console.log(stocks);
       count = productData.length;
+      const date = new Date();
+      const deliveryDate = date.setDate(date.getDate() + 10);
       order.create({
         userId: userData._id,
         fullname: userData.fullname,
@@ -501,13 +531,70 @@ module.exports = {
         totalAmount: sum,
         paymentMethod: req.body.paymentMethod,
         orderStatus: status,
+        orderDate:date,
+        deliveryDate:deliveryDate
       });
       cart.deleteOne({ userId: userData._id }).then(() => {
-        res.render("user/orderSuccess", { session, count });
+        // res.render("user/orderSuccess", { session, count });
+        res.json({status:true});
       });
+      console.log(productData.productQuantity);
+      // products.updateMany({ _id: stocks }, [
+      //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } }, 
+      // ]).then((data)=>{
+      //   console.log(data);
+      // })
+      // products
+      //   .updateMany({ _id: stocks }, { $inc: { stock: -1} })
+      //   .then((stock) => {
+      //     console.log(stock);
+      //   });
+      // products.find({_id:stocks}).then((data)=>{
+      //   console.log("hiii"+data);
+      // })
     } else {
       res.redirect("/cart");
     }
+  },
+  orderSuccess:async(req,res)=>{
+   const count = 0;
+    res.render("user/orderSuccess", { session, count });
+  },
+  viewOrderProducts:(req,res)=>{
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id);
+    order.aggregate([
+      {
+        $match: { _id: objId },
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $project: {
+          productItem: "$orderItems.productId",
+          productQuantity: "$orderItems.quantity",
+        },
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "productItem",
+          foreignField: "_id",
+          as: "productDetail",
+        },
+      },
+      {
+        $project: {
+          productItem: 1,
+          productQuantity: 1,
+          productDetail: { $arrayElemAt: ["$productDetail", 0] },
+        },
+      },
+    ]).then((productData)=>{
+      console.log(productData);
+      res.render('user/viewOrderProducts',{session,count,productData});
+    })
   },
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
@@ -563,7 +650,6 @@ module.exports = {
         },
       },
     ]);
-    console.log(productData);
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
@@ -573,13 +659,14 @@ module.exports = {
       });
     });
   },
-  cancelOrder:(req,res)=>{
+  cancelOrder: (req, res) => {
     const data = req.params.id;
     console.log(data);
-    order.updateOne({_id:data},{$set:{orderStatus:"cancelled"}}).then((data)=>{
-      console.log(data);
-      res.redirect("/orderDetails");
-    })
-    
-  }
+    order
+      .updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
+      .then((data) => {
+        console.log(data);
+        res.redirect("/orderDetails");
+      });
+  },
 };
