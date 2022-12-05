@@ -9,10 +9,12 @@ const mongoose = require("mongoose");
 const order = require("../model/order");
 const category = require("../model/categories");
 const moment = require("moment");
-const instance = require('../middleware/razorPay');
-const crypto = require('crypto');
+const instance = require("../middleware/razorPay");
+const crypto = require("crypto");
+const wishlist = require("../model/wishlist");
 // const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
+
 moment().format();
 dotenv.config();
 // var instance = new Razorpay({
@@ -208,47 +210,129 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
-      const id = req.params.id; 
+      const userId = req.session.userId;
+      const userData = await user.findOne({ email: userId });
+      const cartData = await cart.findOne({ userId: userData.id });
+      const id = req.params.id;
       products.findOne({ _id: id }).then((data) => {
-        res.render("user/productView", { session, data, count });
+        res.render("user/productView", { session, data, count, cartData });
       });
     } catch {
       console.error();
     }
   },
-
+  wishlist: async (req, res) => {
+    const userData = await user.findOne({ email: session });
+    const userId = mongoose.Types.ObjectId(userData._id);
+    const wishlistData = await wishlist.aggregate([
+      {
+        $match: { userId: userId },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $project: {
+          productItem: "$product.productId",
+        },
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "productItem",
+          foreignField: "_id",
+          as: "productDetail",
+        },
+      },
+      {
+        $project: {
+          productItem: 1,
+          productDetail: { $arrayElemAt: ["$productDetail", 0] },
+        },
+      },
+    ]);
+    res.render("user/wishlist", { session, count, wishlistData });
+  },
+  addToWishlist: async (req, res) => {
+    const id = req.params.id;
+    // const data = await products.findOne({ _id: id });
+    const objId = mongoose.Types.ObjectId(id);
+    let proObj = {
+      productId: objId,
+    };
+    const userData = await user.findOne({ email: session });
+    const userId = mongoose.Types.ObjectId(userData._id);
+    const userWishlist = await wishlist.findOne({ userId: userId });
+  
+    if (userWishlist) {
+      let proExist = userWishlist.product.findIndex(
+        (product) => product.productId == id
+      );
+      if (proExist != -1) {
+        res.json({ productExist: true });
+      } else {
+        wishlist
+          .updateOne({ userId: userId }, { $push: { product: proObj } })
+          .then(() => {
+            res.json({ status: true });
+          });
+      }
+    } else {
+      wishlist
+        .create({
+          userId: userId,
+          product: [
+            {
+              productId: objId,
+            },
+          ],
+        })
+        .then(() => {
+          res.json({ status: true });
+        });
+    }
+  },
   addCart: async (req, res) => {
     const id = req.params.id;
-    const data = await products.findOne({ _id: id });
-    const objId = mongoose.Types.ObjectId(id);
     const userId = req.session.userId;
+    const data = await products.findOne({ _id: id });
+    const userData = await user.findOne({ email: userId });
+    const objId = mongoose.Types.ObjectId(id);
+
+    const idUser = mongoose.Types.ObjectId(userData._id);
     let proObj = {
       productId: objId,
       quantity: 1,
     };
     if (data.stock >= 1) {
-      const userData = await user.findOne({ email: userId });
       const userCart = await cart.findOne({ userId: userData._id });
       if (userCart) {
         let proExist = userCart.product.findIndex(
           (product) => product.productId == id
         );
         if (proExist != -1) {
-          await cart.aggregate([
-            {
-              $unwind: "$product",
-            },
-          ]);
-          await cart.updateOne(
-            { userId: userData._id, "product.productId": objId },
-            { $inc: { "product.$.quantity": 1 } }
-          );
-          res.redirect("/userhome");
+          // await cart.aggregate([
+          //   {
+          //     $unwind: "$product",
+          //   },
+          // ]);
+          // await cart.updateOne(
+          //   { userId: userData._id, "product.productId": objId },
+          //   { $inc: { "product.$.quantity": 1 } }
+          // );
+          res.json({ productExist: true });
         } else {
           cart
             .updateOne({ userId: userData._id }, { $push: { product: proObj } })
             .then(() => {
-              res.json({ status: true });
+              wishlist
+                .updateOne(
+                  { userId: idUser },
+                  { $pull: { product: { productId: objId } } }
+                )
+                .then(() => {
+                  res.json({ status: true });
+                });
             });
         }
       } else {
@@ -266,7 +350,7 @@ module.exports = {
         });
       }
     } else {
-      res.json({ status: false });
+      res.json({ stock: true });
     }
   },
   viewCart: async (req, res) => {
@@ -316,22 +400,33 @@ module.exports = {
   },
   changeQuantity: async (req, res) => {
     const data = req.body;
+    data.count = parseInt(data.count);
+    data.quantity = parseInt(data.quantity);
     const objId = mongoose.Types.ObjectId(data.product);
-    await cart
-      .aggregate([
-        {
-          $unwind: "$product",
-        },
-      ])
-      .then(() => {});
-    await cart
-      .updateOne(
-        { _id: data.cart, "product.productId": objId },
-        { $inc: { "product.$.quantity": data.count } }
-      )
-      .then(() => {
-        res.json({ status: true });
-      });
+    const productDetail = await products.findOne({ _id: data.product });
+    if (
+      (data.count == -1 && data.quantity == 1) ||
+      (data.count == 1 && data.quantity == productDetail.stock)
+    ) {
+      res.json({ quantity: true });
+    } else {
+      await cart
+        .aggregate([
+          {
+            $unwind: "$product",
+          },
+        ])
+        .then(() => {
+          cart
+            .updateOne(
+              { _id: data.cart, "product.productId": objId },
+              { $inc: { "product.$.quantity": data.count } }
+            )
+            .then(() => {
+              res.json({ status: true });
+            });
+        });
+    }
   },
   removeProduct: async (req, res) => {
     const data = req.body;
@@ -562,7 +657,7 @@ module.exports = {
             console.log(order);
             res.json(order);
           }
-        }); 
+        });
       }
       // products.updateMany({ _id: stocks }, [
       //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } },
@@ -581,7 +676,7 @@ module.exports = {
       res.redirect("/cart");
     }
   },
-  verifyPayment:(req,res)=>{
+  verifyPayment: (req, res) => {
     console.log(req.body);
     const details = req.body;
     let hmac = crypto.createHmac("sha256", process.env.KETSECRET);
@@ -590,25 +685,28 @@ module.exports = {
         "|" +
         details.payment.razorpay_payment_id
     );
-    hmac = hmac.digest('hex');
-    if(hmac==details.payment.razorpay_signature){
+    hmac = hmac.digest("hex");
+    if (hmac == details.payment.razorpay_signature) {
       const objId = mongoose.Types.ObjectId(details.order.receipt);
       console.log(objId);
-      order.updateOne({_id:objId},{$set:{paymentStatus:"paid"}}).then((data)=>{
-        console.log(data);
-        res.json({success:true});
-      }).catch((err)=>{
-        console.log(err);
-        res.json({ status: false, err_message: "payment failed" });
-      })
-    }else{
+      order
+        .updateOne({ _id: objId }, { $set: { paymentStatus: "paid" } })
+        .then((data) => {
+          console.log(data);
+          res.json({ success: true });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.json({ status: false, err_message: "payment failed" });
+        });
+    } else {
       res.json({ status: false, err_message: "payment failed" });
     }
   },
-  paymentFailure:(req,res)=>{
+  paymentFailure: (req, res) => {
     const details = req.body;
     console.log(details);
-    res.json({staus:true});
+    res.json({ staus: true });
   },
   orderSuccess: async (req, res) => {
     const count = 0;
@@ -706,7 +804,7 @@ module.exports = {
         },
       },
     ]);
-    count = 0;
+
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,

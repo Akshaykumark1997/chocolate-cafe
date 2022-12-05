@@ -29,7 +29,7 @@
           <% }else if(data.stock == 0){ %>
         <div class="fs-5 mb-5 mt-5">
           <h5 class="">Stock :<%= data.stock %>
-          </h5><p class="text-danger mt-2">Out of stock !!!!!!</p>
+          </h5><p class="text-danger mt-2" id="message">Out of stock !!!!!!</p>
         </div>
         <% }else{ %>
           <div class="fs-5 mb-5 mt-5">
@@ -39,20 +39,16 @@
           <% } %>
         <% if(session) { %>
         <div class="d-flex">
-          
-          
-          
-          <button id="cartButton" class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= data._id %>')">Add to Cart</button> 
-          
-         
-          
+          <button id="cartButton" class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= data._id %>')">Add to Cart</button>
         <% }else{ %>
         <div class="d-flex">
           <a href="/user"><button class="btn btn-outline-dark mt-auto" id="">Add to Cart</button></a>
+          <p id="exist" class="text-danger"></p>
         </div>
         <% } %>
       </div>
-      
+        
+      </p>
     </div>
   </div>
 </section>

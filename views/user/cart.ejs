@@ -46,29 +46,13 @@
                       </h6>
                     </div>
                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex my-2">
-                      <button class="btn btn-link px-2" '<% if(product.productQuantity === 1){ %> 
-                        style="pointer-events: none;
-                         cursor: not-allowed;"
-                          <% } %>'
+                      <button id="buttonNegative" class="btn btn-link px-2" 
                                     onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)" >
                         <i class="fas fa-minus"></i>
                       </button>
-                      
-                      <input
-                        id="quantity"
-                        min="0"
-                        name="quantity"
-                        readonly
-                        value="<%= product.productQuantity %>"
-                        type=""
-                        class="form-control form-control-sm"
-                      />
-
+                      <p id="<%= product.productDetail._id %>" ><%= product.productQuantity %></p>
                       <button
-                        class="btn btn-link px-2" '<% if(product.productDetail.stock === product.productQuantity){ %>  
-                          style="pointer-events: none;
-                          cursor: not-allowed;"
-                          <% } %>'
+                        class="btn btn-link px-2"  
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)"
                       >
                         <i class="fas fa-plus"></i>

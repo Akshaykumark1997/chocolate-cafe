@@ -16,6 +16,12 @@ router.get("/logout", userLogin.userLogout);
 router.route("/signup").get(userLogin.getSignup).post(userLogin.postSignup);
 router.post("/otpsignup", userLogin.otpSignup);
 router.get("/viewProduct/:id", userLogin.viewProduct);
+router.get('/wishlist',verifyLogin.verifyLoginUser,userLogin.wishlist);
+router.get(
+  "/addToWishlist/:id",
+  verifyLogin.verifyLoginUser,
+  userLogin.addToWishlist
+);
 router.get("/cart", verifyLogin.verifyLoginUser, userLogin.viewCart);
 router.get("/addCart/:id", verifyLogin.verifyLoginUser, userLogin.addCart);
 router.post(

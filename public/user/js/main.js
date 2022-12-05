@@ -65,29 +65,56 @@ function addToCart(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
-       
-        //  document.getElementById("addToCart").innerHTML = "Go to cart";
-      }else{
-        $("#stock").html(value);
-          window.location.reload();
+      }
+      if(response.productExist){
+       location.href='/cart'
+         
+      }
+      if(response.stock){
+       document.getElementById("message").innerHTML = "Out of stock !!!!!!";
+      }
+    },
+  });
+}
+function addToCartWish(proId) {
+  const value = "sorry !!! currently out of stock";
+  $.ajax({
+    url: "/addCart/" + proId,
+    method: "get",
+    success: (response) => {
+      if (response.status) {
+        let count = $("#cartCount").html();
+        count = parseInt(count) + 1;
+        $("#cartCount").html(count);
+        window.location.reload();
+      }
+      if (response.productExist) {
+        location.href = "/cart";
+      }
+      if (response.stock) {
+        document.getElementById("message").innerHTML = "Out of stock !!!!!!";
       }
     },
   });
 }
 
+
 function changeQuantity(cartId, productId, count) {
-  let quantity = parseInt(document.getElementById("quantity").innerHTML);
+  let quantity = parseInt(document.getElementById(productId).innerHTML);
+  count = parseInt(count);
   $.ajax({
     url: "/changeQuantity",
     data: {
       cart: cartId,
       product: productId,
       count: count,
+      quantity:quantity
     },
     method: "post",
-    success: () => {
-      document.getElementById("quantity").innerHTML = quantity + count;
-      window.location.reload();
+    success: (response) => {
+      if(response.status){
+     document.getElementById(productId).innerHTML = quantity + count;
+      }
     },
   });
 }
@@ -105,6 +132,18 @@ function removeProduct(cartId, productId) {
   });
 }
 
+  function addToWishlist(proId) {
+    $.ajax({
+      url: "/addToWishlist/" + proId,
+      method: "get",
+      success: (response) => {
+        if (response.productExist) {
+          document.getElementById(proId).innerHTML="product already in wishlist";
+          //  location.href = "/cart";
+        }
+      },
+    });
+  }
 
 
 function eiditForm(form) {
