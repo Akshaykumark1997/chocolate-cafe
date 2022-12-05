@@ -17,17 +17,15 @@
     <thead>
       <tr>
         <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Date
+         OrderDate
         </th>
         <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Fullname
+          Name
         </th>
         <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           Address
         </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Mobile
-        </th>
+        
         <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           paymentMethod
         </th>
@@ -41,6 +39,9 @@
           Amount
         </th>
         <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          DeliveryDate
+        </th>
+        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           Options
         </th>
       </tr>
@@ -49,7 +50,7 @@
       <% orderDetails.forEach((order)=>{ %>
       <tr>
         <th scope="row" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          <%= order.createdAt %>
+          <%= order.orderDate %>
         </th>
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.fullname %>
@@ -57,9 +58,7 @@
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.address %>
         </td>
-        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          <%= order.mobile %>
-        </td>
+        
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.paymentMethod %>
         </td>
@@ -72,15 +71,18 @@
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.totalAmount %>
         </td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          <%= order.deliveryDate %>
+        </td>
         <td>
          <a href="/viewOrderProducts/<%= order._id %>"> <button
             type="button"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
             class="btn btn-info text-white"
-            style="background-color: #57423f"
+            style="background-color: #57423f; width: 4.5rem;"
           >
-            View Product
+            View
           </button></a>
           <a href="/cancelOrder/<%= order._id %>"
             ><button type="button" class="btn btn-danger">Cancel</button></a

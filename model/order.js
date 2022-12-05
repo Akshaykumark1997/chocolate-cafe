@@ -49,10 +49,10 @@ const orderSchema = new Schema(
       default: "not paid",
     },
     orderDate:{
-      type:Date
+      type:String
     },
     deliveryDate:{
-      type:Date
+      type:String
     }
   },
   {

@@ -65,6 +65,8 @@ function addToCart(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
+       
+        //  document.getElementById("addToCart").innerHTML = "Go to cart";
       }else{
         $("#stock").html(value);
           window.location.reload();

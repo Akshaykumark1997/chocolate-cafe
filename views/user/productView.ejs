@@ -39,10 +39,16 @@
           <% } %>
         <% if(session) { %>
         <div class="d-flex">
-          <button class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= data._id %>')">Add to Cart</button> 
+          
+          
+          
+          <button id="cartButton" class="btn btn-outline-dark mt-auto" onclick="addToCart('<%= data._id %>')">Add to Cart</button> 
+          
+         
+          
         <% }else{ %>
         <div class="d-flex">
-          <a href="/user"><button class="btn btn-outline-dark mt-auto" id="addToCart">Add to Cart</button></a>
+          <a href="/user"><button class="btn btn-outline-dark mt-auto" id="">Add to Cart</button></a>
         </div>
         <% } %>
       </div>

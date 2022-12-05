@@ -193,10 +193,69 @@
       method:'post',
       data:$('#checkout').serialize(),
       success:(resposnse)=>{
-        if(resposnse.status){
+        if(resposnse.success){
           location.href='/orderSuccess'
+        }else{
+          razorPay(resposnse)
         }
       }
     })
   })
+  function razorPay(order){
+    var options = {
+      "key": "rzp_test_WekI0c4CjhtNac", // Enter the Key ID generated from the Dashboard
+      "amount":order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      "currency": "INR",
+      "name": "Chocolate Cafe",
+      "description": "Test Transaction",
+      "image": "/admin/images/Chocolat Cafe Simple Design.png",
+      "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      "handler": function (response) {
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
+        verifyPayment(response,order)
+      },
+      "prefill": {
+        "name": "Akshay",
+        "email": "akshay@gmail.com",
+        "contact": "9999999999"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response) {
+      // alert(response.error.code);
+      // alert(response.error.description);
+      // alert(response.error.source);
+      // alert(response.error.step);
+      // alert(response.error.reason);
+      // alert(response.error.metadata.order_id);
+      // alert(response.error.metadata.payment_id);
+      // paymentFail(response);
+    });
+     rzp1.open();
+  }
+  function verifyPayment(payment,order){
+    $.ajax({
+      url:'/verifyPayment',
+      data:{
+        payment,
+        order
+      },
+      method:'post',
+      success:(response)=>{
+        if(response.success){
+           location.href = '/orderSuccess'
+        }else{
+          location.href= '/paymentFail'
+        }
+      }
+    })
+  }
 </script>

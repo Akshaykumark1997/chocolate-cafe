@@ -51,6 +51,8 @@ router.post(
   userLogin.postChangePassword
 );
 router.post("/placeOrder", verifyLogin.verifyLoginUser, userLogin.placeOrder);
+router.post('/verifyPayment',verifyLogin.verifyLoginUser,userLogin.verifyPayment);
+router.post("/paymentFail",verifyLogin.verifyLoginUser,userLogin.paymentFailure);
 router.get('/orderSuccess',verifyLogin.verifyLoginUser,userLogin.orderSuccess);
 router.get(
   "/orderDetails",

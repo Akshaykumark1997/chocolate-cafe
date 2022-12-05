@@ -8,6 +8,17 @@ const cart = require("../model/cart");
 const mongoose = require("mongoose");
 const order = require("../model/order");
 const category = require("../model/categories");
+const moment = require("moment");
+const instance = require('../middleware/razorPay');
+const crypto = require('crypto');
+// const Razorpay = require("razorpay");
+const dotenv = require("dotenv");
+moment().format();
+dotenv.config();
+// var instance = new Razorpay({
+//   key_id: process.env.KEYID,
+//   key_secret: process.env.KETSECRET,
+// });
 
 let session;
 var count;
@@ -60,22 +71,22 @@ module.exports = {
       console.error();
     }
   },
-  getCategory:async (req, res) => {
+  getCategory: async (req, res) => {
     const id = req.params.id;
     const Categories = await category.find();
-    const categoryData = await category.findOne({_id:id});
-    if(categoryData){
-    products.find({category:categoryData.category}).then((allProducts)=>{
-      res.render("user/userHome", {
-        session,
-        allProducts,
-        count,
-        Categories,
+    const categoryData = await category.findOne({ _id: id });
+    if (categoryData) {
+      products.find({ category: categoryData.category }).then((allProducts) => {
+        res.render("user/userHome", {
+          session,
+          allProducts,
+          count,
+          Categories,
+        });
       });
-    })
-  }else{
-    res.redirect('/userhome');
-  }
+    } else {
+      res.redirect("/userhome");
+    }
   },
   postLogin: async (req, res) => {
     try {
@@ -197,7 +208,7 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.params.id; 
       products.findOne({ _id: id }).then((data) => {
         res.render("user/productView", { session, data, count });
       });
@@ -472,7 +483,6 @@ module.exports = {
   placeOrder: async (req, res) => {
     const userData = await user.findOne({ email: session });
     const cartData = await cart.findOne({ userId: userData._id });
-    console.log(cartData);
     const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
     if (cartData) {
       const productData = await cart
@@ -513,16 +523,15 @@ module.exports = {
           },
         ])
         .exec();
-      console.log(productData);
+
       const sum = productData.reduce((accumulator, object) => {
         return accumulator + object.productPrice;
       }, 0);
-      const stocks = productData.map((x) => x.productItem);
-      console.log(stocks);
+      // const stocks = productData.map((x) => x.productItem);
+      // console.log(stocks);
       count = productData.length;
-      const date = new Date();
-      const deliveryDate = date.setDate(date.getDate() + 10);
-      order.create({
+
+      const orderData = await order.create({
         userId: userData._id,
         fullname: userData.fullname,
         mobile: userData.mobile,
@@ -531,16 +540,32 @@ module.exports = {
         totalAmount: sum,
         paymentMethod: req.body.paymentMethod,
         orderStatus: status,
-        orderDate:date,
-        deliveryDate:deliveryDate
+        orderDate: moment().format("MMM Do YY"),
+        deliveryDate: moment().add(3, "days").format("MMM Do YY"),
       });
-      cart.deleteOne({ userId: userData._id }).then(() => {
-        // res.render("user/orderSuccess", { session, count });
-        res.json({status:true});
-      });
-      console.log(productData.productQuantity);
+      const amount = orderData.totalAmount * 100;
+      const _id = orderData._id;
+      console.log(amount, _id);
+      await cart.deleteOne({ userId: userData._id });
+      if (req.body.paymentMethod === "COD") {
+        res.json({ success: true });
+      } else if (req.body.paymentMethod === "Online") {
+        var options = {
+          amount: amount,
+          currency: "INR",
+          receipt: "" + _id,
+        };
+        instance.orders.create(options, function (err, order) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(order);
+            res.json(order);
+          }
+        }); 
+      }
       // products.updateMany({ _id: stocks }, [
-      //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } }, 
+      //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } },
       // ]).then((data)=>{
       //   console.log(data);
       // })
@@ -556,45 +581,76 @@ module.exports = {
       res.redirect("/cart");
     }
   },
-  orderSuccess:async(req,res)=>{
-   const count = 0;
+  verifyPayment:(req,res)=>{
+    console.log(req.body);
+    const details = req.body;
+    let hmac = crypto.createHmac("sha256", process.env.KETSECRET);
+    hmac.update(
+      details.payment.razorpay_order_id +
+        "|" +
+        details.payment.razorpay_payment_id
+    );
+    hmac = hmac.digest('hex');
+    if(hmac==details.payment.razorpay_signature){
+      const objId = mongoose.Types.ObjectId(details.order.receipt);
+      console.log(objId);
+      order.updateOne({_id:objId},{$set:{paymentStatus:"paid"}}).then((data)=>{
+        console.log(data);
+        res.json({success:true});
+      }).catch((err)=>{
+        console.log(err);
+        res.json({ status: false, err_message: "payment failed" });
+      })
+    }else{
+      res.json({ status: false, err_message: "payment failed" });
+    }
+  },
+  paymentFailure:(req,res)=>{
+    const details = req.body;
+    console.log(details);
+    res.json({staus:true});
+  },
+  orderSuccess: async (req, res) => {
+    const count = 0;
     res.render("user/orderSuccess", { session, count });
   },
-  viewOrderProducts:(req,res)=>{
+  viewOrderProducts: (req, res) => {
     const id = req.params.id;
     const objId = mongoose.Types.ObjectId(id);
-    order.aggregate([
-      {
-        $match: { _id: objId },
-      },
-      {
-        $unwind: "$orderItems",
-      },
-      {
-        $project: {
-          productItem: "$orderItems.productId",
-          productQuantity: "$orderItems.quantity",
+    order
+      .aggregate([
+        {
+          $match: { _id: objId },
         },
-      },
-      {
-        $lookup: {
-          from: "productdetails",
-          localField: "productItem",
-          foreignField: "_id",
-          as: "productDetail",
+        {
+          $unwind: "$orderItems",
         },
-      },
-      {
-        $project: {
-          productItem: 1,
-          productQuantity: 1,
-          productDetail: { $arrayElemAt: ["$productDetail", 0] },
+        {
+          $project: {
+            productItem: "$orderItems.productId",
+            productQuantity: "$orderItems.quantity",
+          },
         },
-      },
-    ]).then((productData)=>{
-      console.log(productData);
-      res.render('user/viewOrderProducts',{session,count,productData});
-    })
+        {
+          $lookup: {
+            from: "productdetails",
+            localField: "productItem",
+            foreignField: "_id",
+            as: "productDetail",
+          },
+        },
+        {
+          $project: {
+            productItem: 1,
+            productQuantity: 1,
+            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+          },
+        },
+      ])
+      .then((productData) => {
+        console.log(productData);
+        res.render("user/viewOrderProducts", { session, count, productData });
+      });
   },
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
@@ -650,6 +706,7 @@ module.exports = {
         },
       },
     ]);
+    count = 0;
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
