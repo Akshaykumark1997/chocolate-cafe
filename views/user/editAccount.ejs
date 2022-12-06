@@ -93,7 +93,7 @@
                       id="housename"
                       name="housename"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].housename %>"
+                      value="<%= userData?.permanentAddress?.housename %>"
                     />
                     <p id="houseError" style="color: red"></p>
                   </div>
@@ -106,7 +106,7 @@
                       id="area"
                       name="area"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].area %>"
+                      value="<%= userData?.permanentAddress?.area %>"
                     />
                     <p id="areaError" style="color: red"></p>
                   </div>
@@ -119,7 +119,7 @@
                       id="landmark"
                       name="landmark"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].landmark %>"
+                      value="<%= userData?.permanentAddress?.landmark%>"
                     />
                     <p id="landmarkError" style="color: red"></p>
                   </div>
@@ -132,7 +132,7 @@
                       id="city"
                       name="city"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].city %>"
+                      value="<%= userData?.permanentAddress?.city %>"
                     />
                     <p id="cityError" style="color: red"></p>
                   </div>
@@ -145,7 +145,7 @@
                       id="state"
                       name="state"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].state %>"
+                      value="<%= userData?.permanentAddress?.state %>"
                     />
                     <p id="stateError" style="color: red"></p>
                   </div>
@@ -158,7 +158,7 @@
                       id="pincode"
                       name="pincode"
                       class="form-control form-control-lg"
-                      value="<%= userData.addressDetails[0].pincode %>"
+                      value="<%= userData?.permanentAddress?.pincode %>"
                     />
                     <p id="pincodeError" style="color: red"></p>
                   </div>

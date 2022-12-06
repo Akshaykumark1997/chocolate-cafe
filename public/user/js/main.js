@@ -113,7 +113,9 @@ function changeQuantity(cartId, productId, count) {
     method: "post",
     success: (response) => {
       if(response.status){
+        console.log(response)
      document.getElementById(productId).innerHTML = quantity + count;
+     document.getElementById("sum").innerText = "Rs."+response.productData[0].total;
       }
     },
   });
@@ -140,6 +142,9 @@ function removeProduct(cartId, productId) {
         if (response.productExist) {
           document.getElementById(proId).innerHTML="product already in wishlist";
           //  location.href = "/cart";
+        }if(response.cart){
+           document.getElementById(proId).innerHTML =
+             "product already in cart";
         }
       },
     });
@@ -237,9 +242,10 @@ function eiditForm(form) {
     return false;
   }
   return true;
-}
+} 
 
-function addressForm(form) {
+function addressForm() {
+  let address = document.getElementById("checkbox");
   let housename = document.getElementById("housename");
   let area = document.getElementById("area");
   let landmark = document.getElementById("landmark");
@@ -247,6 +253,7 @@ function addressForm(form) {
   let state = document.getElementById("state");
   let pincode = document.getElementById("pincode");
 
+  if(!address.checked){ 
   var regex = /^[a-zA-Z\s]+$/;
   if (housename.value == "") {
     document.getElementById("houseError").innerHTML =
@@ -268,7 +275,7 @@ function addressForm(form) {
   if (regex.test(area.value) === false) {
     document.getElementById("areaError").innerHTML = "area should be alphabets";
     area.focus();
-    return false;
+    return false; 
   }
   if (landmark.value == "") {
     document.getElementById("landmarkError").innerHTML =
@@ -317,4 +324,7 @@ function addressForm(form) {
     return false;
   }
   return true;
+}else{
+  return true;
+}
 }

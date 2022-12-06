@@ -1,235 +1,194 @@
 <%- include('../partials/userPartial.ejs') %>
-<div class="container mt-3">
+<div class="container">
   <div class="row">
-    <div class="col-md-4 order-md-2 mb-4">
-      <form id="checkout">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">Your cart</span>
-        <span class="badge badge-secondary badge-pill">3</span>
-      </h4>
-      <ul class="list-group mb-3 sticky-top">
-        <% productDAta.forEach((product)=>{ %>
-        <li class="list-group-item d-flex justify-content-between lh-condensed">
-          <div>
-            <h6 class="my-0"><%= product.productDetail.product %></h6>
-          </div>
-          <span class="text-muted">Rs.<%= product.productPrice %></span>
-        </li>
-        <% }) %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span>Total </span>
-          <strong>Rs.<%= sum %></strong>
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-8 order-md-1">
-      <section>
-        <div class="container">
-          <label class="col-xs-3 control-label">Select Shipping Address</label>
-          <select class="form-select mt-2" name="address" style="width: 20rem">   
-            <% userData.addressDetails.forEach((address)=>{ %>
-            <option name="address">
-              <%= address.housename %>,<%= address.area %>,<%= address.landmark
-              %>,<%= address.city %>, <%= address.state %>,<%= address.pincode
-              %>
-            </option>
-            <% }) %>
-          </select>
-         
-          <div class="d-block my-3">
+    <div class="col-md-8 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Biling details</h5>
+        </div>
+        <div class="card-body">
+          <form id="checkout" >
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+              <input
+                type="text"
+                id="housename"
+                name="housename"
+                class="form-control"
+              />
+              <label class="form-label" for="form7Example3">House name</label>
+              <p id="houseError" style="color: red"></p>
+            </div>
+
+            <!-- Text input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="area" name="area" class="form-control" />
+              <label class="form-label" for="form7Example4">Area</label>
+              <p id="areaError" style="color: red"></p>
+            </div>
+
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input
+                type=""
+                id="landmark"
+                name="landmark"
+                class="form-control"
+              />
+              <label class="form-label" for="form7Example5">Landmark</label>
+              <p id="landmarkError" style="color: red"></p>
+            </div>
+
+            <!-- Number input -->
+            <div class="form-outline mb-4">
+              <input type="" id="city" name="city" class="form-control" />
+              <label class="form-label" for="form7Example6">City</label>
+              <p id="cityError" style="color: red"></p>
+            </div>
+            <div class="form-outline mb-4">
+              <input type="" id="state" name="state" class="form-control" />
+              <label class="form-label" for="form7Example6">State</label>
+              <p id="stateError" style="color: red"></p>
+            </div>
+            <div class="form-outline mb-4">
+              <input type="" id="pincode" name="pincode" class="form-control" />
+              <label class="form-label" for="form7Example6">Pincode</label>
+              <p id="pincodeError" style="color: red"></p>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="permanentAddress"
+                id="checkbox"
+                name="checkbox"
+              />
+              <label class="form-check-label" for="flexCheckDefault">
+                Use permanentAddress
+              </label>
+            </div>
             <div class="custom-control custom-radio">
               <input
                 id="credit"
                 name="paymentMethod"
-                type="radio" value="COD"
-                class="custom-control-input" 
+                type="radio"
+                value="COD"
+                class="custom-control-input"
                 checked
                 required
               />
-              <label class="custom-control-label" for="credit"
-                >COD</label
-              >
+              <label class="custom-control-label" for="credit">COD</label>
             </div>
             <div class="custom-control custom-radio">
               <input
                 id="debit"
                 name="paymentMethod"
-                type="radio" value="Online"
+                type="radio"
+                value="Online"
                 class="custom-control-input"
                 required
               />
               <label class="custom-control-label" for="debit">Online</label>
             </div>
-            <a href=""><button class="btn btn-primary btn-lg btn-block mt-2">
-              Proceed Order
-            </button></a>
-          </div>
-          </form>
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal-<%= userData._id %>"
-            data-bs-whatever="@mdo"
-          >
-            Add new address
-          </button>
-          <div
-            class="modal fade"
-            id="exampleModal-<%= userData._id %>"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">
-                    Add new Address
-                  </h1>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <form action="/addAddress/<%= userData._id %>" method="post" onsubmit="return addressForm(this);">
-                  <div class="modal-body">
-                    <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label"
-                        >House name:</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="housename"
-                        name="housename"
-                      /><p id="houseError" style="color: red"></p>
-                    </div>
-                    <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label"
-                        >Area:</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="area"
-                        name="area"
-                      /><p id="areaError" style="color: red"></p>
-                    </div>
-                    <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label"
-                        >Landmark:</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="landmark"
-                        name="landmark"
-                      /><p id="landmarkError" style="color: red"></p>
-                    </div>
-                    <div class="mb-3">
-                      <label for="recipient-name" class="col-form-label"
-                        >City:</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="city"
-                        name="city"
-                      /><p id="cityError" style="color: red"></p>
-                    </div>
-                    <div class="mb-3">
-                      <div class="row">
-                        <div class="col-md-6 mb-3">
-                          <label for="firstName">State</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="state"
-                            name="state"
-                          /><p id="stateError" style="color: red"></p>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                          <label for="lastName">Pincode</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="pincode"
-                            name="pincode"
-                          /><p id="pincodeError" style="color: red"></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                    <button type="submit" value="submit" class="btn btn-primary">
-                      Add
-                    </button>
-                  </div>
-                </form>
-              </div>
+            <div class="mt-3">
+              <button
+                type="submit"
+                value="submit"
+                class="btn btn-primary btn-lg btn-block"
+              >
+                Make purchase
+              </button>
             </div>
-          </div>
+          </form>
         </div>
-      </section>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card mb-4">
+        <div class="card-header py-3">
+          <h5 class="mb-0">Summary</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush sticky-top">
+            <% productDAta.forEach((product)=>{ %>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0"
+            >
+              <%= product.productDetail.product %>
+              <span>Rs.<%= product.productPrice %></span>
+            </li>
+            <% }) %>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0"
+            >
+              Shipping
+              <span>Free</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3"
+            >
+              <div>
+                <strong>Total amount</strong>
+              </div>
+              <span><strong>Rs.<%= sum %></strong></span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 <%- include('../partials/user-footer.ejs') %>
 <script>
-  $("#checkout").submit((e)=>{
+  $("#checkout").submit((e) => { 
+    const verify= addressForm();
+    console.log(verify);
     e.preventDefault();
+    if(verify){
     $.ajax({
-      url:'/placeOrder',
-      method:'post',
-      data:$('#checkout').serialize(),
-      success:(resposnse)=>{
-        if(resposnse.success){
-          location.href='/orderSuccess'
-        }else{
-          razorPay(resposnse)
+      url: "/placeOrder",
+      method: "post",
+      data: $("#checkout").serialize(),
+      success: (resposnse) => {
+        if (resposnse.success) {
+          location.href = "/orderSuccess";
+        } else {
+          razorPay(resposnse);
         }
-      }
-    })
-  })
-  function razorPay(order){
+      },
+    });
+  }
+  });
+  function razorPay(order) {
     var options = {
-      "key": "rzp_test_WekI0c4CjhtNac", // Enter the Key ID generated from the Dashboard
-      "amount":order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-      "currency": "INR",
-      "name": "Chocolate Cafe",
-      "description": "Test Transaction",
-      "image": "/admin/images/Chocolat Cafe Simple Design.png",
-      "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-      "handler": function (response) {
+      key: "rzp_test_WekI0c4CjhtNac", // Enter the Key ID generated from the Dashboard
+      amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "Chocolate Cafe",
+      description: "Test Transaction",
+      image: "/admin/images/Chocolat Cafe Simple Design.png",
+      order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
         // alert(response.razorpay_payment_id);
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature);
-        verifyPayment(response,order)
+        verifyPayment(response, order);
       },
-      "prefill": {
-        "name": "Akshay",
-        "email": "akshay@gmail.com",
-        "contact": "9999999999"
+      prefill: {
+        name: "Akshay",
+        email: "akshay@gmail.com",
+        contact: "9999999999",
       },
-      "notes": {
-        "address": "Razorpay Corporate Office"
+      notes: {
+        address: "Razorpay Corporate Office",
       },
-      "theme": {
-        "color": "#3399cc"
-      }
+      theme: {
+        color: "#3399cc",
+      },
     };
     var rzp1 = new Razorpay(options);
-    rzp1.on('payment.failed', function (response) {
+    rzp1.on("payment.failed", function (response) {
       // alert(response.error.code);
       // alert(response.error.description);
       // alert(response.error.source);
@@ -239,23 +198,23 @@
       // alert(response.error.metadata.payment_id);
       // paymentFail(response);
     });
-     rzp1.open();
+    rzp1.open();
   }
-  function verifyPayment(payment,order){
+  function verifyPayment(payment, order) {
     $.ajax({
-      url:'/verifyPayment',
-      data:{
+      url: "/verifyPayment",
+      data: {
         payment,
-        order
+        order,
       },
-      method:'post',
-      success:(response)=>{
-        if(response.success){
-           location.href = '/orderSuccess'
-        }else{
-          location.href= '/paymentFail'
+      method: "post",
+      success: (response) => {
+        if (response.success) {
+          location.href = "/orderSuccess";
+        } else {
+          location.href = "/paymentFail";
         }
-      }
-    })
+      },
+    });
   }
 </script>

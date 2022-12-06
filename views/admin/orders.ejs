@@ -119,13 +119,18 @@
                   <%= order.fullname %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= order.address %>
+                  <%= order.address.housename %><%= order.address.area %><%= order.address.landmark %><%= order.address.city %>
+                  <%= order.address.state %><%= order.address.pincode %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.mobile %>
                 </td>
                 
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"></td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <button type="button" class="btn btn-outline-success" style="width: 5rem">
+                    View
+                  </button>
+                </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.paymentStatus %>
                 </td>

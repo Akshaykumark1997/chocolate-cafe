@@ -17,8 +17,30 @@ const orderSchema = new Schema(
       required: true,
     },
     address: {
-      type: String,
-      required: true,
+      housename: {
+        type: String,
+        required: true,
+      },
+      area: {
+        type: String,
+        required: true,
+      },
+      landmark: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      pincode: {
+        type: String,
+        required: true,
+      },
     },
     orderItems: [
       {
@@ -48,12 +70,12 @@ const orderSchema = new Schema(
       type: String,
       default: "not paid",
     },
-    orderDate:{
-      type:String
+    orderDate: {
+      type: String,
     },
-    deliveryDate:{
-      type:String
-    }
+    deliveryDate: {
+      type: String,
+    },
   },
   {
     timestamps: true,

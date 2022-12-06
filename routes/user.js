@@ -27,7 +27,7 @@ router.get("/addCart/:id", verifyLogin.verifyLoginUser, userLogin.addCart);
 router.post(
   "/changeQuantity",
   verifyLogin.verifyLoginUser,
-  userLogin.changeQuantity
+  userLogin.changeQuantity,userLogin.totalAmount
 );
 router.post(
   "/removeProduct",
@@ -40,12 +40,6 @@ router
   .route("/editAccount")
   .get(verifyLogin.verifyLoginUser, userLogin.editAccount)
   .post(verifyLogin.verifyLoginUser, userLogin.postEditAccount);
-
-router.post(
-  "/addAddress/:id",
-  verifyLogin.verifyLoginUser,
-  userLogin.addAddress
-);
 router.get(
   "/changePassword/:id",
   verifyLogin.verifyLoginUser,

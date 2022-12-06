@@ -230,7 +230,7 @@ module.exports = {
         category: categoryData,
       });
       newCategory.save().then(() => {
-        res.redirect("/admin/categories");
+        res.redirect("/admin/categories"); 
       });
     }else{
       res.render("admin/categories",{err_message:"category already exists",allCategories});

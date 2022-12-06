@@ -25,28 +25,46 @@ const userSchema = new Schema({
     required: true,
     min: 10,
   },
-  addressDetails: [
-    {
-      housename: {
-        type: String,
-      },
-      area: {
-        type: String,
-      },
-      landmark: {
-        type: String,
-      },
-      city: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      pincode: {
-        type: String,
-      },
+  permanentAddress: {
+    housename: {
+      type: String,
     },
-  ],
+    area: {
+      type: String,
+    },
+    landmark: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    pincode: {
+      type: String,
+    },
+  },
+  shippingAddress: {
+    housename: {
+      type: String,
+    },
+    area: {
+      type: String,
+    },
+    landmark: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    pincode: {
+      type: String,
+    },
+  },
   password: {
     type: String,
     required: true,

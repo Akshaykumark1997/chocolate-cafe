@@ -99,7 +99,7 @@
                   <% productData.forEach((product)=>{ %>
                   <div class="d-flex justify-content-between mb-4">
                     <p><%= product.productDetail.product %></p>
-                    <p>Rs.<%= product.productPrice %></p>
+                    <p id="price">Rs.<%= product.productPrice %></p>
                   </div>
                   <% }) %>
 
@@ -133,7 +133,7 @@
 
                   <div class="d-flex justify-content-between mb-5">
                     <h5 class="text-uppercase">Total price</h5>
-                    <h5>Rs.<%= sum %></h5>
+                    <h5 id="sum">Rs.<%= sum %></h5>
                   </div>
                   <% if(productData.length!==0){ %>
                   <a href="/checkout"
