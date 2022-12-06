@@ -860,65 +860,12 @@ module.exports = {
   },
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
-    const productData = await order.aggregate([
-      {
-        $match: { userId: userData._id },
-      },
-      {
-        $unwind: "$orderItems",
-      },
-      {
-        $project: {
-          userId: "$userId",
-          fullname: "$fullname",
-          mobile: "$mobile",
-          address: "$address",
-          totalAmount: "$totalAmount",
-          paymentMethod: "$paymentMethod",
-          paymentStatus: "$paymentStatus",
-          createdAt: "$createdAt",
-          productItem: "$orderItems.productId",
-          productQuantity: "$orderItems.quantity",
-        },
-      },
-      {
-        $lookup: {
-          from: "productdetails",
-          localField: "productItem",
-          foreignField: "_id",
-          as: "productDetail",
-        },
-      },
-      {
-        $project: {
-          userId: 1,
-          fullname: 1,
-          mobile: 1,
-          address: 1,
-          totalAmount: 1,
-          paymentMethod: 1,
-          paymentStatus: 1,
-          createdAt: 1,
-          productItem: 1,
-          productQuantity: 1,
-          productDetail: { $arrayElemAt: ["$productDetail", 0] },
-        },
-      },
-      {
-        $addFields: {
-          productPrice: {
-            $multiply: ["$productQuantity", "$productDetail.price"],
-          },
-        },
-      },
-    ]);
-
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
         count,
         orderDetails,
-        productData,
+       
       });
     });
   },

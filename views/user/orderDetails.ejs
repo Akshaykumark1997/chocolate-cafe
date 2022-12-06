@@ -1,16 +1,7 @@
 <%- include('../partials/userPartial.ejs') %>
-<% if(productData.length===0){ %>
-  <center class="col-xl-12 col-md-6 col-sm-4">
-    <h1 style="color: red">You Havent Ordered Anything Yet...</h1>
-    <img class="image-fluid col-xl-12 col-md-6 col-sm-4 mt-5" src="/user/images/out-of-stock.png"
-      alt="" style="width: 14rem" /><br />
-    <a class="btn btn-succes" href="/userhome" style="
-                          margin-top: 17px;
-                          color: green;
-                          border: solid green;
-                        ">SHOP NOW</a>
-  </center>
-  <% }else{ %>
+
+  
+ 
 <div class="container table-responsive mt-5 mb-5">
     <% if(orderDetails.length !==0){ %>
   <table class="table table-hover table-light">
@@ -95,9 +86,18 @@
   </table>
   <% }else{ %>
     <div>
-        <h3>You Havent Ordered Anything Yet...</h3>
+        <center class="col-xl-12 col-md-6 col-sm-4">
+          <h1 style="color: red">You Havent Ordered Anything Yet...</h1>
+          <img class="image-fluid col-xl-12 col-md-6 col-sm-4 mt-5" src="/user/images/out-of-stock.png" alt=""
+            style="width: 14rem" /><br />
+          <a class="btn btn-succes" href="/userhome" style="
+                                  margin-top: 17px;
+                                  color: green;
+                                  border: solid green;
+                                ">SHOP NOW</a>
+        </center>
     </div>
     <% } %>
 </div>
-<% } %>
+
 <%- include('../partials/user-footer.ejs') %>

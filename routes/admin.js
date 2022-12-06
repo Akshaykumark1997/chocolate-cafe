@@ -52,4 +52,5 @@ router.get(
   adminLogin.deleteCategory
 );
 router.get('/orders',verifyLogin.verifyLoginAdmin,adminLogin.orders);
+router.post("/changeStatus/:id",verifyLogin.verifyLoginAdmin,adminLogin.changeStatus);
 module.exports = router;
