@@ -109,7 +109,7 @@ function changeQuantity(cartId, productId, count) {
       product: productId,
       count: count,
       quantity:quantity
-    },
+    }, 
     method: "post",
     success: (response) => {
       if(response.status){

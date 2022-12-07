@@ -15,7 +15,7 @@ const wishlist = require("../model/wishlist");
 // const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
 
-moment().format();
+moment().format(); 
 dotenv.config();
 // var instance = new Razorpay({
 //   key_id: process.env.KEYID,
@@ -616,12 +616,10 @@ module.exports = {
     }
   },
   placeOrder: async (req, res) => {
-    console.log(req.body);
     const data = req.body;
     const userData = await user.findOne({ email: session });
-    console.log(userData);
     const cartData = await cart.findOne({ userId: userData._id });
-    const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
+    // const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
     if (cartData) {
       const productData = await cart
         .aggregate([
@@ -684,13 +682,12 @@ module.exports = {
           orderItems: cartData.product,
           totalAmount: sum,
           paymentMethod: data.paymentMethod,
-          orderStatus: status,
+          orderStatus: "pending",
           orderDate: moment().format("MMM Do YY"),
           deliveryDate: moment().add(3, "days").format("MMM Do YY"),
         });
         const amount = orderData.totalAmount * 100;
         const _id = orderData._id;
-        console.log(amount, _id);
         await cart.deleteOne({ userId: userData._id });
         if (req.body.paymentMethod === "COD") {
           res.json({ success: true });
@@ -704,7 +701,6 @@ module.exports = {
             if (err) {
               console.log(err);
             } else {
-              console.log(order);
               res.json(order);
             }
           });
@@ -741,13 +737,12 @@ module.exports = {
           orderItems: cartData.product,
           totalAmount: sum,
           paymentMethod: data.paymentMethod,
-          orderStatus: status,
+          orderStatus:"pending",
           orderDate: moment().format("MMM Do YY"),
           deliveryDate: moment().add(3, "days").format("MMM Do YY"),
         });
         const amount = orderData.totalAmount * 100;
         const _id = orderData._id;
-        console.log(amount, _id);
         await cart.deleteOne({ userId: userData._id });
         if (req.body.paymentMethod === "COD") {
           res.json({ success: true });
@@ -761,7 +756,6 @@ module.exports = {
             if (err) {
               console.log(err);
             } else {
-              console.log(order);
               res.json(order);
             }
           });
@@ -785,7 +779,6 @@ module.exports = {
     }
   },
   verifyPayment: (req, res) => {
-    console.log(req.body);
     const details = req.body;
     let hmac = crypto.createHmac("sha256", process.env.KETSECRET);
     hmac.update(
@@ -799,8 +792,7 @@ module.exports = {
       console.log(objId);
       order
         .updateOne({ _id: objId }, { $set: { paymentStatus: "paid" } })
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           res.json({ success: true });
         })
         .catch((err) => {
@@ -854,7 +846,6 @@ module.exports = {
         },
       ])
       .then((productData) => {
-        console.log(productData);
         res.render("user/viewOrderProducts", { session, count, productData });
       });
   },
@@ -871,11 +862,10 @@ module.exports = {
   },
   cancelOrder: (req, res) => {
     const data = req.params.id;
-    console.log(data);
+    
     order
       .updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         res.redirect("/orderDetails");
       });
   },

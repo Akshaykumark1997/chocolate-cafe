@@ -5,7 +5,8 @@ const order = require("../model/order");
 const cart = require("../model/cart");
 const path = require("path");
 const mongoose = require("mongoose");
-
+const moment = require("moment");
+moment().format();
 const adminDetails = {
   email: "admin@gmail.com",
   password: "admin@123",
@@ -41,11 +42,68 @@ module.exports = {
       console.error();
     }
   },
-  gethome: (req, res) => {
+  gethome: async (req, res) => {
     try {
       let session = req.session;
       if (session.adminId) {
-        res.render("admin/adminDashboard");
+        const orderData = await order.find();
+        // console.log(orderData);
+        const totalAmount = orderData.reduce((accumulator, object) => {
+          return (accumulator += object.totalAmount);
+        }, 0);
+        // console.log(totalAmount);
+        const OrderToday = await order.find({
+          orderDate: moment().format("MMM Do YY"),
+        });
+        // console.log(OrderToday);
+        const totalOrderToday = OrderToday.reduce((accumulator, object) => {
+          return (accumulator += object.totalAmount);
+        }, 0);
+        const allOrders = orderData.length;
+        const pendingOrder = await order.find({ orderStatus: "pending" });
+        const pending = pendingOrder.length;
+        const processingOrder = await order.find({ orderStatus: "shipped" });
+        const processing = processingOrder.length;
+        const deliveredOrder = await order.find({ orderStatus: "delivered" });
+        const delivered = deliveredOrder.length;
+        const cancelledOrder = await order.find({ orderStatus: "cancelled" });
+        const cancelled = cancelledOrder.length;
+        const cod = await order.find({ paymentMethod: "COD" });
+        const codOrder = cod.length;
+        const razorPay = await order.find({
+          paymentMethod: "Online",
+        });
+        const razorPayOrder = razorPay.length;
+        const activeUsers = await user.find({ isBlocked: false }).count();
+        const product = await products.find({isDeleted:false}).count()
+        const allOrderDetails = await order.find({paymentStatus:"paid",orderStatus:"delivered"});
+        console.log(allOrderDetails);
+        // const start =  moment().startOf("month").format("MMM Do YY");
+        // const end =  moment().endOf("month").format("MMM Do YY");
+        // const amountPendingList = await order.find({
+        //   orderDate: {
+        //     $gte: end,
+        //     $lte:start,
+        //   },
+        // });
+        //  console.log(amountPendingList);
+        // const amountPending = amountPendingList.reduce((accumulator,object)=>{
+        //   return accumulator+= object.totalAmount;
+        // },0)
+        res.render("admin/adminDashboard", {
+          totalAmount,
+          totalOrderToday,
+          allOrders,
+          pending,
+          processing,
+          delivered,
+          cancelled,
+          codOrder,
+          razorPayOrder,
+          activeUsers,
+          product,
+          allOrderDetails,
+        });
       } else {
         res.redirect("/admin");
       }
@@ -303,18 +361,24 @@ module.exports = {
         res.render("admin/orders", { orderDetails });
       });
   },
-  changeStatus:(req,res)=>{
+  changeStatus: (req, res) => {
     console.log(req.params.id);
     const id = req.params.id;
     const data = req.body;
     console.log(data);
-      order.updateOne({_id:id},{$set:{
-        orderStatus:data.orderStatus,
-        paymentStatus:data.paymentStatus
-        
-      }}).then((data)=>{
+    order
+      .updateOne(
+        { _id: id },
+        {
+          $set: {
+            orderStatus: data.orderStatus,
+            paymentStatus: data.paymentStatus,
+          },
+        }
+      )
+      .then((data) => {
         console.log(data);
         res.redirect("/admin/orders");
-      })
-  }
+      });
+  },
 };

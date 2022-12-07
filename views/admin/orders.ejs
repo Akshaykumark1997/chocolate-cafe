@@ -83,9 +83,9 @@
       </div>
     </div>
     <div class="col py-3">
-      <section>
+      <section class="html-content">
+        <h1>Order Details</h1>
         <div class="container mt-5 table-responsive">
-          <h1>User Details</h1>
           <table id="table" class="table mt-5 table-hover table-light">
             <thead>
               <tr>
@@ -134,158 +134,25 @@
                   <%= order.orderDate %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal-<%= order._id %>">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal-<%= order._id %>"
+                  >
                     View
                   </button>
-                  <button type="button" class="btn btn-outline-danger"data-bs-toggle="modal" data-bs-target="#example-<%= order._id %>">Edit</button>
-                  <div class="modal fade" id="example-<%= order._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                       
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
-                        </div>
-                        <div class="modal-body">
-                          <form action="/admin/changeStatus/<%= order._id %>" method="post">
-                            <div class="mb-3">
-                              
-                              <label for="recipient-name" name="orderStatus" class="col-form-label">Order Status</label>
-                              <select class="form-select" name="orderStatus" aria-label="Default select example">
-                                <option selected><%= order.orderStatus %></option>
-                                <option value="pending" name="orderStatus">Pending</option>
-                                <option value="shipped" name="orderStatus">Shipped</option>
-                                <option value="delivered" name="orderStatus">Delivered</option>
-                                <option value="delivered" name="orderStatus">Cancel</option>
-                              </select>
-                            </div>
-                            <div class="mb-3">
-                              <label for="message-text" name="paymentStatus" class="col-form-label">Payment Status</label>
-                              <select class="form-select" name="paymentStatus" aria-label="Default select example">
-                                <option selected><%= order.paymentStatus %></option>
-                                <option value="not paid" name="paymentStatus">not paid</option>
-                                <option value="paid" name="paymentStatus">paid</option>
-                              </select>
-                            </div>
-                          
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="submit" value="submit" class="btn btn-primary">confirm</button>
-                        </div>
-                      </form>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Modal -->
-                  <div class="modal fade" id="exampleModal-<%= order._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-xl">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Product Details</h1>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          <section class="h-100 gradient-custom">
-                            <div class="container py-5 h-100">
-                              <div class="row d-flex justify-content-center align-items-center h-100">
-                                <div class="col-lg-10 col-xl-8">
-                                  <div class="card mt-3" style="border-radius: 10px">
-                                    <div class="card-header px-4 py-5">
-                                      <h5 class="text-muted mb-0">
-                                        Product Details,
-                                        <span style="color: #a8729a"> </span>!
-                                      </h5>
-                                    </div>
-                                    <div class="card-body p-4">
-                                      <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <p class="lead fw-normal mb-0" style="color: #a8729a">
-                                          Receipt
-                                        </p>
-                                        <p class="small text-muted mb-0">
-                                          Receipt Voucher : 1KAU9-84UIL
-                                        </p>
-                                      </div>
-                                      
-                                      <div class="card shadow-0 border mb-4">
-                                        <div class="card-body">
-                                          <% order.products.forEach((product)=>{ %>
-                                            <div class="row">
-                                              <div class="col-md-2">
-                                                <img src="/admin/products/<%= product._id %>.jpg" class="img-fluid" alt="Phone" />
-                                              </div>
-                                              <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <p class="text-muted mb-0">
-                                                <%= product.product %>
-                                                 
-                                                </p>
-                                              </div>
-                                              <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <p class="text-muted mb-0 small">
-                                                  <%= product.category %>
-                                                </p>
-                                              </div>
-                                              <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <p class="text-muted mb-0 small">
-                                                  <%= product.description %>
-                                                </p>
-                                              </div>
-                                              <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <p class="text-muted mb-0 small">
-                                                  <%= product.price %>
-                                                </p>
-                                              </div>
-                                              <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                                <% order.orderItems.forEach((quantity)=>{ %>
-                                                <p class="text-muted mb-0 small">
-                                                  <% if(product._id+"" == quantity.productId+""){ %>
-                                                  <%=  quantity.quantity %>
-                                                  <% } %>
-                                                </p>
-                                                <% }) %>
-                                              </div>
-                                            </div>
-                                          <% }) %>
-                                              
-                                        </div>
-                                      </div>
-                                      <div class="d-flex justify-content-between pt-2">
-                                        <p class="fw-bold mb-0">Order Details</p>
-                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
-                                      </div>
-                                      
-                                      <div class="d-flex justify-content-between pt-2">
-                                        <p class="text-muted mb-0">Invoice Number : 788152</p>
-
-                                      </div>
-                                      
-                                      <div class="d-flex justify-content-between">
-                                        <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
-                                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>Rs. <%= order.totalAmount %>
-                                      </div>
-                                      
-                                      <div class="d-flex justify-content-between mb-5">
-                                        <p class="text-muted mb-0">Address : 
-                                          <%= order.address.housename %>,<%= order.address.area %>,<%= order.address.landmark %> <br>,<%= order.address.city %>,<%= order.address.state %>,<%= order.address.pincode %> <br><%= order.mobile %>
-                                        </p>
-                                      </div>
-                                      </div>
-                                      
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </section>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#example-<%= order._id %>"
+                  >
+                    Edit
+                  </button>
                 </td>
               </tr>
+
               <% }) %>
             </tbody>
           </table>
@@ -294,8 +161,225 @@
     </div>
   </div>
 </div>
+<% orderDetails.forEach((order)=>{ %>
+<div
+  class="modal fade"
+  id="example-<%= order._id %>"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/changeStatus/<%= order._id %>" method="post">
+          <div class="mb-3">
+            <label
+              for="recipient-name"
+              name="orderStatus"
+              class="col-form-label"
+            >
+              Order Status
+            </label>
+            <select
+              class="form-select"
+              name="orderStatus"
+              aria-label="Default select example"
+            >
+              <option selected><%= order.orderStatus %></option>
+              <option value="pending" name="orderStatus">Pending</option>
+              <option value="shipped" name="orderStatus">Shipped</option>
+              <option value="delivered" name="orderStatus">Delivered</option>
+              <option value="cancelled" name="orderStatus">Cancel</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label
+              for="message-text"
+              name="paymentStatus"
+              class="col-form-label"
+              >Payment Status</label
+            >
+            <select
+              class="form-select"
+              name="paymentStatus"
+              aria-label="Default select example"
+            >
+              <option selected><%= order.paymentStatus %></option>
+              <option value="not paid" name="paymentStatus">not paid</option>
+              <option value="paid" name="paymentStatus">paid</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" value="submit" class="btn btn-primary">
+              confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal-<%= order._id %>"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Product Details</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <section class="h-100 gradient-custom">
+          <div class="container py-5 h-100">
+            <div
+              class="row d-flex justify-content-center align-items-center h-100"
+            >
+              <div class="col-lg-10 col-xl-8">
+                <div class="card mt-3" style="border-radius: 10px">
+                  <div class="card-header px-4 py-5">
+                    <h5 class="text-muted mb-0">
+                      Product Details,
+                      <span style="color: #a8729a"> </span>!
+                    </h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div
+                      class="d-flex justify-content-between align-items-center mb-4"
+                    >
+                      <p class="lead fw-normal mb-0" style="color: #a8729a">
+                        Receipt
+                      </p>
+                      <p class="small text-muted mb-0">
+                        Receipt Voucher : 1KAU9-84UIL
+                      </p>
+                    </div>
+
+                    <div class="card shadow-0 border mb-4">
+                      <div class="card-body">
+                        <% order.products.forEach((product)=>{ %>
+                        <div class="row">
+                          <div class="col-md-2">
+                            <img
+                              src="/admin/products/<%= product._id %>.jpg"
+                              class="img-fluid"
+                              alt="Phone"
+                            />
+                          </div>
+                          <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                          >
+                            <p class="text-muted mb-0">
+                              <%= product.product %>
+                            </p>
+                          </div>
+                          <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                          >
+                            <p class="text-muted mb-0 small">
+                              <%= product.category %>
+                            </p>
+                          </div>
+                          <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                          >
+                            <p class="text-muted mb-0 small">
+                              <%= product.description %>
+                            </p>
+                          </div>
+                          <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                          >
+                            <p class="text-muted mb-0 small">
+                              <%= product.price %>
+                            </p>
+                          </div>
+                          <div
+                            class="col-md-2 text-center d-flex justify-content-center align-items-center"
+                          >
+                            <% order.orderItems.forEach((quantity)=>{ %>
+                            <p class="text-muted mb-0 small">
+                              <% if(product._id+"" == quantity.productId+""){ %>
+                              <%= quantity.quantity %> <% } %>
+                            </p>
+                            <% }) %>
+                          </div>
+                        </div>
+                        <% }) %>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between pt-2">
+                      <p class="fw-bold mb-0">Order Details</p>
+                      <p class="text-muted mb-0">
+                        <span class="fw-bold me-4">Delivery Charges</span> Free
+                      </p>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2">
+                      <p class="text-muted mb-0">Invoice Number : 788152</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                      <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+                      <p class="text-muted mb-0">
+                        <span class="fw-bold me-4">Total</span>Rs. <%=
+                        order.totalAmount %>
+                      </p>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-5">
+                      <p class="text-muted mb-0">
+                        Address : <%= order.address.housename %>,<%=
+                        order.address.area %>,<%= order.address.landmark %>
+                        <br />,<%= order.address.city %>,<%= order.address.state
+                        %>,<%= order.address.pincode %> <br /><%= order.mobile
+                        %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% }) %>
+
+
 <script>
   $(document).ready(function () {
     $("#table").DataTable();
   });
+
+  
 </script>

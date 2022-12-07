@@ -28,11 +28,7 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/orders"
-              
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline">Order</span>
             </a>
@@ -82,6 +78,397 @@
         <hr />
       </div>
     </div>
-    <div class="col py-3"></div>
+    <div class="col py-3 mt-5">
+      <h1 class="h2 mb-0 ls-tight">Dashboard</h1>
+      <!-- Main -->
+      <main class="py-6 bg-surface-secondary mt-2">
+        <main class="container-fluid">
+          <!-- Card stats -->
+          <div class="row g-6 mb-6">
+            <div class="col-xl-4 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Today's Revenue</span
+                      >
+                      <span class="h3 font-bold mb-0"
+                        >Rs.<%= totalOrderToday %></span
+                      >
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-tertiary text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-credit-card"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>13%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >yeaterday</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-4 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Monthly Revenue</span
+                      >
+                      <span class="h3 font-bold mb-0">Rs.</span>
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-primary text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-calendar"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>30%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-4 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Total Revenue</span
+                      >
+                      <span class="h3 font-bold mb-0"
+                        >Rs.<%= totalAmount %></span
+                      >
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-info text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-clock-history"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-danger text-danger me-2"
+                    >
+                      <i class="bi bi-arrow-down me-1"></i>-5%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Toatal Orders</span
+                      >
+                      <span class="h3 font-bold mb-0"><%= allOrders %></span>
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-warning text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-minecart-loaded"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>10%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Order Pending</span
+                      >
+                      <span id="pending" class="h3 font-bold mb-0"
+                        ><%= pending %></span
+                      >
+                      <input
+                        type="hidden"
+                        value="<%= cancelled %>"
+                        id="cancelled"
+                      />
+                      <input type="hidden" value="<%= codOrder %>" id="cod" />
+                      <input
+                        type="hidden"
+                        value="<%= razorPayOrder %>"
+                        id="razorpay"
+                      />
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-warning text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-minecart-loaded"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>10%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Order Shipped</span
+                      >
+                      <span id="shipped" class="h3 font-bold mb-0"
+                        ><%= processing %></span
+                      >
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-warning text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-minecart-loaded"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>10%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 mt-4">
+              <div class="card shadow border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span
+                        class="h6 font-semibold text-muted text-sm d-block mb-2"
+                        >Order Delivered</span
+                      >
+                      <span id="delivered" class="h3 font-bold mb-0"
+                        ><%= delivered %></span
+                      >
+                    </div>
+                    <div class="col-auto">
+                      <div
+                        class="icon icon-shape bg-warning text-white text-lg rounded-circle"
+                      >
+                        <i class="bi bi-minecart-loaded"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2 mb-0 text-sm">
+                    <span
+                      class="badge badge-pill bg-soft-success text-success me-2"
+                    >
+                      <i class="bi bi-arrow-up me-1"></i>10%
+                    </span>
+                    <span class="text-nowrap text-xs text-muted"
+                      >Since last month</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </main>
+      <div class="row">
+        <div class="col-xl-6 col-12">
+          <canvas id="pie-chart"></canvas>
+        </div>
+        <div class="col-xl-6 col-12">
+          <canvas id="salse-revenue"></canvas>
+        </div>
+      </div>
+      <div class="container-fluid pt-4 px-4 ">
+        <div class="d-flex justify-content-end col-12">
+          <button
+              class="btn rounded-pill btn-danger"
+              onclick="CreatePDFfromHTML()"
+            >
+              generate PDF
+            </button>
+        </div>
+        <div class=" text-center rounded p-4 html-content">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Recent Salse</h6>
+            
+            <!-- <input type="button" value="Download PDF File" onclick="DownloadFile('Sample.pdf')" /> -->
+          </div>
+          <div class="table-responsive" id="editor">
+            <table
+              class="table text-start align-middle table-bordered table-hover mb-0"
+            >
+              <thead>
+                <tr class="text-white">
+                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Invoice</th>
+                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Customer</th>
+                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Amount</th>
+                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Status</th>
+                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">order</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% allOrderDetails.forEach((order)=>{ %>
+                <tr> 
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order._id %></td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.fullname %></td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.totalAmount %></td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.paymentStatus %></td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.orderStatus %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://html2canvas.hertzen.com/dist/html2canvas.js"
+></script>
+<script>
+  let pending = document.getElementById("pending").innerHTML;
+  let shipped = document.getElementById("shipped").innerHTML;
+  let delivered = document.getElementById("delivered").innerHTML;
+  let cancelled = document.getElementById("cancelled").value;
+  var ctx5 = document.getElementById("pie-chart").getContext("2d");
+  var myChart5 = new Chart(ctx5, {
+    type: "bar",
+    data: {
+      labels: ["Pending", "Shipped", "Delivered", "Cancelled"],
+      datasets: [
+        {
+          backgroundColor: ["#C2C9C8", "#0B6464", "#515454", "#3E5A5A"],
+          data: [pending, shipped, delivered, cancelled],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+    },
+  });
+  let cod = document.getElementById("cod").value;
+  let razorpay = document.getElementById("razorpay").value;
+  var ctx6 = document.getElementById("salse-revenue").getContext("2d");
+  var myChart6 = new Chart(ctx6, {
+    type: "bar",
+    data: {
+      labels: ["COD", "Razorpay"],
+      datasets: [
+        {
+          backgroundColor: ["#C2C9C8", "#515454"],
+          data: [cod, razorpay],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+    },
+  });
+  function CreatePDFfromHTML() {
+    var HTML_Width = $(".html-content").width();
+    var HTML_Height = $(".html-content").height();
+    var top_left_margin = 15;
+    var PDF_Width = HTML_Width + top_left_margin * 2;
+    var PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
+    var canvas_image_width = HTML_Width;
+    var canvas_image_height = HTML_Height;
+
+    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+    html2canvas($(".html-content")[0]).then(function (canvas) {
+      var imgData = canvas.toDataURL("image/jpeg", 1.0);
+      var pdf = new jsPDF("p", "pt", [PDF_Width, PDF_Height]);
+      pdf.addImage(
+        imgData,
+        "JPG",
+        top_left_margin,
+        top_left_margin,
+        canvas_image_width,
+        canvas_image_height
+      );
+      for (var i = 1; i <= totalPDFPages; i++) {
+        pdf.addPage(PDF_Width, PDF_Height);
+        pdf.addImage(
+          imgData,
+          "JPG",
+          top_left_margin,
+          -(PDF_Height * i) + top_left_margin * 4,
+          canvas_image_width,
+          canvas_image_height
+        );
+      }
+      pdf.save("Recent_Sales_Report.pdf");
+    });
+  }
+</script>
