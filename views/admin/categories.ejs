@@ -28,10 +28,7 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/orders"
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline">Order</span>
             </a>
@@ -96,12 +93,10 @@
                 Add Categories
               </button>
               <% if(locals.err_message){%>
-                <div>
-                  <p class="text-danger">
-                    <%=err_message%>
-                  </p>
-                </div>
-                <%}%>
+              <div>
+                <p class="text-danger"><%=err_message%></p>
+              </div>
+              <%}%>
               <div
                 class="modal fade"
                 id="staticBackdrop"
@@ -290,7 +285,10 @@
                             </button>
                             <a
                               href="/admin/deleteCategory/<%= allCategories._id %>"
-                              ><button type="button" class="btn btn-outline-primary">
+                              ><button
+                                type="button"
+                                class="btn btn-outline-primary"
+                              >
                                 Confirm
                               </button></a
                             >

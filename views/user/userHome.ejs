@@ -107,8 +107,10 @@
           <% allProducts.forEach((allProducts)=>{ %>
           <div class="col mb-5">
             <div class="card h-100">
-              <div class="text-end"><span class="text-danger" id="<%= allProducts._id %>"></span>
-                <button id="wishButton"
+              <div class="text-end">
+                <span class="text-danger" id="<%= allProducts._id %>"></span>
+                <button
+                  id="wishButton"
                   class="btn btn-outline-none"
                   onclick="addToWishlist('<%= allProducts._id %>')"
                 >
@@ -195,6 +197,8 @@
     </section>
   </main>
 </div>
-  <%- include('../partials/user-footer.ejs') %>
+<%- include('../partials/user-footer.ejs') %>
 
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css" />

@@ -75,8 +75,11 @@ module.exports = {
         });
         const razorPayOrder = razorPay.length;
         const activeUsers = await user.find({ isBlocked: false }).count();
-        const product = await products.find({isDeleted:false}).count()
-        const allOrderDetails = await order.find({paymentStatus:"paid",orderStatus:"delivered"});
+        const product = await products.find({ isDeleted: false }).count();
+        const allOrderDetails = await order.find({
+          paymentStatus: "paid",
+          orderStatus: "delivered",
+        });
         console.log(allOrderDetails);
         // const start =  moment().startOf("month").format("MMM Do YY");
         // const end =  moment().endOf("month").format("MMM Do YY");

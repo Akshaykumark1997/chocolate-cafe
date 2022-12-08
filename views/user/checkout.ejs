@@ -7,7 +7,7 @@
           <h5 class="mb-0">Biling details</h5>
         </div>
         <div class="card-body">
-          <form id="checkout" >
+          <form id="checkout">
             <!-- Text input -->
             <div class="form-outline mb-4">
               <input
@@ -141,24 +141,24 @@
 </div>
 <%- include('../partials/user-footer.ejs') %>
 <script>
-  $("#checkout").submit((e) => { 
-    const verify= addressForm();
+  $("#checkout").submit((e) => {
+    const verify = addressForm();
     console.log(verify);
     e.preventDefault();
-    if(verify){
-    $.ajax({
-      url: "/placeOrder",
-      method: "post",
-      data: $("#checkout").serialize(),
-      success: (resposnse) => {
-        if (resposnse.success) {
-          location.href = "/orderSuccess";
-        } else {
-          razorPay(resposnse);
-        }
-      },
-    });
-  }
+    if (verify) {
+      $.ajax({
+        url: "/placeOrder",
+        method: "post",
+        data: $("#checkout").serialize(),
+        success: (resposnse) => {
+          if (resposnse.success) {
+            location.href = "/orderSuccess";
+          } else {
+            razorPay(resposnse);
+          }
+        },
+      });
+    }
   });
   function razorPay(order) {
     var options = {

@@ -341,19 +341,19 @@
           <canvas id="salse-revenue"></canvas>
         </div>
       </div>
-      <div class="container-fluid pt-4 px-4 ">
+      <div class="container-fluid pt-4 px-4">
         <div class="d-flex justify-content-end col-12">
           <button
-              class="btn rounded-pill btn-danger"
-              onclick="CreatePDFfromHTML()"
-            >
-              generate PDF
-            </button>
+            class="btn rounded-pill btn-danger"
+            onclick="CreatePDFfromHTML()"
+          >
+            generate PDF
+          </button>
         </div>
-        <div class=" text-center rounded p-4 html-content">
+        <div class="text-center rounded p-4 html-content">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Recent Salse</h6>
-            
+
             <!-- <input type="button" value="Download PDF File" onclick="DownloadFile('Sample.pdf')" /> -->
           </div>
           <div class="table-responsive" id="editor">
@@ -362,21 +362,56 @@
             >
               <thead>
                 <tr class="text-white">
-                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Invoice</th>
-                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Customer</th>
-                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Amount</th>
-                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">Status</th>
-                  <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">order</th>
+                  <th
+                    scope="col"
+                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                  >
+                    Invoice
+                  </th>
+                  <th
+                    scope="col"
+                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                  >
+                    Customer
+                  </th>
+                  <th
+                    scope="col"
+                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                  >
+                    Amount
+                  </th>
+                  <th
+                    scope="col"
+                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                  >
+                    order
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <% allOrderDetails.forEach((order)=>{ %>
-                <tr> 
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order._id %></td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.fullname %></td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.totalAmount %></td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.paymentStatus %></td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"><%= order.orderStatus %></td>
+                <tr>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <%= order._id %>
+                  </td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <%= order.fullname %>
+                  </td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <%= order.totalAmount %>
+                  </td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <%= order.paymentStatus %>
+                  </td>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <%= order.orderStatus %>
+                  </td>
                 </tr>
                 <% }) %>
               </tbody>

@@ -15,7 +15,7 @@ const wishlist = require("../model/wishlist");
 // const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
 
-moment().format(); 
+moment().format();
 dotenv.config();
 // var instance = new Razorpay({
 //   key_id: process.env.KEYID,
@@ -210,12 +210,26 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
+      const id = req.params.id;
+      const objId = mongoose.Types.ObjectId(id);
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
-      const id = req.params.id;
+      const cartLen = await cart.findOne(
+        { userId: userData.id },
+        { product: { $elemMatch: { productId: objId } } }
+      );
+      const cartExist = cartLen.product.length;
+      console.log(cartExist);
+
       products.findOne({ _id: id }).then((data) => {
-        res.render("user/productView", { session, data, count, cartData });
+        res.render("user/productView", {
+          session,
+          data,
+          count,
+          cartData,
+          cartExist,
+        });
       });
     } catch {
       console.error();
@@ -301,6 +315,23 @@ module.exports = {
           });
       }
     }
+  },
+  removewishlistProduct: async (req, res) => {
+    const data = req.body;
+    const objId = mongoose.Types.ObjectId(data.productId);
+    await wishlist.aggregate([
+      {
+        $unwind: "$product",
+      },
+    ]);
+    await wishlist
+      .updateOne(
+        { _id: data.wishlistId, "product.productId": objId },
+        { $pull: { product: { productId: objId } } }
+      )
+      .then(() => {
+        res.json({ status: true });
+      });
   },
   addCart: async (req, res) => {
     const id = req.params.id;
@@ -455,7 +486,6 @@ module.exports = {
         },
       },
     ]);
-    console.log(productData);
     res.json({ status: true, productData });
   },
   changeQuantity: async (req, res, next) => {
@@ -464,11 +494,10 @@ module.exports = {
     data.quantity = parseInt(data.quantity);
     const objId = mongoose.Types.ObjectId(data.product);
     const productDetail = await products.findOne({ _id: data.product });
-    if (
-      (data.count == -1 && data.quantity == 1) ||
-      (data.count == 1 && data.quantity == productDetail.stock)
-    ) {
+    if (data.count == -1 && data.quantity == 1) {
       res.json({ quantity: true });
+    } else if (data.count == 1 && data.quantity == productDetail.stock) {
+      res.json({ stock: true });
     } else {
       await cart
         .aggregate([
@@ -705,12 +734,12 @@ module.exports = {
             }
           });
         }
-      } else { 
+      } else {
         await user.updateOne(
           { email: session },
           {
             $set: {
-              shippingAddress: { 
+              shippingAddress: {
                 housename: data.housename,
                 area: data.area,
                 landmark: data.landmark,
@@ -737,7 +766,7 @@ module.exports = {
           orderItems: cartData.product,
           totalAmount: sum,
           paymentMethod: data.paymentMethod,
-          orderStatus:"pending",
+          orderStatus: "pending",
           orderDate: moment().format("MMM Do YY"),
           deliveryDate: moment().add(3, "days").format("MMM Do YY"),
         });
@@ -760,6 +789,24 @@ module.exports = {
             }
           });
         }
+      }
+      console.log(productData);
+      for (let i = 0; i < productData.length; i++) {
+        const updatedStock =
+          productData[i].productDetail.stock - productData[i].productQuantity;
+        console.log(updatedStock);
+        products
+          .updateOne(
+            {
+              _id: productData[i].productDetail._id,
+            },
+            {
+              stock: updatedStock,
+            }
+          )
+          .then((data) => {
+            console.log(data);
+          });
       }
       // products.updateMany({ _id: stocks }, [
       //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } },
@@ -856,13 +903,12 @@ module.exports = {
         session,
         count,
         orderDetails,
-       
       });
     });
   },
   cancelOrder: (req, res) => {
     const data = req.params.id;
-    
+
     order
       .updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
       .then(() => {

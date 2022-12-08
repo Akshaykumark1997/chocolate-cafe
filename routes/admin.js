@@ -51,6 +51,10 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.deleteCategory
 );
-router.get('/orders',verifyLogin.verifyLoginAdmin,adminLogin.orders);
-router.post("/changeStatus/:id",verifyLogin.verifyLoginAdmin,adminLogin.changeStatus);
+router.get("/orders", verifyLogin.verifyLoginAdmin, adminLogin.orders);
+router.post(
+  "/changeStatus/:id",
+  verifyLogin.verifyLoginAdmin,
+  adminLogin.changeStatus
+);
 module.exports = router;

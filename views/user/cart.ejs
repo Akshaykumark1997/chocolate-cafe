@@ -1,16 +1,20 @@
-<%- include('../partials/userPartial.ejs') %>
-<% if(productData.length===0){ %>
-  <center class="col-xl-12 col-md-6 col-sm-4">
-    <h1 style="color: red">Sorry your cart is empty</h1>
-    <img class="image-fluid col-xl-12 col-md-6 col-sm-4 mt-5" src="https://alphapharmaexhibitions.com/images/cartempty1.png"
-      alt="" style="width: 14rem" /><br />
-    <a class="btn btn-succes" href="/userhome" style="
-                          margin-top: 17px;
-                          color: green;
-                          border: solid green;
-                        ">SHOP NOW</a>
-  </center>
-  <% }else{ %>
+<%- include('../partials/userPartial.ejs') %> <% if(productData.length===0){ %>
+<center class="col-xl-12 col-md-6 col-sm-4">
+  <h1 style="color: red">Sorry your cart is empty</h1>
+  <img
+    class="image-fluid col-xl-12 col-md-6 col-sm-4 mt-5"
+    src="https://alphapharmaexhibitions.com/images/cartempty1.png"
+    alt=""
+    style="width: 14rem"
+  /><br />
+  <a
+    class="btn btn-succes"
+    href="/userhome"
+    style="margin-top: 17px; color: green; border: solid green"
+    >SHOP NOW</a
+  >
+</center>
+<% }else{ %>
 <section>
   <div class="container py-5">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -20,7 +24,7 @@
           style="border-radius: 15px"
         >
           <div class="card-body p-0">
-            <div class="row g-0 ">
+            <div class="row g-0">
               <div class="col-lg-8">
                 <div class="p-5">
                   <div
@@ -28,7 +32,7 @@
                   >
                     <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
                   </div>
-                   <% productData.forEach((product)=>{ %>
+                  <% productData.forEach((product)=>{ %>
                   <hr class="my-4" />
                   <div
                     class="row mb-4 d-flex justify-content-between align-items-center"
@@ -46,26 +50,34 @@
                       </h6>
                     </div>
                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex my-2">
-                      <button id="buttonNegative" class="btn btn-link px-2" 
-                                    onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)" >
+                      <button
+                        id="buttonNegative"
+                        class="btn btn-link px-2"
+                        onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)"
+                      >
                         <i class="fas fa-minus"></i>
                       </button>
-                      <p id="<%= product.productDetail._id %>" ><%= product.productQuantity %></p>
+                      <p id="<%= product.productDetail._id %>">
+                        <%= product.productQuantity %>
+                      </p>
                       <button
-                        class="btn btn-link px-2"  
+                        class="btn btn-link px-2"
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)"
                       >
                         <i class="fas fa-plus"></i>
                       </button>
                     </div>
-                    
-                    
-                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-center my-2">
+
+                    <div
+                      class="col-md-3 col-lg-2 col-xl-2 offset-lg-1 d-flex justify-content-center my-2"
+                    >
                       <h6 class="mb-0">
                         Rs. <%= product.productDetail.price %>
                       </h6>
                     </div>
-                    <div class="col-md-1 col-lg-1 col-xl-1 text-end d-flex justify-content-center my-2">
+                    <div
+                      class="col-md-1 col-lg-1 col-xl-1 text-end d-flex justify-content-center my-2"
+                    >
                       <button
                         class="btn btn-outline-none"
                         onclick="removeProduct('<%= product._id %>','<%= product.productDetail._id %>')"
@@ -74,12 +86,7 @@
                       </button>
                     </div>
                   </div>
-                  <div class="col-md-3 col-lg-3 col-xl-3 offset-lg-1">
-                    <% if(product.productDetail.stock===product.productQuantity){ %>
-                      <p class="text-danger">Sorry that's all we have</p>
-                      <% } %>
-                  </div>
-                  <% }) %> 
+                  <% }) %>
                   <hr class="my-4" />
                   <div class="pt-5">
                     <h6 class="mb-0">
@@ -128,7 +135,7 @@
                       >
                     </div>
                   </div> -->
-                  
+
                   <hr class="my-4" />
 
                   <div class="d-flex justify-content-between mb-5">
@@ -155,6 +162,8 @@
     </div>
   </div>
 </section>
-<% } %>
-<%- include('../partials/user-footer.ejs') %>
+<% } %> <%- include('../partials/user-footer.ejs') %>
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css" />

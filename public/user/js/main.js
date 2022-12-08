@@ -65,13 +65,10 @@ function addToCart(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
+        document.getElementById("cartButton").innerHTML = "Go to Cart";
       }
-      if(response.productExist){
-       location.href='/cart'
-         
-      }
-      if(response.stock){
-       document.getElementById("message").innerHTML = "Out of stock !!!!!!";
+      if (response.productExist) {
+        location.href = "/cart";
       }
     },
   });
@@ -86,18 +83,24 @@ function addToCartWish(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
-        window.location.reload();
+        Swal.fire({
+          title: "Product added to cart!",
+          text: "Do you want to continue",
+          icon: "success",
+          confirmButtonText: "continue",
+        }).then(function () {
+          location.href = "/wishlist";
+        });
       }
       if (response.productExist) {
         location.href = "/cart";
       }
-      if (response.stock) {
-        document.getElementById("message").innerHTML = "Out of stock !!!!!!";
-      }
+      // if (response.stock) {
+      //   document.getElementById("message").innerHTML = "Out of stock !!!!!!";
+      // }
     },
   });
 }
-
 
 function changeQuantity(cartId, productId, count) {
   let quantity = parseInt(document.getElementById(productId).innerHTML);
@@ -108,14 +111,30 @@ function changeQuantity(cartId, productId, count) {
       cart: cartId,
       product: productId,
       count: count,
-      quantity:quantity
-    }, 
+      quantity: quantity,
+    },
     method: "post",
     success: (response) => {
-      if(response.status){
-        console.log(response)
-     document.getElementById(productId).innerHTML = quantity + count;
-     document.getElementById("sum").innerText = "Rs."+response.productData[0].total;
+      if (response.status) {
+        console.log(response);
+        document.getElementById(productId).innerHTML = quantity + count;
+        document.getElementById("sum").innerText =
+          "Rs." + response.productData[0].total;
+      }
+      if (response.stock) {
+        Swal.fire({
+          title: "Out of stock!",
+          text: "Do you want to continue",
+          icon: "error",
+          confirmButtonText: "continue",
+        });
+      }
+      if (response.quantity) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Minimum One required!",
+        });
       }
     },
   });
@@ -129,27 +148,74 @@ function removeProduct(cartId, productId) {
     },
     method: "post",
     success: () => {
-      location.reload();
+      Swal.fire({
+        title: "Product removed from cart!",
+        text: "Do you want to continue",
+        icon: "success",
+        confirmButtonText: "continue",
+      }).then(function () {
+        location.reload();
+      });
+    },
+  });
+}
+function removeWishlistProduct(wishlistId, productId) {
+  $.ajax({
+    url: "/removewishlistProduct",
+    method: "post",
+    data: {
+      wishlistId,
+      productId,
+    },
+    success: () => {
+      Swal.fire({
+        title: "Product removed from wishlist!",
+        text: "Do you want to continue",
+        icon: "success",
+        confirmButtonText: "continue",
+      }).then(function () {
+        location.reload();
+      });
     },
   });
 }
 
-  function addToWishlist(proId) {
-    $.ajax({
-      url: "/addToWishlist/" + proId,
-      method: "get",
-      success: (response) => {
-        if (response.productExist) {
-          document.getElementById(proId).innerHTML="product already in wishlist";
-          //  location.href = "/cart";
-        }if(response.cart){
-           document.getElementById(proId).innerHTML =
-             "product already in cart";
-        }
-      },
-    });
-  }
-
+function addToWishlist(proId) {
+  $.ajax({
+    url: "/addToWishlist/" + proId,
+    method: "get",
+    success: (response) => {
+      if (response.status) {
+        Swal.fire({
+          title: "Added to wishlist!",
+          text: "Do you want to continue",
+          icon: "success",
+          confirmButtonText: "continue",
+        });
+      }
+      if (response.productExist) {
+        Swal.fire({
+          title: "Already Exist in wishlist!",
+          text: "Do you want to continue",
+          icon: "error",
+          confirmButtonText: "continue",
+        });
+        // document.getElementById(proId).innerHTML="product already in wishlist";
+        //  location.href = "/cart";
+      }
+      if (response.cart) {
+        //  document.getElementById(proId).innerHTML =
+        //    "product already in cart";
+        Swal.fire({
+          title: "Already Exist cart!",
+          text: "Please visit cart",
+          icon: "error",
+          confirmButtonText: "continue",
+        });
+      }
+    },
+  });
+}
 
 function eiditForm(form) {
   let fullname = document.getElementById("fullname");
@@ -242,7 +308,7 @@ function eiditForm(form) {
     return false;
   }
   return true;
-} 
+}
 
 function addressForm() {
   let address = document.getElementById("checkbox");
@@ -253,78 +319,81 @@ function addressForm() {
   let state = document.getElementById("state");
   let pincode = document.getElementById("pincode");
 
-  if(!address.checked){ 
-  var regex = /^[a-zA-Z\s]+$/;
-  if (housename.value == "") {
-    document.getElementById("houseError").innerHTML =
-      "please enter your house name";
-    housename.focus();
-    return false;
-  }
-  if (regex.test(housename.value) === false) {
-    document.getElementById("houseError").innerHTML =
-      "housename should be alphabets";
-    housename.focus();
-    return false;
-  }
-  if (area.value == "") {
-    document.getElementById("areaError").innerHTML = "please enter your area";
-    area.focus();
-    return false;
-  }
-  if (regex.test(area.value) === false) {
-    document.getElementById("areaError").innerHTML = "area should be alphabets";
-    area.focus();
-    return false; 
-  }
-  if (landmark.value == "") {
-    document.getElementById("landmarkError").innerHTML =
-      "please enter your landmark";
-    landmark.focus();
-    return false;
-  }
-  if (regex.test(landmark.value) === false) {
-    document.getElementById("landmarkError").innerHTML =
-      "landmark should be alphabets";
-    landmark.focus();
-    return false;
-  }
-  if (city.value == "") {
-    document.getElementById("cityError").innerHTML = "please enter your city";
-    city.focus();
-    return false;
-  }
-  if (regex.test(city.value) === false) {
-    document.getElementById("cityError").innerHTML = "city should be alphabets";
-    city.focus();
-    return false;
-  }
-  if (state.value == "") {
-    document.getElementById("stateError").innerHTML = "please enter your state";
-    state.focus();
-    return false;
-  }
-  if (regex.test(state.value) === false) {
-    document.getElementById("stateError").innerHTML =
-      "state should be alphabets";
-    state.focus();
-    return false;
-  }
-  if (pincode.value == "") {
-    document.getElementById("pincodeError").innerHTML =
-      "please enter your pincode";
-    pincode.focus();
-    return false;
-  }
+  if (!address.checked) {
+    var regex = /^[a-zA-Z\s]+$/;
+    if (housename.value == "") {
+      document.getElementById("houseError").innerHTML =
+        "please enter your house name";
+      housename.focus();
+      return false;
+    }
+    if (regex.test(housename.value) === false) {
+      document.getElementById("houseError").innerHTML =
+        "housename should be alphabets";
+      housename.focus();
+      return false;
+    }
+    if (area.value == "") {
+      document.getElementById("areaError").innerHTML = "please enter your area";
+      area.focus();
+      return false;
+    }
+    if (regex.test(area.value) === false) {
+      document.getElementById("areaError").innerHTML =
+        "area should be alphabets";
+      area.focus();
+      return false;
+    }
+    if (landmark.value == "") {
+      document.getElementById("landmarkError").innerHTML =
+        "please enter your landmark";
+      landmark.focus();
+      return false;
+    }
+    if (regex.test(landmark.value) === false) {
+      document.getElementById("landmarkError").innerHTML =
+        "landmark should be alphabets";
+      landmark.focus();
+      return false;
+    }
+    if (city.value == "") {
+      document.getElementById("cityError").innerHTML = "please enter your city";
+      city.focus();
+      return false;
+    }
+    if (regex.test(city.value) === false) {
+      document.getElementById("cityError").innerHTML =
+        "city should be alphabets";
+      city.focus();
+      return false;
+    }
+    if (state.value == "") {
+      document.getElementById("stateError").innerHTML =
+        "please enter your state";
+      state.focus();
+      return false;
+    }
+    if (regex.test(state.value) === false) {
+      document.getElementById("stateError").innerHTML =
+        "state should be alphabets";
+      state.focus();
+      return false;
+    }
+    if (pincode.value == "") {
+      document.getElementById("pincodeError").innerHTML =
+        "please enter your pincode";
+      pincode.focus();
+      return false;
+    }
 
-  if (isNaN(pincode.value)) {
-    document.getElementById("pincodeError").innerHTML =
-      "pincode should be digits";
-    pincode.focus();
-    return false;
+    if (isNaN(pincode.value)) {
+      document.getElementById("pincodeError").innerHTML =
+        "pincode should be digits";
+      pincode.focus();
+      return false;
+    }
+    return true;
+  } else {
+    return true;
   }
-  return true;
-}else{
-  return true;
-}
 }
