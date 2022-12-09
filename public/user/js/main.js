@@ -65,36 +65,55 @@ function addToCart(proId) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
-        document.getElementById("cartButton").innerHTML = "Go to Cart";
+        Swal.fire({
+          title: "Added to cart!",
+          icon: "success",
+          confirmButtonText: "continue",
+        }).then(function () {
+          document.getElementById("cartButton").innerHTML = "Go to Cart";
+          location.reload();
+        });
+        
       }
       if (response.productExist) {
-        location.href = "/cart";
+        Swal.fire({
+          title: "Product exist in cart!",
+          icon: "error",
+          confirmButtonText: "continue",
+        }).then(function () {
+          location.reload()
+        });
+      }if(response.stock){
+        Swal.fire({
+          title: "Sorry!!! product out of stock .",
+          icon: "error",
+          confirmButtonText: "continue",
+        }).then(function () {
+          location.reload();
+        });
       }
     },
   });
 }
-function addToCartWish(proId) {
+function addToCartWish(proId) { 
   const value = "sorry !!! currently out of stock";
   $.ajax({
     url: "/addCart/" + proId,
     method: "get",
-    success: (response) => {
+    success: (response) => { 
       if (response.status) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
         Swal.fire({
           title: "Product added to cart!",
-          text: "Do you want to continue",
-          icon: "success",
+          icon: "success", 
           confirmButtonText: "continue",
         }).then(function () {
-          location.href = "/wishlist";
+          location.reload();
         });
       }
-      if (response.productExist) {
-        location.href = "/cart";
-      }
+      
       // if (response.stock) {
       //   document.getElementById("message").innerHTML = "Out of stock !!!!!!";
       // }
@@ -124,7 +143,6 @@ function changeQuantity(cartId, productId, count) {
       if (response.stock) {
         Swal.fire({
           title: "Out of stock!",
-          text: "Do you want to continue",
           icon: "error",
           confirmButtonText: "continue",
         });
@@ -150,7 +168,6 @@ function removeProduct(cartId, productId) {
     success: () => {
       Swal.fire({
         title: "Product removed from cart!",
-        text: "Do you want to continue",
         icon: "success",
         confirmButtonText: "continue",
       }).then(function () {
@@ -170,7 +187,6 @@ function removeWishlistProduct(wishlistId, productId) {
     success: () => {
       Swal.fire({
         title: "Product removed from wishlist!",
-        text: "Do you want to continue",
         icon: "success",
         confirmButtonText: "continue",
       }).then(function () {
@@ -185,18 +201,17 @@ function addToWishlist(proId) {
     url: "/addToWishlist/" + proId,
     method: "get",
     success: (response) => {
-      if (response.status) {
+      if (response.status) {  
         Swal.fire({
           title: "Added to wishlist!",
-          text: "Do you want to continue",
           icon: "success",
           confirmButtonText: "continue",
         });
       }
-      if (response.productExist) {
+      if (response.productExist) { 
+        // Swal(resposnse.message);
         Swal.fire({
-          title: "Already Exist in wishlist!",
-          text: "Do you want to continue",
+          title: "Alredy Exist in wishlist", 
           icon: "error",
           confirmButtonText: "continue",
         });

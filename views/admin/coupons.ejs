@@ -99,7 +99,7 @@
     <div class="col py-3">
       <section>
         <div class="container mt-5">
-          <h1>Categories</h1>
+          <h1>Coupons</h1>
           <div class="d-flex justify-content-end mb-5">
             <div>
               <button
@@ -108,7 +108,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop"
               >
-                Add Categories
+                Add Coupon
               </button>
               <% if(locals.err_message){%>
               <div>
@@ -128,7 +128,7 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="staticBackdropLabel">
-                        Add Category
+                        Add Coupon
                       </h5>
                       <button
                         type="button"
@@ -137,25 +137,56 @@
                         aria-label="Close"
                       ></button>
                     </div>
-                    <form
-                      action="/admin/addCategory"
-                      method="post"
-                      onsubmit="return validateCategory(this);"
-                    >
+                    <form action="/admin/addCoupon" method="post">
                       <div class="modal-body">
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label"
-                            >Category</label
+                            >Coupon</label
                           >
                           <input
                             type="text"
                             class="form-control"
-                            id="category"
-                            name="category"
+                            id="coupon"
+                            name="coupon"
                             aria-describedby="emailHelp"
                           />
                         </div>
-                        <p id="categoryError" style="color: red"></p>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label"
+                            >Discount(In percentage)</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="discount"
+                            name="discount"
+                            aria-describedby="emailHelp"
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label"
+                            >Maximum Limit</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="max"
+                            name="max"
+                            aria-describedby="emailHelp"
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label"
+                            >Expire Date</label
+                          >
+                          <input
+                            type="date"
+                            class="form-control"
+                            id="exdate"
+                            name="exdate"
+                            aria-describedby="emailHelp"
+                          />
+                        </div>
                       </div>
                       <div class="modal-footer">
                         <button
@@ -187,34 +218,40 @@
                     Sl.No
                   </th>
                   <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Category
+                    Coupon
                   </th>
                   <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    Edit
+                    Expire Date
+                  </th>
+                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                    Options
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <% allCategories.forEach((allCategories,index)=>{ %>
+                <% coupons.forEach((coupons,index)=>{ %>
                 <tr>
                   <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                     <%= index + 1 %>
                   </td>
+                  <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+                    <%= coupons.couponName %>
+                  </th>
                   <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                    <%= allCategories.category %>
+                    <%= coupons.expirationTime %>
                   </td>
                   <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                     <button
                       type="button"
                       class="btn btn-outline-none"
                       data-bs-toggle="modal"
-                      data-bs-target="#staticBackdrop-<%= allCategories._id %>"
+                      data-bs-target="#staticBackdrop-"
                     >
                       <i class="bi bi-pencil-square"></i>
                     </button>
                     <div
                       class="modal fade"
-                      id="staticBackdrop-<%= allCategories._id %>"
+                      id="staticBackdrop-"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
                       tabindex="-1"
@@ -223,29 +260,25 @@
                     >
                       <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                          <form
-                            action="/admin/editCategory/<%= allCategories._id %>"
-                            method="post"
-                            onsubmit="return validateEditCategory(this);"
-                          >
+                          <form action="/admin/editCategory/" method="post">
                             <div class="modal-header">
                               <h5 class="modal-title" id="staticBackdropLabel">
-                                Edit Category
+                                Edit Coupon
                               </h5>
                             </div>
                             <div class="mb-3">
                               <label for="exampleInputEmail1" class="form-label"
-                                >Category</label
+                                >Coupon</label
                               >
                               <input
                                 type="text"
                                 class="form-control"
-                                id="categorys"
+                                id="category"
                                 name="category"
-                                value="<%= allCategories.category %>"
+                                aria-describedby="emailHelp"
+                                value=""
                               />
                             </div>
-                            <p id="categorysError" style="color: red"></p>
                             <div class="modal-footer">
                               <button
                                 type="button"
@@ -270,7 +303,7 @@
                       type=""
                       class="btn btn-outline-none"
                       data-bs-toggle="modal"
-                      data-bs-target="#static-<%= allCategories._id %>"
+                      data-bs-target="#static-"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +320,7 @@
                     </button>
                     <div
                       class="modal fade"
-                      id="static-<%= allCategories._id %>"
+                      id="static-"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
                       tabindex="-1"
@@ -298,7 +331,7 @@
                         <div class="modal-content">
                           <div class="modal-header">
                             <h5 class="modal-title" id="staticBackdropLabel">
-                              Delete Category
+                              Delete Coupon
                             </h5>
                             <button
                               type="button"
@@ -307,9 +340,7 @@
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">
-                            Want to delete <%= allCategories.category %>
-                          </div>
+                          <div class="modal-body">Want to delete</div>
                           <div class="modal-footer">
                             <button
                               type="button"
@@ -318,8 +349,7 @@
                             >
                               Close
                             </button>
-                            <a
-                              href="/admin/deleteCategory/<%= allCategories._id %>"
+                            <a href="/admin/deleteCategory/"
                               ><button
                                 type="button"
                                 class="btn btn-outline-primary"

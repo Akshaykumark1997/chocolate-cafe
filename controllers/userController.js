@@ -14,7 +14,7 @@ const crypto = require("crypto");
 const wishlist = require("../model/wishlist");
 // const Razorpay = require("razorpay");
 const dotenv = require("dotenv");
-
+const Swal = require("sweetalert2");
 moment().format();
 dotenv.config();
 // var instance = new Razorpay({
@@ -71,6 +71,53 @@ module.exports = {
       }
     } catch {
       console.error();
+    }
+  },
+  shop:async(req,res)=>{
+    const Categories = await category.find();
+        const userData = await user.findOne({ email: session });
+        const productDAta = await cart.find({ userId: userData._id });
+        if (productDAta.length) {
+          count = productDAta[0].product.length;
+        } else {
+          count = 0;
+        }
+        products.find({ isDeleted: false }).then((allProducts) => { 
+          Swal.fire({
+            title: "Error!",
+            text: "Do you want to continue",
+            icon: "error",
+            confirmButtonText: "Cool",
+          });
+          res.render("user/shop", {
+            session,
+            allProducts,  
+            count,
+            Categories,
+          });
+        });
+  },
+  shopCategory:async(req,res)=>{
+    const id = req.params.id;
+    const Categories = await category.find();
+    const categoryData = await category.findOne({ _id: id });
+    if (categoryData) {
+      products.find({ category: categoryData.category }).then((allProducts) => {
+        Swal.fire({
+          title: "Error!",
+          text: "Do you want to continue",
+          icon: "error",
+          confirmButtonText: "Cool",
+        });
+        res.render("user/shop", {
+          session,
+          allProducts,
+          count,
+          Categories,
+        });
+      });
+    } else {
+      res.redirect("/shop");
     }
   },
   getCategory: async (req, res) => {
@@ -210,23 +257,26 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
+      let cartExist;
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
-      const cartLen = await cart.findOne(
-        { userId: userData.id },
-        { product: { $elemMatch: { productId: objId } } }
-      );
-      const cartExist = cartLen.product.length;
-      console.log(cartExist);
-
+      if(cartData == null){
+        cartExist = 0;
+      }else{
+          const cartLen = await cart.findOne(
+          { userId: userData.id },
+          { product: { $elemMatch: { productId: objId } } }
+        );
+         cartExist = cartLen.product.length;
+      }
       products.findOne({ _id: id }).then((data) => {
         res.render("user/productView", {
           session,
           data,
-          count,
+          count, 
           cartData,
           cartExist,
         });
@@ -284,15 +334,15 @@ module.exports = {
       { product: { $elemMatch: { productId: objId } } }
     );
     console.log("hiii" + verify);
-    if (verify.product.length) {
-      res.json({ cart: true });
+    if (verify?.product?.length) {
+      res.json({ cart: true }); 
     } else {
       if (userWishlist) {
         let proExist = userWishlist.product.findIndex(
           (product) => product.productId == id
         );
         if (proExist != -1) {
-          res.json({ productExist: true });
+          res.json({ productExist: true});
         } else {
           wishlist
             .updateOne({ userId: userId }, { $push: { product: proObj } })
@@ -646,9 +696,9 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
     const data = req.body;
+    console.log(data);
     const userData = await user.findOne({ email: session });
     const cartData = await cart.findOne({ userId: userData._id });
-    // const status = req.body.paymentMethod === "COD" ? "placed" : "pending";
     if (cartData) {
       const productData = await cart
         .aggregate([
@@ -808,19 +858,6 @@ module.exports = {
             console.log(data);
           });
       }
-      // products.updateMany({ _id: stocks }, [
-      //   { $set: { stock: { $subtract:["$stock","$productData.productQuantity"]} } },
-      // ]).then((data)=>{
-      //   console.log(data);
-      // })
-      // products
-      //   .updateMany({ _id: stocks }, { $inc: { stock: -1} })
-      //   .then((stock) => {
-      //     console.log(stock);
-      //   });
-      // products.find({_id:stocks}).then((data)=>{
-      //   console.log("hiii"+data);
-      // })
     } else {
       res.redirect("/cart");
     }
@@ -872,6 +909,9 @@ module.exports = {
         },
         {
           $project: {
+            address:"$address",
+            totalAmount:"$totalAmount",
+            mobile:"$mobile",
             productItem: "$orderItems.productId",
             productQuantity: "$orderItems.quantity",
           },
@@ -886,6 +926,9 @@ module.exports = {
         },
         {
           $project: {
+            address:1,
+            totalAmount:1,
+            mobile:1,
             productItem: 1,
             productQuantity: 1,
             productDetail: { $arrayElemAt: ["$productDetail", 0] },
@@ -893,6 +936,7 @@ module.exports = {
         },
       ])
       .then((productData) => {
+        console.log(productData);
         res.render("user/viewOrderProducts", { session, count, productData });
       });
   },

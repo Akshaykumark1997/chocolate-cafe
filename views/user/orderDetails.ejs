@@ -1,38 +1,25 @@
 <%- include('../partials/userPartial.ejs') %>
-
 <div class="container table-responsive mt-5 mb-5">
   <% if(orderDetails.length !==0){ %>
   <table class="table table-hover table-light" id="table">
     <thead>
       <tr>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          OrderDate
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Order Date</th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Name</th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Payment Method
         </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Name
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Payment Status
         </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Address
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Order Status
         </th>
 
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          paymentMethod
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+          Delivery Date
         </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          PaymentStatus
-        </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          orderStatus
-        </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Amount
-        </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          DeliveryDate
-        </th>
-        <th scope="col" class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          Options
-        </th>
+        <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">Options</th>
       </tr>
     </thead>
     <tbody>
@@ -44,11 +31,6 @@
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.fullname %>
         </td>
-        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          <%= order.address.housename %>,<%= order.address.area %>,<%=
-          order.address.landmark %> <%= order.address.city %>,<%=
-          order.address.state %>,<%= order.address.pincode %>
-        </td>
 
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.paymentMethod %>
@@ -56,30 +38,61 @@
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.paymentStatus %>
         </td>
-        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
+        <% if(order.orderStatus === "pending"){ %>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center text-warning">
           <%= order.orderStatus %>
         </td>
-        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-          <%= order.totalAmount %>
+        <% }else if(order.orderStatus === "shipped"){ %>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center text-info">
+          <%= order.orderStatus %>
         </td>
+        <% }else if(order.orderStatus === "delivered"){ %>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center text-success">
+          <%= order.orderStatus %>
+        </td>
+        <% }else if(order.orderStatus === "cancelled"){ %>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center text-danger">
+          <%= order.orderStatus %>
+        </td>
+        <% } %>
+
         <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <%= order.deliveryDate %>
         </td>
-        <td>
+        <td class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
           <a href="/viewOrderProducts/<%= order._id %>">
-            <button
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              class="btn btn-info text-white"
-              style="background-color: #57423f; width: 4.5rem"
-            >
-              View
-            </button></a
-          >
+            <button type="button" class="btn btn-outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-view-list"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"
+                />
+              </svg></button
+          ></a>
           <a href="/cancelOrder/<%= order._id %>"
-            ><button type="button" class="btn btn-danger">Cancel</button></a
-          >
+            ><button type="button" class="btn btn-outline-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-x-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg></button
+          ></a>
         </td>
       </tr>
       <% }) %>

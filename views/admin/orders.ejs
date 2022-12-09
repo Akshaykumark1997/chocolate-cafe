@@ -3,7 +3,7 @@
   <div class="row flex-nowrap">
     <div
       class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
-      style="background-color: #57423f"
+      style="background-color: #484c4c"
     >
       <div
         class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
@@ -12,7 +12,7 @@
           href="/"
           class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
         >
-          <span class="fs-5 d-none d-sm-inline">Admin</span>
+          <span class="fs-5 d-none d-sm-inline text-white">Admin</span>
         </a>
         <ul
           class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
@@ -24,13 +24,13 @@
                 src="/admin/images/dashboard.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline">Dashboard</span>
+              /><span class="ms-1 d-none d-sm-inline text-white">Dashboard</span>
             </a>
           </li>
           <li>
             <a href="#submenu1" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline">Order</span>
+              <span class="ms-1 d-none d-sm-inline text-white">Order</span>
             </a>
           </li>
           <li>
@@ -39,7 +39,7 @@
                 src="/admin/images/products.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline">Products</span></a
+              /><span class="ms-1 d-none d-sm-inline text-white">Products</span></a
             >
           </li>
           <li>
@@ -49,7 +49,7 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline">Add Products</span></a
+              <span class="ms-1 d-none d-sm-inline text-white">Add Products</span></a
             >
           </li>
           <li>
@@ -59,7 +59,17 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline">Categories</span></a
+              <span class="ms-1 d-none d-sm-inline text-white">Categories</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/coupons" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/discount.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white">Coupons</span></a
             >
           </li>
           <li>
@@ -68,14 +78,14 @@
               data-bs-toggle="collapse"
               class="nav-link px-0 align-middle"
             >
-              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline">Users</span>
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem; color:white;" />
+              <span class="ms-1 d-none d-sm-inline text-white">Users</span>
             </a>
           </li>
           <li>
             <a href="/admin/logout" class="nav-link px-0 align-middle">
               <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline">Logout</span>
+              <span class="ms-1 d-none d-sm-inline text-white">Logout</span>
             </a>
           </li>
         </ul>
@@ -96,13 +106,13 @@
                   Mobile
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  paymentMethod
+                  Payment Method
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Payment Status
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  OrderStatus
+                  Order Status
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Order Date
@@ -127,28 +137,42 @@
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.paymentStatus %>
                 </td>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                <% if(order.orderStatus === "pending"){ %>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-warning">
                   <%= order.orderStatus %>
                 </td>
+                <% }else if(order.orderStatus === "shipped"){ %>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-info">
+                  <%= order.orderStatus %>
+                </td>
+                <% }else if(order.orderStatus === "delivered"){ %>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-success">
+                  <%= order.orderStatus %>
+                </td>
+                <% }else if(order.orderStatus === "cancelled"){ %>
+                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-danger">
+                  <%= order.orderStatus %>
+                </td>
+                <% } %>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.orderDate %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <button
                     type="button"
-                    class="btn btn-outline-success"
+                    class="btn btn-outline-none"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal-<%= order._id %>"
                   >
-                    View
+                    <i class="bi bi-view-list"></i>
                   </button>
                   <button
                     type="button"
-                    class="btn btn-outline-danger"
+                    class="btn btn-outline-none"
                     data-bs-toggle="modal"
                     data-bs-target="#example-<%= order._id %>"
                   >
-                    Edit
+                    <i class="bi bi-pencil-square"></i>
                   </button>
                 </td>
               </tr>
@@ -363,12 +387,6 @@
             </div>
           </div>
         </section>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>

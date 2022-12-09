@@ -3,6 +3,7 @@ const user = require("../model/userSignUp");
 const category = require("../model/categories");
 const order = require("../model/order");
 const cart = require("../model/cart");
+const coupon = require("../model/coupon.js");
 const path = require("path");
 const mongoose = require("mongoose");
 const moment = require("moment");
@@ -80,7 +81,6 @@ module.exports = {
           paymentStatus: "paid",
           orderStatus: "delivered",
         });
-        console.log(allOrderDetails);
         // const start =  moment().startOf("month").format("MMM Do YY");
         // const end =  moment().endOf("month").format("MMM Do YY");
         // const amountPendingList = await order.find({
@@ -112,11 +112,17 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   getLogout: (req, res) => {
+    try{
     req.session.destroy();
     res.redirect("/admin");
+    }catch{
+      console.error();
+      res.render('user/error');
+    }
   },
   products: async (req, res) => {
     try {
@@ -128,6 +134,7 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   addProducts: (req, res) => {
@@ -137,6 +144,7 @@ module.exports = {
       });
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   postProducts: async (req, res) => {
@@ -166,9 +174,11 @@ module.exports = {
         );
       } else {
         console.error();
+        res.render("user/error");
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   editProduct: async (req, res) => {
@@ -183,6 +193,7 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   postEditProduct: async (req, res) => {
@@ -211,6 +222,7 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   deleteProduct: (req, res) => {
@@ -234,6 +246,7 @@ module.exports = {
         });
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   userDetails: async (req, res) => {
@@ -246,6 +259,7 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
 
@@ -257,6 +271,7 @@ module.exports = {
       });
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   unblockuser: (req, res) => {
@@ -267,6 +282,7 @@ module.exports = {
       });
     } catch {
       console.error();
+      res.render("user/error");
     }
   },
   categories: async (req, res) => {
@@ -277,14 +293,15 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render('user/error');
     }
   },
   addCategory: async (req, res) => {
     try {
       const categoryData = req.body.category;
       const allCategories = await category.find();
-      const verify = category.findOne({ category: categoryData });
-      if (verify.length) {
+      const verify =await category.findOne({ category: categoryData });
+      if (verify == null) {
         const newCategory = new category({
           category: categoryData,
         });
@@ -299,13 +316,13 @@ module.exports = {
       }
     } catch {
       console.error();
+      res.render('user/error');
     }
   },
   editCategory: async (req, res) => {
     try {
       const id = req.params.id;
       const categoryData = await category.findOne({ _id: id });
-      console.log(categoryData);
       category
         .updateOne(
           { _id: id },
@@ -321,13 +338,14 @@ module.exports = {
               { category: categoryData.category },
               { $set: { category: req.body.category } }
             )
-            .then((data) => {
-              console.log(data);
+            .then(() => {
+              res.redirect("/admin/categories");
             });
-          res.redirect("/admin/categories");
+          
         });
     } catch {
       console.error();
+      res.render('user/error');
     }
   },
   deleteCategory: (req, res) => {
@@ -338,9 +356,11 @@ module.exports = {
       });
     } catch {
       console.error();
+      res.render('user/error');
     }
   },
   orders: async (req, res) => {
+    try{
     order
       .aggregate([
         {
@@ -363,12 +383,17 @@ module.exports = {
       .then((orderDetails) => {
         res.render("admin/orders", { orderDetails });
       });
+    }catch{
+      console.error();
+      res.render("user/error");
+    }
   },
   changeStatus: (req, res) => {
+    try{
     console.log(req.params.id);
     const id = req.params.id;
     const data = req.body;
-    console.log(data);
+   
     order
       .updateOne(
         { _id: id },
@@ -379,9 +404,45 @@ module.exports = {
           },
         }
       )
-      .then((data) => {
-        console.log(data);
+      .then(() => {
         res.redirect("/admin/orders");
       });
+    }catch{
+      console.error();
+      res.render("user/error");
+    }
   },
+  getCoupons:(req,res)=>{
+    try{
+      coupon.find().then((coupons)=>{
+        res.render("admin/coupons",{coupons});
+      })
+    
+    }catch{
+      console.error();
+      res.render("user/error");
+    }
+  },
+  addCoupon:(req,res)=>{
+    try{
+    const data = req.body;
+    console.log(data);
+    const dis = parseInt(data.discount);
+    const max = parseInt(data.max);
+    const discount = (dis/100);
+    console.log(discount);
+    coupon.create({
+      couponName:data.coupon,
+      discount: discount,
+      maxLimit:max,
+      expirationTime:data.exdate
+    }).then((data)=>{
+      console.log(data);
+      res.redirect("/admin/coupons");
+    })
+    }catch{
+      console.error();
+      res.render("user/error");
+    }
+  }
 };

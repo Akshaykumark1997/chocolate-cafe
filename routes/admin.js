@@ -57,4 +57,6 @@ router.post(
   verifyLogin.verifyLoginAdmin,
   adminLogin.changeStatus
 );
+router.get('/coupons',verifyLogin.verifyLoginAdmin,adminLogin.getCoupons);
+router.post('/addCoupon',verifyLogin.verifyLoginAdmin,adminLogin.addCoupon);
 module.exports = router;

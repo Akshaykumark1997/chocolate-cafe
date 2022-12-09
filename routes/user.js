@@ -11,6 +11,8 @@ router.get(
 
   userLogin.getCategory
 );
+router.get('/shop',verifyLogin.verifyLoginUser,userLogin.shop);
+router.get("/categoryShop/:id",verifyLogin.verifyLoginUser,userLogin.shopCategory);
 router.post("/login", userLogin.postLogin);
 router.get("/logout", userLogin.userLogout);
 router.route("/signup").get(userLogin.getSignup).post(userLogin.postSignup);
