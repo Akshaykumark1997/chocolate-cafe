@@ -81,18 +81,18 @@ module.exports = {
           paymentStatus: "paid",
           orderStatus: "delivered",
         });
-        // const start =  moment().startOf("month").format("MMM Do YY");
-        // const end =  moment().endOf("month").format("MMM Do YY");
-        // const amountPendingList = await order.find({
-        //   orderDate: {
-        //     $gte: end,
-        //     $lte:start,
-        //   },
-        // });
-        //  console.log(amountPendingList);
-        // const amountPending = amountPendingList.reduce((accumulator,object)=>{
-        //   return accumulator+= object.totalAmount;
-        // },0)
+        const start = moment().startOf("month");
+        const end = moment().endOf("month");
+        const amountPendingList = await order.find({
+          createdAt: {
+            $gte: start,
+            $lte:end,
+          },
+        });
+         console.log(amountPendingList);
+        const amountPending = amountPendingList.reduce((accumulator,object)=>{
+          return accumulator+= object.totalAmount;
+        },0)
         res.render("admin/adminDashboard", {
           totalAmount,
           totalOrderToday,
@@ -106,6 +106,7 @@ module.exports = {
           activeUsers,
           product,
           allOrderDetails,
+          amountPending,
         });
       } else {
         res.redirect("/admin");

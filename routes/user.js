@@ -58,13 +58,14 @@ router.post(
   verifyLogin.verifyLoginUser,
   userLogin.postChangePassword
 );
-router.post("/placeOrder", verifyLogin.verifyLoginUser, userLogin.placeOrder);
+
+router.post("/placeOrder", verifyLogin.verifyLoginUser,userLogin.placeOrder);
 router.post(
   "/verifyPayment",
   verifyLogin.verifyLoginUser,
   userLogin.verifyPayment
 );
-router.post(
+router.get(
   "/paymentFail",
   verifyLogin.verifyLoginUser,
   userLogin.paymentFailure

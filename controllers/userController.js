@@ -12,18 +12,40 @@ const moment = require("moment");
 const instance = require("../middleware/razorPay");
 const crypto = require("crypto");
 const wishlist = require("../model/wishlist");
-// const Razorpay = require("razorpay");
+const coupon = require("../model/coupon");
 const dotenv = require("dotenv");
 const Swal = require("sweetalert2");
 moment().format();
 dotenv.config();
-// var instance = new Razorpay({
-//   key_id: process.env.KEYID,
-//   key_secret: process.env.KETSECRET,
-// });
+
 
 let session;
 var count;
+function checkCoupon(data, id) {
+  console.log(data);
+  return new Promise((resolve) => {
+    if (data.coupon) {
+      coupon
+        .find(
+          { couponName: data.coupon },
+          { users: { $elemMatch: { userId: id } } }
+        )
+        .then((exist) => {
+          console.log(exist);
+          if (exist[0].users.length) {
+            resolve(true);
+          } else {
+            coupon.find({ couponName: data.coupon }).then((discount) => {
+              resolve(discount);
+            });
+            
+          }
+        });
+    } else {
+      resolve(false);
+    }
+  });
+}
 module.exports = {
   guestHome: async (req, res) => {
     try {
@@ -73,31 +95,31 @@ module.exports = {
       console.error();
     }
   },
-  shop:async(req,res)=>{
+  shop: async (req, res) => {
     const Categories = await category.find();
-        const userData = await user.findOne({ email: session });
-        const productDAta = await cart.find({ userId: userData._id });
-        if (productDAta.length) {
-          count = productDAta[0].product.length;
-        } else {
-          count = 0;
-        }
-        products.find({ isDeleted: false }).then((allProducts) => { 
-          Swal.fire({
-            title: "Error!",
-            text: "Do you want to continue",
-            icon: "error",
-            confirmButtonText: "Cool",
-          });
-          res.render("user/shop", {
-            session,
-            allProducts,  
-            count,
-            Categories,
-          });
-        });
+    const userData = await user.findOne({ email: session });
+    const productDAta = await cart.find({ userId: userData._id });
+    if (productDAta.length) {
+      count = productDAta[0].product.length;
+    } else {
+      count = 0;
+    }
+    products.find({ isDeleted: false }).then((allProducts) => {
+      Swal.fire({
+        title: "Error!",
+        text: "Do you want to continue",
+        icon: "error",
+        confirmButtonText: "Cool",
+      });
+      res.render("user/shop", {
+        session,
+        allProducts,
+        count,
+        Categories,
+      });
+    });
   },
-  shopCategory:async(req,res)=>{
+  shopCategory: async (req, res) => {
     const id = req.params.id;
     const Categories = await category.find();
     const categoryData = await category.findOne({ _id: id });
@@ -263,20 +285,20 @@ module.exports = {
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
-      if(cartData == null){
+      if (cartData == null) {
         cartExist = 0;
-      }else{
-          const cartLen = await cart.findOne(
+      } else {
+        const cartLen = await cart.findOne(
           { userId: userData.id },
           { product: { $elemMatch: { productId: objId } } }
         );
-         cartExist = cartLen.product.length;
+        cartExist = cartLen.product.length;
       }
       products.findOne({ _id: id }).then((data) => {
         res.render("user/productView", {
           session,
           data,
-          count, 
+          count,
           cartData,
           cartExist,
         });
@@ -335,14 +357,14 @@ module.exports = {
     );
     console.log("hiii" + verify);
     if (verify?.product?.length) {
-      res.json({ cart: true }); 
+      res.json({ cart: true });
     } else {
       if (userWishlist) {
         let proExist = userWishlist.product.findIndex(
           (product) => product.productId == id
         );
         if (proExist != -1) {
-          res.json({ productExist: true});
+          res.json({ productExist: true });
         } else {
           wishlist
             .updateOne({ userId: userId }, { $push: { product: proObj } })
@@ -696,170 +718,210 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
     const data = req.body;
-    console.log(data);
     const userData = await user.findOne({ email: session });
-    const cartData = await cart.findOne({ userId: userData._id });
-    if (cartData) {
-      const productData = await cart
-        .aggregate([
-          {
-            $match: { userId: userData.id },
-          },
-          {
-            $unwind: "$product",
-          },
-          {
-            $project: {
-              productItem: "$product.productId",
-              productQuantity: "$product.quantity",
+    const objId = mongoose.Types.ObjectId(userData._id);
+    const discount = await checkCoupon(data, objId);
+    console.log(discount+ "discount");
+    if (discount == true) {
+      res.json({ coupon: true });
+    } else {
+      const cartData = await cart.findOne({ userId: userData._id });
+      if (cartData) {
+        const productData = await cart
+          .aggregate([
+            {
+              $match: { userId: userData.id },
             },
-          },
-          {
-            $lookup: {
-              from: "productdetails",
-              localField: "productItem",
-              foreignField: "_id",
-              as: "productDetail",
+            {
+              $unwind: "$product",
             },
-          },
-          {
-            $project: {
-              productItem: 1,
-              productQuantity: 1,
-              productDetail: { $arrayElemAt: ["$productDetail", 0] },
-            },
-          },
-          {
-            $addFields: {
-              productPrice: {
-                $multiply: ["$productQuantity", "$productDetail.price"],
+            {
+              $project: {
+                productItem: "$product.productId",
+                productQuantity: "$product.quantity",
               },
             },
-          },
-        ])
-        .exec();
+            {
+              $lookup: {
+                from: "productdetails",
+                localField: "productItem",
+                foreignField: "_id",
+                as: "productDetail",
+              },
+            },
+            {
+              $project: {
+                productItem: 1,
+                productQuantity: 1,
+                productDetail: { $arrayElemAt: ["$productDetail", 0] },
+              },
+            },
+            {
+              $addFields: {
+                productPrice: {
+                  $multiply: ["$productQuantity", "$productDetail.price"],
+                },
+              },
+            },
+          ])
+          .exec();
 
-      const sum = productData.reduce((accumulator, object) => {
-        return accumulator + object.productPrice;
-      }, 0);
-      // const stocks = productData.map((x) => x.productItem);
-      // console.log(stocks);
-      count = productData.length;
-      if (data.checkbox === "permanentAddress") {
-        const orderData = await order.create({
-          userId: userData._id,
-          fullname: userData.fullname,
-          mobile: userData.mobile,
-          address: {
-            housename: userData.permanentAddress.housename,
-            area: userData.permanentAddress.area,
-            landmark: userData.permanentAddress.landmark,
-            city: userData.permanentAddress.city,
-            state: userData.permanentAddress.state,
-            pincode: userData.permanentAddress.pincode,
-          },
-          orderItems: cartData.product,
-          totalAmount: sum,
-          paymentMethod: data.paymentMethod,
-          orderStatus: "pending",
-          orderDate: moment().format("MMM Do YY"),
-          deliveryDate: moment().add(3, "days").format("MMM Do YY"),
-        });
-        const amount = orderData.totalAmount * 100;
-        const _id = orderData._id;
-        await cart.deleteOne({ userId: userData._id });
-        if (req.body.paymentMethod === "COD") {
-          res.json({ success: true });
-        } else if (req.body.paymentMethod === "Online") {
-          let options = {
-            amount: amount,
-            currency: "INR",
-            receipt: "" + _id,
-          };
-          instance.orders.create(options, function (err, order) {
-            if (err) {
-              console.log(err);
-            } else {
-              res.json(order);
-            }
+        const sum = productData.reduce((accumulator, object) => {
+          return accumulator + object.productPrice;
+        }, 0);
+        console.log(sum);
+        if (discount == false) {
+          var total = sum;
+        } else {
+          let dis = sum * discount[0].discount;
+          if (dis > discount[0].maxLimit) {
+            total = sum - 100;
+          } else {
+            total = dis;
+          }
+        }
+        count = productData.length;
+        if (data.checkbox === "permanentAddress") {
+          const orderData = await order.create({
+            userId: userData._id,
+            fullname: userData.fullname,
+            mobile: userData.mobile,
+            address: {
+              housename: userData.permanentAddress.housename,
+              area: userData.permanentAddress.area,
+              landmark: userData.permanentAddress.landmark,
+              city: userData.permanentAddress.city,
+              state: userData.permanentAddress.state,
+              pincode: userData.permanentAddress.pincode,
+            },
+            orderItems: cartData.product,
+            totalAmount: total,
+            paymentMethod: data.paymentMethod,
+            orderStatus: "pending",
+            orderDate: moment().format("MMM Do YY"),
+            deliveryDate: moment().add(3, "days").format("MMM Do YY"),
           });
+          const amount = orderData.totalAmount * 100;
+          const _id = orderData._id;
+          await cart.deleteOne({ userId: userData._id });
+          if (req.body.paymentMethod === "COD") {
+            res.json({ success: true });
+            coupon.updateOne({ couponName:data.coupon}, { $push: { users: {userId:objId} } }).then((updated)=>{
+              console.log(updated)
+            });
+          } else if (req.body.paymentMethod === "Online") {
+            let options = {
+              amount: amount,
+              currency: "INR",
+              receipt: "" + _id,
+            };
+            instance.orders.create(options, function (err, order) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.json(order);
+                coupon
+                  .updateOne(
+                    { couponName: data.coupon },
+                    { $push: { users: { userId: objId } } }
+                  )
+                  .then((updated) => {
+                    console.log(updated);
+                  });
+              }
+            });
+          }
+        } else {
+          await user.updateOne(
+            { email: session },
+            {
+              $set: {
+                shippingAddress: {
+                  housename: data.housename,
+                  area: data.area,
+                  landmark: data.landmark,
+                  city: data.city,
+                  state: data.state,
+                  pincode: data.pincode,
+                },
+              },
+            }
+          );
+          const userData = await user.findOne({ email: session });
+          const orderData = await order.create({
+            userId: userData._id,
+            fullname: userData.fullname,
+            mobile: userData.mobile,
+            address: {
+              housename: userData.shippingAddress.housename,
+              area: userData.shippingAddress.area,
+              landmark: userData.shippingAddress.landmark,
+              city: userData.shippingAddress.city,
+              state: userData.shippingAddress.state,
+              pincode: userData.shippingAddress.pincode,
+            },
+            orderItems: cartData.product,
+            totalAmount: sum,
+            paymentMethod: data.paymentMethod,
+            orderStatus: "pending",
+            orderDate: moment().format("MMM Do YY"),
+            deliveryDate: moment().add(3, "days").format("MMM Do YY"),
+          });
+          const amount = orderData.totalAmount * 100;
+          const _id = orderData._id;
+          await cart.deleteOne({ userId: userData._id });
+          if (req.body.paymentMethod === "COD") {
+            res.json({ success: true });
+            coupon
+              .updateOne(
+                { couponName: data.coupon },
+                { $push: { users: { userId: objId } } }
+              )
+              .then((updated) => {
+                console.log(updated);
+              });
+          } else if (req.body.paymentMethod === "Online") {
+            let options = {
+              amount: amount,
+              currency: "INR",
+              receipt: "" + _id,
+            };
+            instance.orders.create(options, function (err, order) {
+              if (err) {
+                console.log(err);
+              } else {
+                res.json(order);
+                coupon
+                  .updateOne(
+                    { couponName: data.coupon },
+                    { $push: { users: { userId: objId } } }
+                  )
+                  .then((updated) => {
+                    console.log(updated);
+                  });
+              }
+            });
+          }
+        }
+        for (let i = 0; i < productData.length; i++) {
+          const updatedStock =
+            productData[i].productDetail.stock - productData[i].productQuantity;
+          products
+            .updateOne(
+              {
+                _id: productData[i].productDetail._id,
+              },
+              {
+                stock: updatedStock,
+              }
+            )
+            .then((data) => {
+              console.log(data);
+            });
         }
       } else {
-        await user.updateOne(
-          { email: session },
-          {
-            $set: {
-              shippingAddress: {
-                housename: data.housename,
-                area: data.area,
-                landmark: data.landmark,
-                city: data.city,
-                state: data.state,
-                pincode: data.pincode,
-              },
-            },
-          }
-        );
-        const userData = await user.findOne({ email: session });
-        const orderData = await order.create({
-          userId: userData._id,
-          fullname: userData.fullname,
-          mobile: userData.mobile,
-          address: {
-            housename: userData.shippingAddress.housename,
-            area: userData.shippingAddress.area,
-            landmark: userData.shippingAddress.landmark,
-            city: userData.shippingAddress.city,
-            state: userData.shippingAddress.state,
-            pincode: userData.shippingAddress.pincode,
-          },
-          orderItems: cartData.product,
-          totalAmount: sum,
-          paymentMethod: data.paymentMethod,
-          orderStatus: "pending",
-          orderDate: moment().format("MMM Do YY"),
-          deliveryDate: moment().add(3, "days").format("MMM Do YY"),
-        });
-        const amount = orderData.totalAmount * 100;
-        const _id = orderData._id;
-        await cart.deleteOne({ userId: userData._id });
-        if (req.body.paymentMethod === "COD") {
-          res.json({ success: true });
-        } else if (req.body.paymentMethod === "Online") {
-          let options = {
-            amount: amount,
-            currency: "INR",
-            receipt: "" + _id,
-          };
-          instance.orders.create(options, function (err, order) {
-            if (err) {
-              console.log(err);
-            } else {
-              res.json(order);
-            }
-          });
-        }
+        res.redirect("/cart");
       }
-      console.log(productData);
-      for (let i = 0; i < productData.length; i++) {
-        const updatedStock =
-          productData[i].productDetail.stock - productData[i].productQuantity;
-        console.log(updatedStock);
-        products
-          .updateOne(
-            {
-              _id: productData[i].productDetail._id,
-            },
-            {
-              stock: updatedStock,
-            }
-          )
-          .then((data) => {
-            console.log(data);
-          });
-      }
-    } else {
-      res.redirect("/cart");
     }
   },
   verifyPayment: (req, res) => {
@@ -890,7 +952,7 @@ module.exports = {
   paymentFailure: (req, res) => {
     const details = req.body;
     console.log(details);
-    res.json({ staus: true });
+    res.render("user/paymentFail", { session, count });
   },
   orderSuccess: async (req, res) => {
     const count = 0;
@@ -909,9 +971,9 @@ module.exports = {
         },
         {
           $project: {
-            address:"$address",
-            totalAmount:"$totalAmount",
-            mobile:"$mobile",
+            address: "$address",
+            totalAmount: "$totalAmount",
+            mobile: "$mobile",
             productItem: "$orderItems.productId",
             productQuantity: "$orderItems.quantity",
           },
@@ -926,9 +988,9 @@ module.exports = {
         },
         {
           $project: {
-            address:1,
-            totalAmount:1,
-            mobile:1,
+            address: 1,
+            totalAmount: 1,
+            mobile: 1,
             productItem: 1,
             productQuantity: 1,
             productDetail: { $arrayElemAt: ["$productDetail", 0] },
@@ -936,7 +998,6 @@ module.exports = {
         },
       ])
       .then((productData) => {
-        console.log(productData);
         res.render("user/viewOrderProducts", { session, count, productData });
       });
   },

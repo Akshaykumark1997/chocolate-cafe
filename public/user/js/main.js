@@ -71,7 +71,6 @@ function addToCart(proId) {
           confirmButtonText: "continue",
         }).then(function () {
           document.getElementById("cartButton").innerHTML = "Go to Cart";
-          location.reload();
         });
         
       }

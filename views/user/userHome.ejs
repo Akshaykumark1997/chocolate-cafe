@@ -5,7 +5,7 @@
   class="carousel slide"
   data-bs-ride="carousel"
 >
-  <div class="carousel-inner">
+  <!-- <div class="carousel-inner">
     <div class="carousel-item active">
       <div class="box">
         <img
@@ -21,43 +21,37 @@
         </div>
       </div>
     </div>
-  </div>
-  <main class="mt-5 pt-3">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 gx-5 mb-4">
-          <div
-            class="bg-image hover-overlay ripple shadow-2-strong rounded-5"
-            data-mdb-ripple-color="light"
-          >
-            <img src="/user/images/content1.jpg" class="img-fluid" />
-            <a href="#!">
-              <div
-                class="mask"
-                style="background-color: rgba(251, 251, 251, 0.15)"
-              ></div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-md-6 gx-5 mb-4">
-          <h4><strong>Facilis consequatur eligendi</strong></h4>
-          <p class="text-muted">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis
-            consequatur eligendi quisquam doloremque vero ex debitis veritatis
-            placeat unde animi laborum sapiente illo possimus, commodi
-            dignissimos obcaecati illum maiores corporis.
-          </p>
-          <p><strong>Doloremque vero ex debitis veritatis?</strong></p>
-          <p class="text-muted">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod
-            itaque voluptate nesciunt laborum incidunt. Officia, quam
-            consectetur. Earum eligendi aliquam illum alias, unde optio
-            accusantium soluta, iusto molestiae adipisci et?
-          </p>
-        </div>
+  </div> -->
+  <main >
+    
+    <div
+      class="d-sm-flex align-items-center justify-content-between px-1"
+      style="height: 100vh;"
+    >
+      <div class="col-md-4 mx-auto mb-4 mb-sm-0 headline px-5">
+        <span class="text-secondary text-uppercase">welcome</span>
+        <h1 class="display-6  ">
+          50% OFF up to Rs.100 <br> <span class="font-weight-bold display-5" style="color: #9b5de5">On Your First Order</span>
+        </h1>
+        <a
+          href="#"
+          class="btn px-5 py-3 text-white mt-3 mt-sm-0"
+          style="border-radius: 30px; background-color: #9b5de5"
+          >Shop Now</a
+        >
       </div>
+      <!-- in mobile remove the clippath -->
+      <div
+        class="col-md-8 h-100 clipped"
+        style="
+          min-height: 350px;
+          background-image: url(/user/images/hero1.jpg);
+          background-position: center;
+          background-size: cover;
+        "
+      ></div>
     </div>
+    
     <section>
       <div class="container">
         <nav class="nav d-flex justify-content-center mt-5">
@@ -200,3 +194,26 @@
 <%- include('../partials/user-footer.ejs') %>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+  body {
+    font-family: "Poppins", sans-serif !important;
+  }
+
+  .headline {
+    left: 130px;
+  }
+  .clipped {
+    clip-path: polygon(50% 0, 100% 0, 100% 100%, 0% 100%);
+  }
+  @media screen and (max-width: 650px) {
+    .headline {
+      left: 20px;
+    }
+    .clipped {
+      clip-path: none;
+      max-height: 300px !important;
+    }
+  }
+</style>

@@ -128,9 +128,9 @@
             <li
               class="list-group-item d-flex justify-content-between align-items-center px-0"
             >
-              <h5 class="text-uppercase mb-3">Give code</h5>
+              <h5 class="text-uppercase mb-5">Give code</h5>
               <div>
-                <div class="form-outline">
+                <div class="form-outline mt-3">
                   <input
                     type="text"
                     id="coupon" name="coupon"
@@ -148,7 +148,7 @@
               <div>
                 <strong>Total amount</strong>
               </div>
-              <span><strong>Rs.<%= sum %></strong></span>
+              <span id="total">Rs.<%= sum %></span>
             </li>
           </ul>
         </div>
@@ -158,8 +158,10 @@
   </div>
 </div>
 <%- include('../partials/user-footer.ejs') %>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   $("#checkout").submit((e) => {
+    const total = document.getElementById("total").innerHTML;
     const verify = addressForm();
     console.log(verify);
     e.preventDefault();
@@ -169,7 +171,15 @@
         method: "post",
         data: $("#checkout").serialize(),
         success: (resposnse) => {
-          if (resposnse.success) {
+          if(resposnse.coupon){
+             Swal.fire({
+          title: "Coupon already used!",
+          icon: "error",
+          confirmButtonText: "continue",
+        }).then(function () {
+          location.reload()
+        });
+          }else if (resposnse.success) {
             location.href = "/orderSuccess";
           } else {
             razorPay(resposnse);
@@ -215,6 +225,7 @@
       // alert(response.error.metadata.order_id);
       // alert(response.error.metadata.payment_id);
       // paymentFail(response);
+      location.href="/paymentFail";
     });
     rzp1.open();
   }
