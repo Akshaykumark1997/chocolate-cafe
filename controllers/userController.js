@@ -20,6 +20,7 @@ dotenv.config();
 
 let session;
 var count;
+var wishCount;
 function checkCoupon(data, id) {
   console.log(data);
   return new Promise((resolve) => {
@@ -49,7 +50,7 @@ module.exports = {
     try {
       const Categories = await category.find();
       const allProducts = await products.find({ isDeleted: false });
-      res.render("user/userHome", { session, allProducts, count, Categories });
+      res.render("user/userHome", { session, allProducts, count, Categories,wishCount });
     } catch {
       console.error();
     }
@@ -73,10 +74,13 @@ module.exports = {
         const Categories = await category.find();
         const userData = await user.findOne({ email: session });
         const productDAta = await cart.find({ userId: userData._id });
+        const wishlistData = await wishlist.find({userId:userData._id});
         if (productDAta.length) {
+          wishCount = wishlistData[0].product.length;
           count = productDAta[0].product.length;
         } else {
           count = 0;
+          wishCount=0;
         }
         products.find({ isDeleted: false }).then((allProducts) => {
           res.render("user/userHome", {
@@ -84,6 +88,7 @@ module.exports = {
             allProducts,
             count,
             Categories,
+            wishCount
           });
         });
       } else {
@@ -97,9 +102,12 @@ module.exports = {
     const Categories = await category.find();
     const userData = await user.findOne({ email: session });
     const productDAta = await cart.find({ userId: userData._id });
+    const wishlistData = await wishlist.find({ userId: userData._id });
     if (productDAta.length) {
+      wishCount = wishlistData[0].product.length;
       count = productDAta[0].product.length;
     } else {
+      wishCount =0;
       count = 0;
     }
     products.find({ isDeleted: false }).then((allProducts) => {
@@ -114,6 +122,7 @@ module.exports = {
         allProducts,
         count,
         Categories,
+        wishCount
       });
     });
   },
@@ -134,6 +143,7 @@ module.exports = {
           allProducts,
           count,
           Categories,
+          wishCount
         });
       });
     } else {
@@ -151,6 +161,7 @@ module.exports = {
           allProducts,
           count,
           Categories,
+          wishCount
         });
       });
     } else {
@@ -284,6 +295,8 @@ module.exports = {
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
       const count = cartData?.product?.length;
+      const wishlistData = await wishlist.find({ userId: userData._id });
+      const wishCount = wishlistData?.product?.length;
       if (cartData == null) {
         cartExist = 0;
       } else {
@@ -300,6 +313,7 @@ module.exports = {
           count,
           cartData,
           cartExist,
+          wishCount
         });
       });
     } catch {
@@ -311,6 +325,9 @@ module.exports = {
     const userId = mongoose.Types.ObjectId(userData._id);
     const cartData = await cart.findOne({ userId: userData.id });
     const count = cartData?.product?.length;
+    const wishlistDetails = await wishlist.findOne({ userId: userData._id });
+    console.log(wishlistDetails);
+    const wishCount = wishlistDetails?.product?.length;
     const wishlistData = await wishlist.aggregate([
       {
         $match: { userId: userId },
@@ -338,7 +355,7 @@ module.exports = {
         },
       },
     ]);
-    res.render("user/wishlist", { session, count, wishlistData });
+    res.render("user/wishlist", { session, count, wishlistData,wishCount });
   },
   addToWishlist: async (req, res) => {
     const id = req.params.id;
@@ -509,7 +526,7 @@ module.exports = {
       return accumulator + object.productPrice;
     }, 0);
     count = productData.length;
-    res.render("user/cart", { session, productData, count, sum });
+    res.render("user/cart", { session, productData, count, sum,wishCount});
   },
   totalAmount: async (req, res) => {
     const userId = req.session.userId;
@@ -651,15 +668,15 @@ module.exports = {
       return accumulator + object.productPrice;
     }, 0);
     count = productDAta.length;
-    res.render("user/checkout", { session, productDAta, count, sum, userData });
+    res.render("user/checkout", { session, productDAta, count, sum, userData ,wishCount});
   },
   account: async (req, res) => {
     const userData = await user.findOne({ email: session });
-    res.render("user/accountDetails", { userData, session, count });
+    res.render("user/accountDetails", { userData, session, count,wishCount });
   },
   editAccount: async (req, res) => {
     const userData = await user.findOne({ email: session });
-    res.render("user/editAccount", { userData, session, count });
+    res.render("user/editAccount", { userData, session, count ,wishCount});
   },
   postEditAccount: async (req, res) => {
     const data = req.body;
@@ -686,7 +703,7 @@ module.exports = {
     res.redirect("/account");
   },
   changePassword: (req, res) => {
-    res.render("user/changePassword", { session, count });
+    res.render("user/changePassword", { session, count ,wishCount});
   },
   postChangePassword: async (req, res) => {
     const data = req.body;
@@ -704,14 +721,14 @@ module.exports = {
       } else {
         res.render("user/changePassword", {
           session,
-          count,
+          count,wishCount,
           err_message: "password is incorrect",
         });
       }
     } else {
       res.render("user/changePassword", {
         session,
-        count,
+        count,wishCount,
         err_message: "password must be same",
       });
     }
@@ -958,11 +975,11 @@ module.exports = {
   paymentFailure: (req, res) => {
     const details = req.body;
     console.log(details);
-    res.render("user/paymentFail", { session, count });
+    res.render("user/paymentFail", { session, count ,wishCount});
   },
   orderSuccess: async (req, res) => {
     const count = 0;
-    res.render("user/orderSuccess", { session, count });
+    res.render("user/orderSuccess", { session, count,wishCount });
   },
   viewOrderProducts: (req, res) => {
     const id = req.params.id;
@@ -1004,17 +1021,20 @@ module.exports = {
         },
       ])
       .then((productData) => {
-        res.render("user/viewOrderProducts", { session, count, productData });
+        res.render("user/viewOrderProducts", { session, count, productData,wishCount });
       });
   },
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
     const cartData = await cart.findOne({ userId: userData.id });
     const count = cartData?.product?.length;
+    const wishlistData = await wishlist.findOne({ userId: userData._id });
+    const wishCount = wishlistData?.product?.length;
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
         count,
+        wishCount,
         orderDetails,
       });
     });

@@ -201,6 +201,9 @@ function addToWishlist(proId) {
     method: "get",
     success: (response) => {
       if (response.status) {  
+        let count = $("#wishCount").html();
+        count = parseInt(count) + 1;
+        $("#wishCount").html(count);
         Swal.fire({
           title: "Added to wishlist!",
           icon: "success",
