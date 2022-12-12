@@ -86,13 +86,16 @@ module.exports = {
         const amountPendingList = await order.find({
           createdAt: {
             $gte: start,
-            $lte:end,
+            $lte: end,
           },
         });
-         console.log(amountPendingList);
-        const amountPending = amountPendingList.reduce((accumulator,object)=>{
-          return accumulator+= object.totalAmount;
-        },0)
+        console.log(amountPendingList);
+        const amountPending = amountPendingList.reduce(
+          (accumulator, object) => {
+            return (accumulator += object.totalAmount);
+          },
+          0
+        );
         res.render("admin/adminDashboard", {
           totalAmount,
           totalOrderToday,
@@ -117,12 +120,12 @@ module.exports = {
     }
   },
   getLogout: (req, res) => {
-    try{
-    req.session.destroy();
-    res.redirect("/admin");
-    }catch{
+    try {
+      req.session.destroy();
+      res.redirect("/admin");
+    } catch {
       console.error();
-      res.render('user/error');
+      res.render("user/error");
     }
   },
   products: async (req, res) => {
@@ -294,14 +297,14 @@ module.exports = {
       }
     } catch {
       console.error();
-      res.render('user/error');
+      res.render("user/error");
     }
   },
   addCategory: async (req, res) => {
     try {
       const categoryData = req.body.category;
       const allCategories = await category.find();
-      const verify =await category.findOne({ category: categoryData });
+      const verify = await category.findOne({ category: categoryData });
       if (verify == null) {
         const newCategory = new category({
           category: categoryData,
@@ -317,7 +320,7 @@ module.exports = {
       }
     } catch {
       console.error();
-      res.render('user/error');
+      res.render("user/error");
     }
   },
   editCategory: async (req, res) => {
@@ -342,11 +345,10 @@ module.exports = {
             .then(() => {
               res.redirect("/admin/categories");
             });
-          
         });
     } catch {
       console.error();
-      res.render('user/error');
+      res.render("user/error");
     }
   },
   deleteCategory: (req, res) => {
@@ -357,13 +359,54 @@ module.exports = {
       });
     } catch {
       console.error();
-      res.render('user/error');
+      res.render("user/error");
     }
   },
   orders: async (req, res) => {
-    try{
-    order
-      .aggregate([
+    try {
+      order
+        .aggregate([
+          {
+            $lookup: {
+              from: "productdetails",
+              localField: "orderItems.productId",
+              foreignField: "_id",
+              as: "products",
+            },
+          },
+          {
+            $lookup: {
+              from: "userdetails",
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+        ])
+        .then((orderDetails) => {
+          res.render("admin/orders", { orderDetails });
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
+  },
+  changeStatus: async (req, res) => {
+    try {
+      console.log(req.params.id);
+      const id = req.params.id;
+      const data = req.body;
+      console.log(data);
+      const orderDetails = await order.findOne({_id:id});
+      console.log(orderDetails);
+      const objId = mongoose.Types.ObjectId(id);
+      const orderData = await order.aggregate([
+        {
+          $match: { _id: objId },
+        },
+        {
+          $unwind: "$orderItems",
+        },
         {
           $lookup: {
             from: "productdetails",
@@ -373,77 +416,98 @@ module.exports = {
           },
         },
         {
-          $lookup: {
-            from: "userdetails",
-            localField: "userId",
-            foreignField: "_id",
-            as: "user",
+          $project: {
+            quantity: "$orderItems.quantity",
+            products: { $arrayElemAt: ["$products", 0] },
           },
         },
-      ])
-      .then((orderDetails) => {
-        res.render("admin/orders", { orderDetails });
-      });
-    }catch{
-      console.error();
-      res.render("user/error");
-    }
-  },
-  changeStatus: (req, res) => {
-    try{
-    console.log(req.params.id);
-    const id = req.params.id;
-    const data = req.body;
-   
-    order
-      .updateOne(
-        { _id: id },
-        {
-          $set: {
-            orderStatus: data.orderStatus,
-            paymentStatus: data.paymentStatus,
-          },
+      ]);
+      if (data.orderStatus == "cancelled") {
+        for (let i = 0; i < orderData.length; i++) {
+          const updatedStock =
+            orderData[i].products.stock + orderData[i].quantity;
+          products
+            .updateOne(
+              {
+                _id: orderData[i].products._id,
+              },
+              {
+                stock: updatedStock,
+              }
+            )
+            .then((data) => {
+              console.log(data);
+            });
         }
-      )
-      .then(() => {
-        res.redirect("/admin/orders");
+      }
+     else if(orderDetails.orderStatus == "cancelled"){
+        for (let i = 0; i < orderData.length; i++) {
+          const updatedStock =
+            orderData[i].products.stock - orderData[i].quantity;
+          products
+            .updateOne(
+              {
+                _id: orderData[i].products._id,
+              },
+              {
+                stock: updatedStock,
+              }
+            )
+            .then((data) => {
+              console.log(data);
+            });
+        }
+      }
+      order
+        .updateOne(
+          { _id: id },
+          {
+            $set: {
+              orderStatus: data.orderStatus,
+              paymentStatus: data.paymentStatus,
+            },
+          }
+        )
+        .then(() => {
+          res.redirect("/admin/orders");
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
+  },
+  getCoupons: (req, res) => {
+    try {
+      coupon.find().then((coupons) => {
+        res.render("admin/coupons", { coupons });
       });
-    }catch{
+    } catch {
       console.error();
       res.render("user/error");
     }
   },
-  getCoupons:(req,res)=>{
-    try{
-      coupon.find().then((coupons)=>{
-        res.render("admin/coupons",{coupons});
-      })
-    
-    }catch{
-      console.error();
-      res.render("user/error");
-    }
-  },
-  addCoupon:(req,res)=>{
-    try{
-    const data = req.body;
-    console.log(data);
-    const dis = parseInt(data.discount);
-    const max = parseInt(data.max);
-    const discount = (dis/100);
-    console.log(discount);
-    coupon.create({
-      couponName:data.coupon,
-      discount: discount,
-      maxLimit:max,
-      expirationTime:data.exdate
-    }).then((data)=>{
+  addCoupon: (req, res) => {
+    try {
+      const data = req.body;
       console.log(data);
-      res.redirect("/admin/coupons");
-    })
-    }catch{
+      const dis = parseInt(data.discount);
+      const max = parseInt(data.max);
+      const discount = dis / 100;
+      console.log(discount);
+      coupon
+        .create({
+          couponName: data.coupon,
+          discount: discount,
+          maxLimit: max,
+          expirationTime: data.exdate,
+        })
+        .then((data) => {
+          console.log(data);
+          res.redirect("/admin/coupons");
+        });
+    } catch {
       console.error();
       res.render("user/error");
     }
-  }
+  },
 };

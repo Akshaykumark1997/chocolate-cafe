@@ -18,7 +18,6 @@ const Swal = require("sweetalert2");
 moment().format();
 dotenv.config();
 
-
 let session;
 var count;
 function checkCoupon(data, id) {
@@ -38,7 +37,6 @@ function checkCoupon(data, id) {
             coupon.find({ couponName: data.coupon }).then((discount) => {
               resolve(discount);
             });
-            
           }
         });
     } else {
@@ -285,6 +283,7 @@ module.exports = {
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
+      const count = cartData?.product?.length;
       if (cartData == null) {
         cartExist = 0;
       } else {
@@ -310,6 +309,8 @@ module.exports = {
   wishlist: async (req, res) => {
     const userData = await user.findOne({ email: session });
     const userId = mongoose.Types.ObjectId(userData._id);
+    const cartData = await cart.findOne({ userId: userData.id });
+    const count = cartData?.product?.length;
     const wishlistData = await wishlist.aggregate([
       {
         $match: { userId: userId },
@@ -355,7 +356,6 @@ module.exports = {
       { userId: userId },
       { product: { $elemMatch: { productId: objId } } }
     );
-    console.log("hiii" + verify);
     if (verify?.product?.length) {
       res.json({ cart: true });
     } else {
@@ -721,7 +721,7 @@ module.exports = {
     const userData = await user.findOne({ email: session });
     const objId = mongoose.Types.ObjectId(userData._id);
     const discount = await checkCoupon(data, objId);
-    console.log(discount+ "discount");
+    console.log(discount + "discount");
     if (discount == true) {
       res.json({ coupon: true });
     } else {
@@ -806,9 +806,14 @@ module.exports = {
           await cart.deleteOne({ userId: userData._id });
           if (req.body.paymentMethod === "COD") {
             res.json({ success: true });
-            coupon.updateOne({ couponName:data.coupon}, { $push: { users: {userId:objId} } }).then((updated)=>{
-              console.log(updated)
-            });
+            coupon
+              .updateOne(
+                { couponName: data.coupon },
+                { $push: { users: { userId: objId } } }
+              )
+              .then((updated) => {
+                console.log(updated);
+              });
           } else if (req.body.paymentMethod === "Online") {
             let options = {
               amount: amount,
@@ -903,6 +908,7 @@ module.exports = {
             });
           }
         }
+        console.log(productData);
         for (let i = 0; i < productData.length; i++) {
           const updatedStock =
             productData[i].productDetail.stock - productData[i].productQuantity;
@@ -1003,6 +1009,8 @@ module.exports = {
   },
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
+    const cartData = await cart.findOne({ userId: userData.id });
+    const count = cartData?.product?.length;
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
@@ -1011,9 +1019,47 @@ module.exports = {
       });
     });
   },
-  cancelOrder: (req, res) => {
+  cancelOrder: async (req, res) => {
     const data = req.params.id;
-
+    const objId = mongoose.Types.ObjectId(data);
+    const orderData = await order.aggregate([
+      {
+        $match: { _id: objId },
+      },
+      {
+        $unwind: "$orderItems",
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "orderItems.productId",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+      {
+        $project: {
+          quantity:"$orderItems.quantity",
+          products: { $arrayElemAt: ["$products", 0] },
+        },
+      },
+    ]);
+    for (let i = 0; i < orderData.length; i++) {
+      const updatedStock =
+        orderData[i].products.stock + orderData[i].quantity;
+      products
+        .updateOne(
+          {
+            _id: orderData[i].products._id,
+          },
+          {
+            stock: updatedStock,
+          }
+        )
+        .then((data) => {
+          console.log(data);
+        });
+    }
     order
       .updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
       .then(() => {

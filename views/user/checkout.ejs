@@ -170,8 +170,8 @@
         url: "/placeOrder",
         method: "post",
         data: $("#checkout").serialize(),
-        success: (resposnse) => {
-          if(resposnse.coupon){
+        success: (response) => {
+          if(response.coupon){
              Swal.fire({
           title: "Coupon already used!",
           icon: "error",
@@ -179,10 +179,10 @@
         }).then(function () {
           location.reload()
         });
-          }else if (resposnse.success) {
+          }else if (response.success) {
             location.href = "/orderSuccess";
           } else {
-            razorPay(resposnse);
+            razorPay(response);
           }
         },
       });

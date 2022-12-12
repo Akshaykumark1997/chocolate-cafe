@@ -70,7 +70,7 @@ function addToCart(proId) {
           icon: "success",
           confirmButtonText: "continue",
         }).then(function () {
-          document.getElementById("cartButton").innerHTML = "Go to Cart";
+          location.reload()
         });
         
       }
