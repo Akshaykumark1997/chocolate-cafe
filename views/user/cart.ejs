@@ -56,10 +56,10 @@
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)"
                       >
                         <i class="fas fa-minus"></i>
-                      </button>
+                      </button><button class="btn ">
                       <p id="<%= product.productDetail._id %>">
                         <%= product.productQuantity %>
-                      </p>
+                      </p></button>
                       <button
                         class="btn btn-link px-2"
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)"

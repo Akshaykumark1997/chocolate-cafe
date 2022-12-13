@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   fullname: {
     type: String,
-    required: true,
+    // required: true,
     match: [/^[a-zA-Z]+$/, "please fill a valid name"],
   },
   username: {

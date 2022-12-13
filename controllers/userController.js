@@ -14,7 +14,6 @@ const crypto = require("crypto");
 const wishlist = require("../model/wishlist");
 const coupon = require("../model/coupon");
 const dotenv = require("dotenv");
-const Swal = require("sweetalert2");
 moment().format();
 dotenv.config();
 
@@ -73,14 +72,17 @@ module.exports = {
       if (session) {
         const Categories = await category.find();
         const userData = await user.findOne({ email: session });
-        const productDAta = await cart.find({ userId: userData._id });
-        const wishlistData = await wishlist.find({userId:userData._id});
-        if (productDAta.length) {
+        const cartData = await cart.find({ userId: userData._id });
+         const wishlistData = await wishlist.find({userId:userData._id});
+         if(wishlistData.length){
           wishCount = wishlistData[0].product.length;
-          count = productDAta[0].product.length;
+         }else{
+          wishCount = 0;
+         }
+        if (cartData.length) {
+          count = cartData[0].product.length;
         } else {
           count = 0;
-          wishCount=0;
         }
         products.find({ isDeleted: false }).then((allProducts) => {
           res.render("user/userHome", {
@@ -99,53 +101,70 @@ module.exports = {
     }
   },
   shop: async (req, res) => {
+    const pageNum = req.query.page;
+    const perPage = 12;
+    let docCount;
     const Categories = await category.find();
     const userData = await user.findOne({ email: session });
-    const productDAta = await cart.find({ userId: userData._id });
+    const cartData = await cart.find({ userId: userData._id });
     const wishlistData = await wishlist.find({ userId: userData._id });
-    if (productDAta.length) {
-      wishCount = wishlistData[0].product.length;
-      count = productDAta[0].product.length;
-    } else {
-      wishCount =0;
-      count = 0;
-    }
-    products.find({ isDeleted: false }).then((allProducts) => {
-      Swal.fire({
-        title: "Error!",
-        text: "Do you want to continue",
-        icon: "error",
-        confirmButtonText: "Cool",
-      });
+     if (wishlistData.length) {
+       wishCount = wishlistData[0].product.length;
+     } else {
+       wishCount = 0;
+     }
+     if (cartData.length) {
+       count = cartData[0].product.length;
+     } else {
+       count = 0;
+     }
+    products.find({ isDeleted: false }).countDocuments().then((documents)=>{
+      docCount = documents;
+      return products.find({isDeleted:false}).skip((pageNum - 1)*perPage).limit(perPage)
+    }).then((allProducts) => {
       res.render("user/shop", {
         session,
         allProducts,
         count,
         Categories,
-        wishCount
-      });
+        wishCount,
+        pageNum,
+        docCount,
+        pages:Math.ceil(docCount/perPage)
+      }); 
     });
   },
   shopCategory: async (req, res) => {
     const id = req.params.id;
+    const pageNum = req.query.page;
+    const perPage = 12;
+    let docCount;
     const Categories = await category.find();
     const categoryData = await category.findOne({ _id: id });
     if (categoryData) {
-      products.find({ category: categoryData.category }).then((allProducts) => {
-        Swal.fire({
-          title: "Error!",
-          text: "Do you want to continue",
-          icon: "error",
-          confirmButtonText: "Cool",
+      products
+        .find({ category: categoryData.category,isDeleted:false })
+        .countDocuments()
+        .then((documents) => {
+          docCount = documents;
+          return products
+            .find({ category: categoryData.category,isDeleted: false })
+            .skip((pageNum - 1) * perPage)
+            .limit(perPage);
+        })
+        .then((allProducts) => {
+          res.render("user/categories", {
+            session,
+            allProducts,
+            count,
+            Categories,
+            wishCount,
+            categoryId:categoryData._id,
+            pageNum,
+            docCount,
+            pages: Math.ceil(docCount / perPage),
+          });
         });
-        res.render("user/shop", {
-          session,
-          allProducts,
-          count,
-          Categories,
-          wishCount
-        });
-      });
     } else {
       res.redirect("/shop");
     }
@@ -217,7 +236,7 @@ module.exports = {
   },
   postSignup: (req, res) => {
     try {
-      const data = { ...req.body };
+      const data = req.body ;
       if (data.password === data.confirmpassword) {
         User.find({
           $or: [{ mobile: data.mobile }, { email: data.email }],
@@ -234,16 +253,37 @@ module.exports = {
                   session,
                   err_message: "username unavilable",
                 });
-              } else {
-                const otpc = Math.floor(100000 + Math.random() * 900000);
-                const tonumber = `+91${data.mobile}`;
-                sendOtp.sendOTP(tonumber, otpc);
-                const newOtp = new otpsign({
-                  otp: otpc,
-                });
-                newOtp.save().then(() => {
-                  res.render("user/otpSignup", { session, data });
-                });
+              } 
+              else {
+                // const otpc = Math.floor(100000 + Math.random() * 900000);
+                // const tonumber = `+91${data.mobile}`;
+                // sendOtp.sendOTP(tonumber, otpc);
+                // const newOtp = new otpsign({
+                //   otp: otpc,
+                // });
+                // newOtp.save().then(() => {
+                //   res.render("user/otpSignup", { session, data });
+                // });
+                let mailDetails = {
+                  from: process.env.GMAIL,
+                  to: data.email,
+                  subject: "CHOCOLATE CAFE VERIFICATION",
+                  html: `<p>YOUR OTP FOR REGISTERING IN CASTLE  IS <h1> ${sendOtp.OTP} <h1> </p>`,
+                }; 
+                 sendOtp.mailTransporter.sendMail(mailDetails, (err, response) => {
+                   if (err) {
+                     console.log("error occurs");
+                   } else {
+                     console.log(response);
+                     console.log(data);
+                     const newOtp = new otpsign({
+                       otp: sendOtp.OTP,
+                     });
+                     newOtp.save().then(() => {
+                       res.render("user/otpSignup", { session, data });
+                     }); 
+                   }
+                 });
               }
             });
           }
@@ -294,11 +334,16 @@ module.exports = {
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const cartData = await cart.findOne({ userId: userData.id });
-      const count = cartData?.product?.length;
-      const wishlistData = await wishlist.find({ userId: userData._id });
-      const wishCount = wishlistData?.product?.length;
+      let count = cartData?.product?.length;
+      const wishlistData = await wishlist.findOne({ userId: userData._id });
+      console.log(wishlistData);
+      let wishCount = wishlistData?.product?.length;
+      if(wishlistData == null ){
+        wishCount = 0;
+      }
       if (cartData == null) {
         cartExist = 0;
+        count = 0;
       } else {
         const cartLen = await cart.findOne(
           { userId: userData.id },
@@ -324,10 +369,15 @@ module.exports = {
     const userData = await user.findOne({ email: session });
     const userId = mongoose.Types.ObjectId(userData._id);
     const cartData = await cart.findOne({ userId: userData.id });
-    const count = cartData?.product?.length;
+    let count = cartData?.product?.length;
     const wishlistDetails = await wishlist.findOne({ userId: userData._id });
     console.log(wishlistDetails);
-    const wishCount = wishlistDetails?.product?.length;
+    let wishCount = wishlistDetails?.product?.length;
+    if(wishlistDetails == null ){
+      wishCount = 0;
+    }if(cartData == null){
+      count =0;
+    }
     const wishlistData = await wishlist.aggregate([
       {
         $match: { userId: userId },
@@ -486,6 +536,12 @@ module.exports = {
   viewCart: async (req, res) => {
     const userId = req.session.userId;
     const userData = await user.findOne({ email: userId });
+    const wishlistDetails = await wishlist.findOne({ userId: userData._id });
+    console.log(wishlistDetails);
+    let wishCount = wishlistDetails?.product?.length;
+    if (wishlistDetails == null) {
+      wishCount = 0;
+    }
     const productData = await cart.aggregate([
       {
         $match: { userId: userData.id },
@@ -1027,9 +1083,14 @@ module.exports = {
   orderDetails: async (req, res) => {
     const userData = await user.findOne({ email: session });
     const cartData = await cart.findOne({ userId: userData.id });
-    const count = cartData?.product?.length;
+    let count = cartData?.product?.length;
     const wishlistData = await wishlist.findOne({ userId: userData._id });
-    const wishCount = wishlistData?.product?.length;
+    let wishCount = wishlistData?.product?.length;
+    if(wishlistData == null ){
+      wishCount = 0;
+    }if(cartData == null){
+      count = 0;
+    }
     await order.find({ userId: userData._id }).then((orderDetails) => {
       res.render("user/orderDetails", {
         session,
