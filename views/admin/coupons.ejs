@@ -137,7 +137,11 @@
                         aria-label="Close"
                       ></button>
                     </div>
-                    <form action="/admin/addCoupon" method="post">
+                    <form
+                      action="/admin/addCoupon"
+                      method="post"
+                      onsubmit="return validateAddCoupon(this);"
+                    >
                       <div class="modal-body">
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label"
@@ -150,6 +154,7 @@
                             name="coupon"
                             aria-describedby="emailHelp"
                           />
+                          <p id="couponError" style="color: red"></p>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label"
@@ -162,6 +167,7 @@
                             name="discount"
                             aria-describedby="emailHelp"
                           />
+                          <p id="discountError" style="color: red"></p>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label"
@@ -174,6 +180,7 @@
                             name="max"
                             aria-describedby="emailHelp"
                           />
+                          <p id="maxError" style="color: red"></p>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label"
@@ -186,6 +193,7 @@
                             name="exdate"
                             aria-describedby="emailHelp"
                           />
+                          <p id="exdateError" style="color: red"></p>
                         </div>
                       </div>
                       <div class="modal-footer">
@@ -245,13 +253,13 @@
                       type="button"
                       class="btn btn-outline-none"
                       data-bs-toggle="modal"
-                      data-bs-target="#staticBackdrop-"
+                      data-bs-target="#staticBackdrop-<%= coupons._id %>"
                     >
                       <i class="bi bi-pencil-square"></i>
                     </button>
                     <div
                       class="modal fade"
-                      id="staticBackdrop-"
+                      id="staticBackdrop-<%= coupons._id %>"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
                       tabindex="-1"
@@ -260,24 +268,87 @@
                     >
                       <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                          <form action="/admin/editCategory/" method="post">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="staticBackdropLabel">
-                                Edit Coupon
-                              </h5>
-                            </div>
-                            <div class="mb-3">
-                              <label for="exampleInputEmail1" class="form-label"
-                                >Coupon</label
-                              >
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="category"
-                                name="category"
-                                aria-describedby="emailHelp"
-                                value=""
-                              />
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdrop-<%= coupons._id %>">
+                              Edit Coupon
+                            </h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <form
+                            action="/admin/editCoupon/<%= coupons._id %>"
+                            method="post"
+                            onsubmit="return validateEditCoupon(this);"
+                          >
+                            <div class="modal-body">
+                              <div class="mb-3">
+                                <label
+                                  for="exampleInputEmail1"
+                                  class="form-label"
+                                  >Coupon</label
+                                >
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="coupon"
+                                  name="coupon"
+                                  value="<%= coupons.couponName %>"
+                                  aria-describedby="emailHelp"
+                                />
+                                <p id="couponNameError" style="color: red"></p>
+                              </div>
+                              <div class="mb-3">
+                                <label
+                                  for="exampleInputEmail1"
+                                  class="form-label"
+                                  >Discount(In percentage)</label
+                                >
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  id="discount"
+                                  name="discount"
+                                  value="<%= coupons.discount %>"
+                                  aria-describedby="emailHelp"
+                                />
+                                <p id="discountsError" style="color: red"></p>
+                              </div>
+                              <div class="mb-3">
+                                <label
+                                  for="exampleInputEmail1"
+                                  class="form-label"
+                                  >Maximum Limit</label
+                                >
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  id="max"
+                                  name="max"
+                                  value="<%= coupons.maxLimit %>"
+                                  aria-describedby="emailHelp"
+                                />
+                                <p id="maxlError" style="color: red"></p>
+                              </div>
+                              <div class="mb-3">
+                                <label
+                                  for="exampleInputEmail1"
+                                  class="form-label"
+                                  >Expire Date</label
+                                >
+                                <input
+                                  type="date"
+                                  class="form-control"
+                                  id="exdate"
+                                  name="exdate"
+                                  value="<%= coupons.expirationTime %>"
+                                  aria-describedby="emailHelp"
+                                />
+                                <p id="expdateError" style="color: red"></p>
+                              </div>
                             </div>
                             <div class="modal-footer">
                               <button
@@ -288,11 +359,12 @@
                                 Close
                               </button>
                               <button
+                                id="submit"
                                 type="submit"
                                 value="submit"
                                 class="btn btn-outline-primary"
                               >
-                                Confirm
+                                submit
                               </button>
                             </div>
                           </form>
@@ -303,7 +375,7 @@
                       type=""
                       class="btn btn-outline-none"
                       data-bs-toggle="modal"
-                      data-bs-target="#static-"
+                      data-bs-target="#static-<%= coupons._id %>"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +392,7 @@
                     </button>
                     <div
                       class="modal fade"
-                      id="static-"
+                      id="static-<%= coupons._id %>"
                       data-bs-backdrop="static"
                       data-bs-keyboard="false"
                       tabindex="-1"
@@ -340,7 +412,9 @@
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">Want to delete</div>
+                          <div class="modal-body">
+                            Want to delete <%= coupons.couponName %>
+                          </div>
                           <div class="modal-footer">
                             <button
                               type="button"

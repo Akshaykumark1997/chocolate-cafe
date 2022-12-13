@@ -24,7 +24,9 @@
                 src="/admin/images/dashboard.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Dashboard</span>
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Dashboard</span
+              >
             </a>
           </li>
           <li>
@@ -43,7 +45,9 @@
                 src="/admin/images/products.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Products</span></a
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Products</span
+              ></a
             >
           </li>
           <li>
@@ -53,7 +57,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Add Products</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Add Products</span
+              ></a
             >
           </li>
           <li>
@@ -63,7 +69,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Categories</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Categories</span
+              ></a
             >
           </li>
           <li>
@@ -107,7 +115,7 @@
                     <form
                       action="/admin/addproducts"
                       method="post"
-                      enctype="multipart/form-data"
+                      enctype="multipart/form-data" onsubmit="return validateAddProduct(this);"
                     >
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example1cg"
@@ -119,6 +127,7 @@
                           name="product"
                           class="form-control form-control-lg"
                         />
+                        <p id="nameError" style="color: red"></p>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -131,6 +140,7 @@
                           name="price"
                           class="form-control form-control-lg"
                         />
+                        <p id="priceError" style="color: red"></p>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -159,6 +169,7 @@
                           name="description"
                           class="form-control form-control-lg"
                         />
+                        <p id="descriptionError" style="color: red"></p>
                       </div>
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example4cdg"
@@ -170,8 +181,9 @@
                           name="stock"
                           class="form-control form-control-lg"
                         />
+                        <p id="stockError" style="color: red"></p>
                       </div>
-                      <div class="form-outline mb-4">
+                      <!-- <div class="form-outline mb-4">
                         <label class="form-label" for="customFile"
                           >Choose image</label
                         >
@@ -182,7 +194,39 @@
                           class="form-control"
                           required
                         />
-                      </div>
+                      </div> -->
+                      <main class="page">
+                        <!-- input file -->
+                        <div class="box">
+                          <input type="file" id="file-input" name="image" />
+                        </div>
+                        <!-- leftbox -->
+                        <div class="box-2">
+                          <div  class="result"></div>
+                        </div>
+                        <!--rightbox-->
+                        <div class="box-2 img-result hide">
+                          <!-- result of crop -->
+                          <img  class="cropped" src="" alt=""/>
+                        </div>
+                        <!-- input file -->
+                        <div class="box">
+                          <div class="options hide">
+                            <label> Width</label>
+                            <input
+                              type="num"
+                              class="img-w"
+                              value="300"
+                              min="100"
+                              max="1200"
+                            />
+                          </div>
+                          <!-- save btn -->
+                          <button class="btn save hide">Save</button>
+                          
+                        </div>
+                         <p id="fileError" style="color: red"></p>
+                      </main>
 
                       <div class="d-flex justify-content-center">
                         <button
@@ -205,8 +249,67 @@
     </div>
   </div>
 </div>
-<!-- The existing file input somewhere in our form -->
-<input type="file" />
+<style>
+ 
+</style>
 
-<!-- The script tag we just added to our page -->
-<script defer src="https://cdn.crop.guide/loader/l.js?c=123ABC"></script>
+<script>
+  let result = document.querySelector(".result"),
+    img_result = document.querySelector(".img-result"),
+    img_w = document.querySelector(".img-w"),
+    img_h = document.querySelector(".img-h"),
+    options = document.querySelector(".options"),
+    save = document.querySelector(".save"),
+    cropped = document.querySelector(".cropped"),
+    dwn = document.querySelector(".download"),
+    upload = document.querySelector("#file-input"),
+    newImage = document.getElementById("file-input");
+    cropper = "";
+
+  // on change show image with crop options
+  upload.addEventListener("change", (e) => {
+    if (e.target.files.length) {
+      // start file reader
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target.result) {
+          // create new image
+          var img = document.createElement("img");
+          img.id = "image";
+          img.src = e.target.result;
+          
+          // clean result before
+          result.innerHTML = "";
+          // append new image
+          result.appendChild(img);
+          
+          // show save btn and options
+          save.classList.remove("hide");
+          options.classList.remove("hide");
+          // init cropper
+          cropper = new Cropper(img);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  });
+
+  // save on click
+  save.addEventListener("click", (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc = cropper
+      .getCroppedCanvas({
+        width: img_w.value, // input value
+      })
+      .toDataURL();
+    // remove hide class of img
+    cropped.classList.remove("hide");
+    img_result.classList.remove("hide");
+    // show image cropped
+    cropped.src = imgSrc;
+    dwn.classList.remove("hide");
+    dwn.download = "imagename.png";
+    dwn.setAttribute("href", imgSrc);
+  });
+</script>

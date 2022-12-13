@@ -165,7 +165,7 @@ module.exports = {
       if (productData) {
         let imagename = productData._id;
         image.mv(
-          path.join(__dirname, "../public/admin/products/") +
+          path.join(__dirname, "../public/admin/products/") + 
             imagename +
             ".jpg",
           (err) => {
@@ -510,4 +510,19 @@ module.exports = {
       res.render("user/error");
     }
   },
+  editCoupon:(req,res)=>{
+    const id = req.params.id;
+    const data = req.body;
+    console.log(data);
+    console.log(id);
+    coupon.updateOne({_id:id},{
+      couponName:data.coupon,
+      discount:data.discoun,
+      maxLimit:data.max,
+      expirationTime:data.exdate
+    }).then((data)=>{
+      console.log(data);
+      res.redirect("/admin/coupons");
+    })
+  }
 };

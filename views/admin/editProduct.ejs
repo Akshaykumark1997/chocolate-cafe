@@ -105,7 +105,7 @@
                     <form
                       action="/admin/editproduct/<%= productData._id %>"
                       method="post"
-                      enctype="multipart/form-data"
+                      enctype="multipart/form-data" onsubmit="return validateAddProduct(this);"
                     >
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example1cg"
@@ -118,6 +118,7 @@
                           value="<%= productData.product %>"
                           class="form-control form-control-lg"
                         />
+                         <p id="nameError" style="color: red"></p>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -131,6 +132,7 @@
                           value="<%= productData.price %>"
                           class="form-control form-control-lg"
                         />
+                        <p id="priceError" style="color: red"></p>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -165,6 +167,7 @@
                           value="<%= productData.description %>"
                           class="form-control form-control-lg"
                         />
+                        <p id="descriptionError" style="color: red"></p>
                       </div>
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example4cdg"
@@ -177,6 +180,7 @@
                           class="form-control form-control-lg"
                           value="<%= productData.stock %>"
                         />
+                        <p id="stockError" style="color: red"></p>
                       </div>
                       <div class="form-outline mb-4">
                         <label class="form-label" for="customFile"
@@ -194,6 +198,7 @@
                           class="form-control"
                           value="/admin/products/<%= productData._id %>.jpg"
                         />
+                         <p id="fileError" style="color: red"></p>
                       </div>
 
                       <div class="d-flex justify-content-center">
