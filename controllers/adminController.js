@@ -165,7 +165,7 @@ module.exports = {
       if (productData) {
         let imagename = productData._id;
         image.mv(
-          path.join(__dirname, "../public/admin/products/") + 
+          path.join(__dirname, "../public/admin/products/") +
             imagename +
             ".jpg",
           (err) => {
@@ -397,7 +397,7 @@ module.exports = {
       const id = req.params.id;
       const data = req.body;
       console.log(data);
-      const orderDetails = await order.findOne({_id:id});
+      const orderDetails = await order.findOne({ _id: id });
       console.log(orderDetails);
       const objId = mongoose.Types.ObjectId(id);
       const orderData = await order.aggregate([
@@ -439,8 +439,7 @@ module.exports = {
               console.log(data);
             });
         }
-      }
-     else if(orderDetails.orderStatus == "cancelled"){
+      } else if (orderDetails.orderStatus == "cancelled") {
         for (let i = 0; i < orderData.length; i++) {
           const updatedStock =
             orderData[i].products.stock - orderData[i].quantity;
@@ -510,19 +509,60 @@ module.exports = {
       res.render("user/error");
     }
   },
-  editCoupon:(req,res)=>{
+  editCoupon: (req, res) => {
     const id = req.params.id;
     const data = req.body;
     console.log(data);
     console.log(id);
-    coupon.updateOne({_id:id},{
-      couponName:data.coupon,
-      discount:data.discoun,
-      maxLimit:data.max,
-      expirationTime:data.exdate
-    }).then((data)=>{
-      console.log(data);
-      res.redirect("/admin/coupons");
-    })
+    coupon
+      .updateOne(
+        { _id: id },
+        {
+          couponName: data.coupon,
+          discount: data.discoun,
+          maxLimit: data.max,
+          expirationTime: data.exdate,
+        }
+      )
+      .then((data) => {
+        console.log(data);
+        res.redirect("/admin/coupons");
+      });
+  },
+  salesReports: async (req, res) => {
+    const allOrderDetails = await order.find({
+      paymentStatus: "paid",
+      orderStatus: "delivered",
+    });
+    res.render("admin/salesReports", { allOrderDetails });
+  },
+  dailyReports:(req,res)=>{
+     order
+       .find({$and:[
+         { paymentStatus: "paid", orderStatus: "delivered" },
+         {
+           orderDate: moment().format("MMM Do YY"),
+         }
+        ]})
+       .then((allOrderDetails) => {
+         res.render("admin/salesReports", { allOrderDetails });
+       });
+  },
+  monthlyReports:(req,res)=>{
+     const start = moment().startOf("month");
+        const end = moment().endOf("month");
+         order
+           .find({$and:[
+             { paymentStatus: "paid", orderStatus: "delivered" },
+             {
+               createdAt: {
+                 $gte: start,
+                 $lte: end,
+               },
+             }]}
+           )
+           .then((allOrderDetails) => {
+             res.render("admin/salesReports", { allOrderDetails });
+           });
   }
 };

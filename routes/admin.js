@@ -60,4 +60,15 @@ router.post(
 router.get('/coupons',verifyLogin.verifyLoginAdmin,adminLogin.getCoupons);
 router.post('/addCoupon',verifyLogin.verifyLoginAdmin,adminLogin.addCoupon);
 router.post("/editCoupon/:id", verifyLogin.verifyLoginAdmin, adminLogin.editCoupon);
+router.get(
+  "/salesReports",
+  verifyLogin.verifyLoginAdmin,
+  adminLogin.salesReports
+);
+router.get("/dailyReport",verifyLogin.verifyLoginAdmin,adminLogin.dailyReports);
+router.get(
+  "/monthlyReport",
+  verifyLogin.verifyLoginAdmin,
+  adminLogin.dailyReports
+);
 module.exports = router;

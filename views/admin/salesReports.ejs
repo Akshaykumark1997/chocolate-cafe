@@ -1,0 +1,247 @@
+<%- include('../partials/adminPartial.ejs') %>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div
+      class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+      style="background-color: #484c4c"
+    >
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span class="fs-5 d-none d-sm-inline text-white">Admin</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          <li class="nav-item">
+            <a href="/admin/adminhome" class="nav-link align-middle px-0">
+              <img
+                src="/admin/images/dashboard.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Dashboard</span
+              >
+            </a>
+          </li>
+          <li>
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
+              <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/salesReports" class="nav-link px-0 align-middle">
+              <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Sales Report</span
+              >
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/products.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Products</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/addProducts" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/add products.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Add Products</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/Categories" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/category.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Categories</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/coupons" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/discount.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white">Coupons</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/userDetails" class="nav-link px-0 align-middle">
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/logout" class="nav-link px-0 align-middle">
+              <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Logout</span>
+            </a>
+          </li>
+        </ul>
+        <hr />
+      </div>
+    </div>
+    <div class="col py-3">
+      <div class="container mt-5">
+        <h2>Sales Reports</h2>
+
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div class="d-flex justify-content-end col-12">
+            <button
+              class="btn rounded-pill btn-danger"
+              onclick="CreatePDFfromHTML()"
+            >
+              generate PDF
+            </button>
+          </div>
+        </div>
+        <div class="d-flex justify-content-start mb-4">
+             <a href="/admin/salesReports"
+            ><button class="mx-2">Total Sales</button></a
+          >
+          <a href="/admin/dailyReport"><button class="">Daily Sales</button></a>
+          <a href="/admin/monthlyReport"
+            ><button class="mx-2">Monthly sales</button></a
+          >
+         
+        </div>
+        <div class="table-responsive mt-5 html-content">
+          <table
+            class="table text-start align-middle table-bordered table-hover mb-0"
+            id="table"
+          >
+            <thead>
+              <tr class="text-white">
+                <th
+                  scope="col"
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                >
+                  Invoice
+                </th>
+                <th
+                  scope="col"
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                >
+                  Customer
+                </th>
+                <th
+                  scope="col"
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                >
+                  Amount
+                </th>
+                <th
+                  scope="col"
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
+                >
+                  order
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% allOrderDetails.forEach((order)=>{ %>
+              <tr>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order._id %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order.fullname %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order.totalAmount %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order.paymentStatus %>
+                </td>
+                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
+                  <%= order.orderStatus %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <script>
+  $(document).ready(function () {
+    $("#table").DataTable();
+  });
+</script> -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="https://html2canvas.hertzen.com/dist/html2canvas.js"
+></script>
+<script>
+  function CreatePDFfromHTML() {
+    var HTML_Width = $(".html-content").width();
+    var HTML_Height = $(".html-content").height();
+    var top_left_margin = 15;
+    var PDF_Width = HTML_Width + top_left_margin * 2;
+    var PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
+    var canvas_image_width = HTML_Width;
+    var canvas_image_height = HTML_Height;
+
+    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+    html2canvas($(".html-content")[0]).then(function (canvas) {
+      var imgData = canvas.toDataURL("image/jpeg", 1.0);
+      var pdf = new jsPDF("p", "pt", [PDF_Width, PDF_Height]);
+      pdf.addImage(
+        imgData,
+        "JPG",
+        top_left_margin,
+        top_left_margin,
+        canvas_image_width,
+        canvas_image_height
+      );
+      for (var i = 1; i <= totalPDFPages; i++) {
+        pdf.addPage(PDF_Width, PDF_Height);
+        pdf.addImage(
+          imgData,
+          "JPG",
+          top_left_margin,
+          -(PDF_Height * i) + top_left_margin * 4,
+          canvas_image_width,
+          canvas_image_height
+        );
+      }
+      pdf.save("Recent_Sales_Report.pdf");
+    });
+  }
+</script>

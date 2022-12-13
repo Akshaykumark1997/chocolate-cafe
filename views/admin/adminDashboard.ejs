@@ -34,6 +34,16 @@
             </a>
           </li>
           <li>
+            <a
+              href="/admin/salesReports"
+             
+              class="nav-link px-0 align-middle"
+            >
+              <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Sales Report</span>
+            </a>
+          </li>
+          <li>
             <a href="/admin/products" class="nav-link px-0 align-middle">
               <img
                 src="/admin/images/products.svg"
@@ -351,100 +361,10 @@
           <canvas id="salse-revenue"></canvas>
         </div>
       </div>
-      <div class="container-fluid pt-4 px-4">
-        <div class="d-flex justify-content-end col-12">
-          <button
-            class="btn rounded-pill btn-danger"
-            onclick="CreatePDFfromHTML()"
-          >
-            generate PDF
-          </button>
-        </div>
-        <div class="text-center rounded p-4 html-content">
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Recent Sales</h6>
-            <!-- <input type="button" value="Download PDF File" onclick="DownloadFile('Sample.pdf')" /> -->
-          </div>
-           <div class="d-flex  justify-content-start mb-4">
-            <a href="/admin/dailyReport"><button class="">Daily Sales</button></a>
-            <a href="/admin/monthlyReport"><button class="mx-2">Monthly sales</button></a>
-            <a href="/admin/totalReport"><button class="mx-2">Total Sales</button></a>
-          </div>
-          <div class="table-responsive" id="editor">
-            <table
-              class="table text-start align-middle table-bordered table-hover mb-0"
-            >
-              <thead>
-                <tr class="text-white">
-                  <th
-                    scope="col"
-                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
-                  >
-                    Invoice
-                  </th>
-                  <th
-                    scope="col"
-                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
-                  >
-                    Customer
-                  </th>
-                  <th
-                    scope="col"
-                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
-                  >
-                    Amount
-                  </th>
-                  <th
-                    scope="col"
-                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    class="col-3 col-md-3 col-lg-3 col-xl-2 text-center"
-                  >
-                    order
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <% allOrderDetails.forEach((order)=>{ %>
-                <tr>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                    <%= order._id %>
-                  </td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                    <%= order.fullname %>
-                  </td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                    <%= order.totalAmount %>
-                  </td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                    <%= order.paymentStatus %>
-                  </td>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                    <%= order.orderStatus %>
-                  </td>
-                </tr>
-                <% }) %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-<script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"
-></script>
-<script
-  type="text/javascript"
-  src="https://html2canvas.hertzen.com/dist/html2canvas.js"
-></script>
 <script>
   let pending = document.getElementById("pending").innerHTML;
   let shipped = document.getElementById("shipped").innerHTML;
@@ -484,40 +404,5 @@
       responsive: true,
     },
   });
-  function CreatePDFfromHTML() {
-    var HTML_Width = $(".html-content").width();
-    var HTML_Height = $(".html-content").height();
-    var top_left_margin = 15;
-    var PDF_Width = HTML_Width + top_left_margin * 2;
-    var PDF_Height = PDF_Width * 1.5 + top_left_margin * 2;
-    var canvas_image_width = HTML_Width;
-    var canvas_image_height = HTML_Height;
 
-    var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
-    html2canvas($(".html-content")[0]).then(function (canvas) {
-      var imgData = canvas.toDataURL("image/jpeg", 1.0);
-      var pdf = new jsPDF("p", "pt", [PDF_Width, PDF_Height]);
-      pdf.addImage(
-        imgData,
-        "JPG",
-        top_left_margin,
-        top_left_margin,
-        canvas_image_width,
-        canvas_image_height
-      );
-      for (var i = 1; i <= totalPDFPages; i++) {
-        pdf.addPage(PDF_Width, PDF_Height);
-        pdf.addImage(
-          imgData,
-          "JPG",
-          top_left_margin,
-          -(PDF_Height * i) + top_left_margin * 4,
-          canvas_image_width,
-          canvas_image_height
-        );
-      }
-      pdf.save("Recent_Sales_Report.pdf");
-    });
-  }
 </script>
