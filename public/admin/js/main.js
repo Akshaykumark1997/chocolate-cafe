@@ -132,7 +132,7 @@ function validateEditCoupon(form) {
   let exdate = document.getElementById("exdate");
   if (coupon.value == "") {
     document.getElementById("couponNameError").innerHTML =
-      "please enter product name";
+      "please enter coupon name";
     coupon.focus();
     return false;
   }

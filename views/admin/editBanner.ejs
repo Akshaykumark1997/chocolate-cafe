@@ -1,0 +1,189 @@
+<%- include('../partials/adminPartial.ejs') %>
+<div class="container-fluid">
+  <div class="row flex-nowrap">
+    <div
+      class="col-auto col-md-3 col-xl-2 px-sm-2 px-0"
+      style="background-color: #484c4c"
+    >
+      <div
+        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span class="fs-5 d-none d-sm-inline text-white">Admin</span>
+        </a>
+        <ul
+          class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+          id="menu"
+        >
+          <li class="nav-item">
+            <a href="#" class="nav-link align-middle px-0">
+              <img
+                src="/admin/images/dashboard.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Dashboard</span
+              >
+            </a>
+          </li>
+          <li>
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
+              <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Order</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/salesReports" class="nav-link px-0 align-middle">
+              <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Sales Report</span
+              >
+            </a>
+          </li>
+          <li>
+            <a href="/admin/products" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/products.svg"
+                alt=""
+                style="width: 1rem"
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Products</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/addProducts" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/add products.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Add Products</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/Categories" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/category.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Categories</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="/admin/coupons" class="nav-link px-0 align-middle">
+              <img
+                src="/admin/images/discount.svg"
+                alt=""
+                style="width: 1rem"
+              />
+              <span class="ms-1 d-none d-sm-inline text-white">Coupons</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/banner" class="nav-link px-0 align-middle">
+              <img src="/admin/images/banner.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Banners</span></a
+            >
+          </li>
+          <li>
+            <a href="/admin/userDetails" class="nav-link px-0 align-middle">
+              <img src="/admin/images/users.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin/logout" class="nav-link px-0 align-middle">
+              <img src="/admin/images/exit.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Logout</span>
+            </a>
+          </li>
+        </ul>
+        <hr />
+      </div>
+    </div>
+    <div class="col py-3">
+      <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+          <div class="col-md-10">
+            <div class="rounded h-100 p-4 text-center">
+              <h6 class="mb-4">Add New Banner</h6>
+              <% banners.forEach((banner)=>{ %>
+              <form
+                action="/admin/editBanner/<%= banner._id %>"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <div class="mb-3">
+                  <label for="highlight" class="form-label">Banner Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="banner"
+                    name="banner"
+                    value="<%= banner.banner %>"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="image" class="form-label">Coupon</label>
+                  <select
+                    class="form-select"
+                    id="coupon"
+                    name="couponName"
+                    aria-label="Floating label select example"
+                    required
+                  >
+                    <% coupons.forEach((coupon)=>{ %>
+                    <option value=" <%= coupon.couponName %> ">
+                      <%= coupon.couponName %>
+                    </option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="image" class="form-label">Add Banner Image</label><br>
+                  <img
+                    src="/admin/banners/<%= banner._id %>.jpg"
+                    alt=""
+                    style="width: 5rem"
+                  />
+                  <input
+                    class="form-control form-control-sm"
+                    id="image"
+                    name="image"
+                    value="/admin/banners/<%= banner._id %>.jpg"
+                    type="file"
+                    multiple
+                  />
+                </div>
+                <div class="">
+                  <label for="image" class="form-label">Banner Text</label>
+                  <input
+                    class="form-control"
+                    id="bannerText"
+                    value="<%= banner.bannerText %>"
+                    name="bannertext"
+                    style="height: 150px"
+                  />
+                </div>
+                <div class="mt-3 text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <% }) %>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

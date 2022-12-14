@@ -23,7 +23,6 @@ const couponSchema = new Schema(
     },
     expirationTime: {
       type: String,
-      required: true,
     },
     users: [
       {

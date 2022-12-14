@@ -1,6 +1,14 @@
 <%- include('../partials/userPartial.ejs') %>
 <section class="h-100 gradient-custom">
   <div class="container py-5 h-100">
+    <div >
+                    <h6 class="mb-0">
+                      <a href="/orderDetails" class="text-body text-decoration-none"
+                        ><i class="fas fa-long-arrow-alt-left me-2"></i>Back to
+                        orders</a
+                      >
+                    </h6>
+                  </div>
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-lg-10 col-xl-8">
         <div class="card mt-3" style="border-radius: 10px">
@@ -11,11 +19,6 @@
             </h5>
           </div>
           <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-              <p class="lead fw-normal mb-0" style="color: #a8729a">Receipt</p>
-              <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
-            </div>
-
             <div class="card shadow-0 border mb-4">
               <div class="card-body">
                 <% productData.forEach((order)=>{ %>
@@ -77,10 +80,16 @@
 
                     <div class="d-flex justify-content-between pt-2">
                       <p class="text-muted mb-0">Invoice Number : 788152</p>
+                      <% if(productData[0].discount){ %>
                       <p class="text-muted mb-0">
-                        <span class="fw-bold me-4">Total</span>Rs. <%=
-                        productData[0].totalAmount %>
+                        <span class="fw-bold me-4">Discount</span>Rs. <%=
+                        productData[0].discount %>
                       </p>
+                      <% }else{ %>
+                        <p class="text-muted mb-0">
+                        <span class="fw-bold me-4">Discount</span> --
+                      </p>
+                      <% } %>
                     </div>
                     <div class="d-flex justify-content-between mb-5">
                       <p class="text-muted mb-0">
@@ -89,6 +98,10 @@
                         <br />,<%= productData[0].address.city %>,<%= productData[0].address.state
                         %>,<%= productData[0].address.pincode %> <br /><%= productData[0].mobile
                         %>
+                      </p>
+                      <p class="text-muted mb-0">
+                        <span class="fw-bold me-4">Total</span>Rs. <%=
+                        productData[0].totalAmount %>
                       </p>
                     </div>
                 <div class="row d-flex align-items-center">

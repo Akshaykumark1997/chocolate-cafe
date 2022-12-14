@@ -57,18 +57,35 @@ router.post(
   verifyLogin.verifyLoginAdmin,
   adminLogin.changeStatus
 );
-router.get('/coupons',verifyLogin.verifyLoginAdmin,adminLogin.getCoupons);
-router.post('/addCoupon',verifyLogin.verifyLoginAdmin,adminLogin.addCoupon);
-router.post("/editCoupon/:id", verifyLogin.verifyLoginAdmin, adminLogin.editCoupon);
+router.get("/coupons", verifyLogin.verifyLoginAdmin, adminLogin.getCoupons);
+router.post("/addCoupon", verifyLogin.verifyLoginAdmin, adminLogin.addCoupon);
+router.post(
+  "/editCoupon/:id",
+  verifyLogin.verifyLoginAdmin,
+  adminLogin.editCoupon
+);
 router.get(
   "/salesReports",
   verifyLogin.verifyLoginAdmin,
   adminLogin.salesReports
 );
-router.get("/dailyReport",verifyLogin.verifyLoginAdmin,adminLogin.dailyReports);
+router.get(
+  "/dailyReport",
+  verifyLogin.verifyLoginAdmin,
+  adminLogin.dailyReports
+);
 router.get(
   "/monthlyReport",
   verifyLogin.verifyLoginAdmin,
   adminLogin.dailyReports
 );
+router.get("/banner", verifyLogin.verifyLoginAdmin, adminLogin.banner);
+router
+  .route("/addBanner")
+  .get(verifyLogin.verifyLoginAdmin, adminLogin.addBanner)
+  .post(verifyLogin.verifyLoginAdmin, adminLogin.postAddBanner);
+router
+  .route("/editBanner/:id")
+  .get(verifyLogin.verifyLoginAdmin, adminLogin.editBanner)
+  .post(verifyLogin.verifyLoginAdmin,adminLogin.postEditBanner); 
 module.exports = router;

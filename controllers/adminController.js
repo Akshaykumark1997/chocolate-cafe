@@ -6,6 +6,7 @@ const cart = require("../model/cart");
 const coupon = require("../model/coupon.js");
 const path = require("path");
 const mongoose = require("mongoose");
+const banner = require('../model/banner');
 const moment = require("moment");
 moment().format();
 const adminDetails = {
@@ -536,33 +537,99 @@ module.exports = {
     });
     res.render("admin/salesReports", { allOrderDetails });
   },
-  dailyReports:(req,res)=>{
-     order
-       .find({$and:[
-         { paymentStatus: "paid", orderStatus: "delivered" },
-         {
-           orderDate: moment().format("MMM Do YY"),
-         }
-        ]})
-       .then((allOrderDetails) => {
-         res.render("admin/salesReports", { allOrderDetails });
-       });
+  dailyReports: (req, res) => {
+    order
+      .find({
+        $and: [
+          { paymentStatus: "paid", orderStatus: "delivered" },
+          {
+            orderDate: moment().format("MMM Do YY"),
+          },
+        ],
+      })
+      .then((allOrderDetails) => {
+        res.render("admin/salesReports", { allOrderDetails });
+      });
   },
-  monthlyReports:(req,res)=>{
-     const start = moment().startOf("month");
-        const end = moment().endOf("month");
-         order
-           .find({$and:[
-             { paymentStatus: "paid", orderStatus: "delivered" },
-             {
-               createdAt: {
-                 $gte: start,
-                 $lte: end,
-               },
-             }]}
-           )
-           .then((allOrderDetails) => {
-             res.render("admin/salesReports", { allOrderDetails });
-           });
+  monthlyReports: (req, res) => {
+    const start = moment().startOf("month");
+    const end = moment().endOf("month");
+    order
+      .find({
+        $and: [
+          { paymentStatus: "paid", orderStatus: "delivered" },
+          {
+            createdAt: {
+              $gte: start,
+              $lte: end,
+            },
+          },
+        ],
+      })
+      .then((allOrderDetails) => {
+        res.render("admin/salesReports", { allOrderDetails });
+      });
+  },
+  banner:(req,res)=>{
+    banner.find().then((banners)=>{
+       res.render("admin/viewBanner",{banners});
+    })
+  },
+  addBanner:(req,res)=>{
+    coupon.find().then((coupons)=>{
+      res.render("admin/addBanner",{coupons});
+    })
+  },
+  postAddBanner:(req,res)=>{
+    const data = req.body;
+    console.log(data);
+    const image = req.files.image;
+    console.log(image);
+    banner.create({
+      banner:data.banner,
+      bannerText:data.bannertext,
+      couponName:data.couponName
+    }).then((bannerData)=>{ 
+      console.log(bannerData);
+      let imagename = bannerData._id;
+      image.mv(
+        path.join(__dirname, "../public/admin/banners/") + imagename + ".jpg",
+        (err) => {
+          if (!err) {
+            res.redirect("/admin/banner");
+          } else {
+            console.log(err);
+          }
+        }
+      );
+    })
+  },
+  editBanner:(req,res)=>{
+    const id = req.params.id;
+    banner.find({ _id: id }).then((banners) => {
+      coupon.find().then((coupons) => {
+        res.render("admin/editBanner", { banners, coupons });
+      });
+    });
+  },
+  postEditBanner:(req,res)=>{
+    const id = req.params.id;
+    const data = req.body;
+    console.log(data);
+    banner.updateOne({
+      banner:data.banner,
+      bannerText:data.bannertext,
+      couponName:data.couponName
+    }).then(()=>{
+      if (req?.files?.image) {
+        const image = req.files.image;
+        image.mv(
+          path.join(__dirname, "../public/admin/banners/") + id + ".jpg"
+        );
+        res.redirect("/admin/banner");
+      } else {
+        res.redirect("/admin/banner");
+      }
+    })
   }
 };

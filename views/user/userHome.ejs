@@ -5,93 +5,103 @@
   class="carousel slide"
   data-bs-ride="carousel"
 >
-  <!-- <div class="carousel-inner">
-    <div class="carousel-item active">
-      <div class="box">
-        <img
-          class="img-responsive"
-          src="/user/images/hero1.jpg"
-          width="100%"
-          alt="header image"
-        />
-        <div class="img-title">
-          <h1 class="display-4 fw-bold" style="color: #57423f">
-            Delicious sweet and Chocolate
-          </h1>
+  <main>
+    <section
+      id="hero"
+      class="hero d-flex align-items-center section-bg"
+      style="background-color: #eaeff6"
+    >
+      <div class="container">
+        <div class="row justify-content-between gy-5">
+          <div
+            class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center align-items-center align-items-lg-start text-center text-lg-start"
+          >
+            <h2 data-aos="fade-up" class="font-weight-bold display-6 fw-bolder">
+              Enjoy Your Healthy<br />Delicious Chocolates
+            </h2>
+            <p data-aos="fade-up" data-aos-delay="100" >
+              <%= banners[0].bannerText %> "<%= banners[0].couponName %>"
+            </p>
+            <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
+              <a
+                href="/shop"
+                class="btn px-5 py-3 text-white mt-3 mt-sm-0"
+                style="border-radius: 30px; background-color: #9b5de5"
+                >Shop Now</a
+              >
+            </div>
+          </div>
+          <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
+            <img
+              src="/admin/banners/<%= banners[0]._id %>.jpg"
+              class="img-fluid"
+              alt=""
+              data-aos="zoom-out"
+              data-aos-delay="300"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container-fluid py-5">
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-7">
+            <h1 class="section-title position-relative text-center mb-5">
+              Traditional & Delicious Chocolates Since 2004
+            </h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 py-5">
+            <h4 class="font-weight-bold mb-3">About Us</h4>
+            <h5 class="text-muted mb-3">
+              Amazin chocolates with milk , ice creame and more....
+            </h5>
+            <p>
+              Our exciting collections includes universal favorites like the
+              delicious Pastry chef fantasy and Almount dark Chocolate along with local
+              favorite flavors like Salted ruttles  and Poppy strudel.
+            </p>
+          </div>
+          <div class="col-lg-4" style="min-height: 400px;">
+            <div class="position-relative h-100 rounded overflow-hidden">
+              <img
+                class="position-absolute w-100 h-100"
+                src="/user/images/about.jpg"
+                style="object-fit: cover;"
+              />
+            </div>
+          </div>
+          <div class="col-lg-4 py-5">
+            <h4 class="font-weight-bold mb-3">Our Features</h4>
+
+            <p class="mb-3">
+              We’ve been serving Happyness since 2004. So grab a spoon
+              and dig deeper into our history- there’s a treasure trove of
+              innovation and creativity waiting for you!
+            </p>
+            <h5 class="text-muted mb-3">
+              <i class="fa fa-check text-secondary mr-3"></i>100% vegetarian
+            </h5>
+            <h5 class="text-muted mb-3">
+              <i class="fa fa-check text-secondary mr-3"></i>Made with pure chocolates
+            </h5>
+            <h5 class="text-muted mb-3">
+              <i class="fa fa-check text-secondary mr-3"></i>Outstanding product
+              innovations
+            </h5>
+          </div>
         </div>
       </div>
     </div>
-  </div> -->
-  <main >
-    
-    <div
-      class="d-sm-flex align-items-center justify-content-between px-1"
-      style="height: 80vh;"
-    >
-      <div class="col-md-4 mx-auto mb-4 mb-sm-0 headline px-5">
-        <span class="text-secondary text-uppercase">welcome</span>
-        <h1 class="display-6  ">
-          50% OFF up to Rs.100 <br> <span class="font-weight-bold display-5" style="color: #9b5de5">On Your First Order</span><br>
-          <span class="pb-1"  style="color: #9b5de5; font-size: 1rem;">Use Code WELCOME</span>
-        </h1>
-        <a
-          href="/shop"
-          class="btn px-5 py-3 text-white mt-3 mt-sm-0"
-          style="border-radius: 30px; background-color: #9b5de5"
-          >Shop Now</a
-        >
-      </div>
-      <!-- in mobile remove the clippath -->
-      <div
-        class="col-md-8 h-100 clipped"
-        style="
-          min-height: 350px;
-          background-image: url(/user/images/hero1.jpg);
-          background-position: center;
-          background-size: cover;
-        "
-      ></div>
-    </div>
-    
+    </section>
     <section>
-      <div class="container">
-        <nav class="nav d-flex justify-content-center mt-5">
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="text-decoration-none" href="/userhome"
-              ><button
-                class="nav-link"
-                id="nav-home-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-home"
-                type="button"
-                role="tab"
-                aria-controls="nav-home"
-                aria-selected="true"
-              >
-                All
-              </button></a
-            >
-
-            <% Categories.forEach((category)=>{ %>
-            <a
-              class="text-decoration-none"
-              href="/chocolate/<%= category._id %>"
-              ><button
-                class="nav-link"
-                id="nav-profile-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#nav-profile"
-                type="button"
-                role="tab"
-                aria-controls="nav-profile"
-                aria-selected="false"
-              >
-                <%= category.category %>
-              </button></a
-            >
-            <% }) %>
+      <div class="container mt-5">
+        <div class="tab-header text-center">
+            <h3>OUR BEST SELLERS</h3>
           </div>
-        </nav>
       </div>
     </section>
     <section class="py-5 bg-light">
@@ -102,57 +112,6 @@
           <% allProducts.forEach((allProducts)=>{ %>
           <div class="col mb-5">
             <div class="card h-100">
-              <div class="text-end">
-                <span class="text-danger" id="<%= allProducts._id %>"></span>
-                <button
-                  id="wishButton"
-                  class="btn btn-outline-none"
-                  onclick="addToWishlist('<%= allProducts._id %>')"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    version="1.1"
-                    width="25"
-                    height="25"
-                    viewBox="0 0 256 256"
-                    xml:space="preserve"
-                  >
-                    <defs></defs>
-                    <g
-                      style="
-                        stroke: none;
-                        stroke-width: 0;
-                        stroke-dasharray: none;
-                        stroke-linecap: butt;
-                        stroke-linejoin: miter;
-                        stroke-miterlimit: 10;
-                        fill: none;
-                        fill-rule: nonzero;
-                        opacity: 1;
-                      "
-                      transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)"
-                    >
-                      <path
-                        d="M 64.44 12.016 c 5.225 0 10.136 2.035 13.831 5.729 c 7.626 7.626 7.626 20.035 0 27.662 l -19.44 19.44 L 45 78.677 L 31.169 64.846 l -19.44 -19.44 c -7.626 -7.626 -7.626 -20.035 0 -27.662 c 3.694 -3.694 8.606 -5.729 13.831 -5.729 c 5.225 0 10.136 2.035 13.831 5.729 l 1.367 1.367 L 45 23.354 l 4.242 -4.242 l 1.367 -1.367 C 54.304 14.05 59.216 12.016 64.44 12.016 M 64.44 6.016 c -6.541 0 -13.083 2.495 -18.073 7.486 L 45 14.869 l 0 0 l 0 0 l -1.367 -1.367 C 38.642 8.511 32.101 6.016 25.56 6.016 S 12.477 8.511 7.486 13.502 c -9.982 9.982 -9.982 26.165 0 36.147 l 19.44 19.44 c 0 0 0 0 0.001 0 L 45 87.163 l 18.073 -18.073 c 0 0 0 0 0 0 l 19.44 -19.44 c 9.982 -9.982 9.982 -26.165 0 -36.147 C 77.523 8.511 70.982 6.016 64.44 6.016 L 64.44 6.016 z"
-                        style="
-                          stroke: none;
-                          stroke-width: 1;
-                          stroke-dasharray: none;
-                          stroke-linecap: butt;
-                          stroke-linejoin: miter;
-                          stroke-miterlimit: 10;
-                          fill: rgb(0, 0, 0);
-                          fill-rule: nonzero;
-                          opacity: 1;
-                        "
-                        transform=" matrix(1 0 0 1 0 0) "
-                        stroke-linecap="round"
-                      />
-                    </g>
-                  </svg>
-                </button>
-              </div>
               <a
                 class="text-decoration-none text-dark"
                 href="/viewProduct/<%= allProducts._id %>"
@@ -176,13 +135,7 @@
                 </div>
               </div>
               <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a href="/viewProduct/<%= allProducts._id %>"
-                    ><button class="btn btn-outline-dark mt-auto">
-                      view product
-                    </button></a
-                  >
-                </div>
+                
               </div>
             </div>
           </div>

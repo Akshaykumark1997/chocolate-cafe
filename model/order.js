@@ -76,6 +76,9 @@ const orderSchema = new Schema(
     deliveryDate: {
       type: String,
     },
+    discount:{
+      type:Number
+    }
   },
   {
     timestamps: true,
