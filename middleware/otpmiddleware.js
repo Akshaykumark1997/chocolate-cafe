@@ -18,7 +18,7 @@ dotenv.config();
 //       .catch((error) => {
 //         console.log(error);
 //       });
-//   }, 
+//   },
 // };
 const nodemailer = require("nodemailer");
 

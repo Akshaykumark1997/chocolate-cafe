@@ -30,22 +30,17 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/orders"
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline text-white">Order</span>
             </a>
           </li>
           <li>
-            <a
-              href="/admin/salesReports"
-              
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/salesReports" class="nav-link px-0 align-middle">
               <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline text-white">Sales Report</span>
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Sales Report</span
+              >
             </a>
           </li>
           <li>
@@ -130,7 +125,8 @@
                     <form
                       action="/admin/addproducts"
                       method="post"
-                      enctype="multipart/form-data" onsubmit="return validateAddProduct(this);"
+                      enctype="multipart/form-data"
+                      onsubmit="return validateAddProduct(this);"
                     >
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example1cg"
@@ -217,12 +213,12 @@
                         </div>
                         <!-- leftbox -->
                         <div class="box-2">
-                          <div  class="result"></div>
+                          <div class="result"></div>
                         </div>
                         <!--rightbox-->
                         <div class="box-2 img-result hide">
                           <!-- result of crop -->
-                          <img  class="cropped" src="" alt=""/>
+                          <img class="cropped" src="" alt="" />
                         </div>
                         <!-- input file -->
                         <div class="box">
@@ -238,9 +234,8 @@
                           </div>
                           <!-- save btn -->
                           <button class="btn save hide">Save</button>
-                          
                         </div>
-                         <p id="fileError" style="color: red"></p>
+                        <p id="fileError" style="color: red"></p>
                       </main>
 
                       <div class="d-flex justify-content-center">
@@ -264,9 +259,7 @@
     </div>
   </div>
 </div>
-<style>
- 
-</style>
+<style></style>
 
 <script>
   let result = document.querySelector(".result"),
@@ -279,7 +272,7 @@
     dwn = document.querySelector(".download"),
     upload = document.querySelector("#file-input"),
     newImage = document.getElementById("file-input");
-    cropper = "";
+  cropper = "";
 
   // on change show image with crop options
   upload.addEventListener("change", (e) => {
@@ -292,12 +285,12 @@
           var img = document.createElement("img");
           img.id = "image";
           img.src = e.target.result;
-          
+
           // clean result before
           result.innerHTML = "";
           // append new image
           result.appendChild(img);
-          
+
           // show save btn and options
           save.classList.remove("hide");
           options.classList.remove("hide");

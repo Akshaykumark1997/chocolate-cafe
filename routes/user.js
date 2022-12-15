@@ -11,8 +11,12 @@ router.get(
 
   userLogin.getCategory
 );
-router.get('/shop',verifyLogin.verifyLoginUser,userLogin.shop);
-router.get("/categoryShop/:id",verifyLogin.verifyLoginUser,userLogin.shopCategory);
+router.get("/shop", verifyLogin.verifyLoginUser, userLogin.shop);
+router.get(
+  "/categoryShop/:id",
+  verifyLogin.verifyLoginUser,
+  userLogin.shopCategory
+);
 router.post("/login", userLogin.postLogin);
 router.get("/logout", userLogin.userLogout);
 router.route("/signup").get(userLogin.getSignup).post(userLogin.postSignup);
@@ -59,7 +63,7 @@ router.post(
   userLogin.postChangePassword
 );
 
-router.post("/placeOrder", verifyLogin.verifyLoginUser,userLogin.placeOrder);
+router.post("/placeOrder", verifyLogin.verifyLoginUser, userLogin.placeOrder);
 router.post(
   "/verifyPayment",
   verifyLogin.verifyLoginUser,

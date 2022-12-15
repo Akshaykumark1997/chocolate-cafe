@@ -115,12 +115,13 @@
         <div class="row g-4">
           <div class="col-md-10">
             <div class="rounded h-100 p-4 text-center">
-              <h6 class="mb-4">Add New Banner</h6>
+              <h6 class="mb-4">Edit Banner</h6>
               <% banners.forEach((banner)=>{ %>
               <form
                 action="/admin/editBanner/<%= banner._id %>"
                 method="POST"
-                enctype="multipart/form-data" onsubmit="return validateBanner(this);"
+                enctype="multipart/form-data"
+                onsubmit="return validateBanner(this);"
               >
                 <div class="mb-3">
                   <label for="highlight" class="form-label">Banner Name</label>
@@ -132,7 +133,7 @@
                     value="<%= banner.banner %>"
                     aria-describedby="emailHelp"
                   />
-                   <p id="bannerError" style="color: red"></p>
+                  <p id="bannerError" style="color: red"></p>
                 </div>
                 <div class="mb-3">
                   <label for="image" class="form-label">Coupon</label>
@@ -151,7 +152,8 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="image" class="form-label">Add Banner Image</label><br>
+                  <label for="image" class="form-label">Add Banner Image</label
+                  ><br />
                   <img
                     src="/admin/banners/<%= banner._id %>.jpg"
                     alt=""

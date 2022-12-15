@@ -24,7 +24,9 @@
                 src="/admin/images/dashboard.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Dashboard</span>
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Dashboard</span
+              >
             </a>
           </li>
           <li>
@@ -34,13 +36,11 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/salesReports"
-              
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/salesReports" class="nav-link px-0 align-middle">
               <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline text-white">Sales Report</span>
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Sales Report</span
+              >
             </a>
           </li>
           <li>
@@ -49,7 +49,9 @@
                 src="/admin/images/products.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Products</span></a
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Products</span
+              ></a
             >
           </li>
           <li>
@@ -59,7 +61,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Add Products</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Add Products</span
+              ></a
             >
           </li>
           <li>
@@ -69,7 +73,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Categories</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Categories</span
+              ></a
             >
           </li>
           <li>
@@ -121,7 +127,8 @@
                     <form
                       action="/admin/editproduct/<%= productData._id %>"
                       method="post"
-                      enctype="multipart/form-data" onsubmit="return validateAddProduct(this);"
+                      enctype="multipart/form-data"
+                      onsubmit="return validateAddProduct(this);"
                     >
                       <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example1cg"
@@ -134,7 +141,7 @@
                           value="<%= productData.product %>"
                           class="form-control form-control-lg"
                         />
-                         <p id="nameError" style="color: red"></p>
+                        <p id="nameError" style="color: red"></p>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -214,7 +221,7 @@
                           class="form-control"
                           value="/admin/products/<%= productData._id %>.jpg"
                         />
-                         <p id="fileError" style="color: red"></p>
+                        <p id="fileError" style="color: red"></p>
                       </div>
 
                       <div class="d-flex justify-content-center">

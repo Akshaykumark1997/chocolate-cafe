@@ -55,11 +55,12 @@
                         class="btn btn-link px-2"
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',-1)"
                       >
-                        <i class="fas fa-minus"></i>
-                      </button><button class="btn ">
-                      <p id="<%= product.productDetail._id %>">
-                        <%= product.productQuantity %>
-                      </p></button>
+                        <i class="fas fa-minus"></i></button
+                      ><button class="btn">
+                        <p id="<%= product.productDetail._id %>">
+                          <%= product.productQuantity %>
+                        </p>
+                      </button>
                       <button
                         class="btn btn-link px-2"
                         onclick="changeQuantity('<%= product._id %>','<%= product.productDetail._id %>',1)"
@@ -165,4 +166,3 @@
 <% } %> <%- include('../partials/user-footer.ejs') %>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-

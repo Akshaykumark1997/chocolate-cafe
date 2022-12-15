@@ -6,7 +6,7 @@ const cart = require("../model/cart");
 const coupon = require("../model/coupon.js");
 const path = require("path");
 const mongoose = require("mongoose");
-const banner = require('../model/banner');
+const banner = require("../model/banner");
 const moment = require("moment");
 moment().format();
 const adminDetails = {
@@ -49,15 +49,15 @@ module.exports = {
       let session = req.session;
       if (session.adminId) {
         const orderData = await order.find();
-        
+
         const totalAmount = orderData.reduce((accumulator, object) => {
           return (accumulator += object.totalAmount);
         }, 0);
-       
+
         const OrderToday = await order.find({
           orderDate: moment().format("MMM Do YY"),
         });
-        
+
         const totalOrderToday = OrderToday.reduce((accumulator, object) => {
           return (accumulator += object.totalAmount);
         }, 0);
@@ -90,7 +90,7 @@ module.exports = {
             $lte: end,
           },
         });
-        
+
         const amountPending = amountPendingList.reduce(
           (accumulator, object) => {
             return (accumulator += object.totalAmount);
@@ -244,7 +244,6 @@ module.exports = {
               { multi: true }
             )
             .then(() => {
-              
               res.redirect("/admin/products");
             });
         });
@@ -394,7 +393,7 @@ module.exports = {
   changeStatus: async (req, res) => {
     try {
       const id = req.params.id;
-      const data = req.body;    
+      const data = req.body;
       const orderDetails = await order.findOne({ _id: id });
       const objId = mongoose.Types.ObjectId(id);
       const orderData = await order.aggregate([
@@ -488,7 +487,7 @@ module.exports = {
       const dis = parseInt(data.discount);
       const max = parseInt(data.max);
       const discount = dis / 100;
-      
+
       coupon
         .create({
           couponName: data.coupon,
@@ -518,7 +517,6 @@ module.exports = {
         }
       )
       .then(() => {
-       
         res.redirect("/admin/coupons");
       });
   },
@@ -562,41 +560,42 @@ module.exports = {
         res.render("admin/salesReports", { allOrderDetails });
       });
   },
-  banner:(req,res)=>{
-    banner.find().then((banners)=>{
-       res.render("admin/viewBanner",{banners});
-    })
+  banner: (req, res) => {
+    banner.find().then((banners) => {
+      res.render("admin/viewBanner", { banners });
+    });
   },
-  addBanner:(req,res)=>{
-    coupon.find().then((coupons)=>{
-      res.render("admin/addBanner",{coupons});
-    })
+  addBanner: (req, res) => {
+    coupon.find().then((coupons) => {
+      res.render("admin/addBanner", { coupons });
+    });
   },
-  postAddBanner:(req,res)=>{
+  postAddBanner: (req, res) => {
     const data = req.body;
-    
+
     const image = req.files.image;
-    
-    banner.create({
-      banner:data.banner,
-      bannerText:data.bannertext,
-      couponName:data.couponName
-    }).then((bannerData)=>{ 
-     
-      let imagename = bannerData._id;
-      image.mv(
-        path.join(__dirname, "../public/admin/banners/") + imagename + ".jpg",
-        (err) => {
-          if (!err) {
-            res.redirect("/admin/banner");
-          } else {
-            console.log(err);
+
+    banner
+      .create({
+        banner: data.banner,
+        bannerText: data.bannertext,
+        couponName: data.couponName,
+      })
+      .then((bannerData) => {
+        let imagename = bannerData._id;
+        image.mv(
+          path.join(__dirname, "../public/admin/banners/") + imagename + ".jpg",
+          (err) => {
+            if (!err) {
+              res.redirect("/admin/banner");
+            } else {
+              console.log(err);
+            }
           }
-        }
-      );
-    })
+        );
+      });
   },
-  editBanner:(req,res)=>{
+  editBanner: (req, res) => {
     const id = req.params.id;
     banner.find({ _id: id }).then((banners) => {
       coupon.find().then((coupons) => {
@@ -604,31 +603,43 @@ module.exports = {
       });
     });
   },
-  postEditBanner:(req,res)=>{
+  postEditBanner: (req, res) => {
     const id = req.params.id;
     const data = req.body;
-    banner.updateOne({_id:id},{
-      banner:data.banner,
-      bannerText:data.bannertext,
-      couponName:data.couponName
-    }).then(()=>{
-      if (req?.files?.image) {
-        const image = req.files.image;
-        image.mv(
-          path.join(__dirname, "../public/admin/banners/") + id + ".jpg"
-        );
-        res.redirect("/admin/banner");
-      } else {
-        res.redirect("/admin/banner");
-      }
-    })
+    banner
+      .updateOne(
+        { _id: id },
+        {
+          banner: data.banner,
+          bannerText: data.bannertext,
+          couponName: data.couponName,
+        }
+      )
+      .then(() => {
+        if (req?.files?.image) {
+          const image = req.files.image;
+          image.mv(
+            path.join(__dirname, "../public/admin/banners/") + id + ".jpg"
+          );
+          res.redirect("/admin/banner");
+        } else {
+          res.redirect("/admin/banner");
+        }
+      });
   },
-  deleteBanner:(req,res)=>{
+  deleteBanner: (req, res) => {
     const id = req.params.id;
-    banner.updateOne({_id:id},{$set:{
-      isDeleted:true
-    }}).then(()=>{
-      res.redirect('/admin/banner');
-    })
-  }
+    banner
+      .updateOne(
+        { _id: id },
+        {
+          $set: {
+            isDeleted: true,
+          },
+        }
+      )
+      .then(() => {
+        res.redirect("/admin/banner");
+      });
+  },
 };

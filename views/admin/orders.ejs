@@ -24,7 +24,9 @@
                 src="/admin/images/dashboard.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Dashboard</span>
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Dashboard</span
+              >
             </a>
           </li>
           <li>
@@ -34,13 +36,11 @@
             </a>
           </li>
           <li>
-            <a
-              href="/admin/salesReports"
-              
-              class="nav-link px-0 align-middle"
-            >
+            <a href="/admin/salesReports" class="nav-link px-0 align-middle">
               <img src="/admin/images/sales.svg" alt="" style="width: 1rem" />
-              <span class="ms-1 d-none d-sm-inline text-white">Sales Report</span>
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Sales Report</span
+              >
             </a>
           </li>
           <li>
@@ -49,7 +49,9 @@
                 src="/admin/images/products.svg"
                 alt=""
                 style="width: 1rem"
-              /><span class="ms-1 d-none d-sm-inline text-white">Products</span></a
+              /><span class="ms-1 d-none d-sm-inline text-white"
+                >Products</span
+              ></a
             >
           </li>
           <li>
@@ -59,7 +61,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Add Products</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Add Products</span
+              ></a
             >
           </li>
           <li>
@@ -69,7 +73,9 @@
                 alt=""
                 style="width: 1rem"
               />
-              <span class="ms-1 d-none d-sm-inline text-white">Categories</span></a
+              <span class="ms-1 d-none d-sm-inline text-white"
+                >Categories</span
+              ></a
             >
           </li>
           <li>
@@ -94,7 +100,11 @@
               data-bs-toggle="collapse"
               class="nav-link px-0 align-middle"
             >
-              <img src="/admin/images/users.svg" alt="" style="width: 1rem; color:white;" />
+              <img
+                src="/admin/images/users.svg"
+                alt=""
+                style="width: 1rem; color: white"
+              />
               <span class="ms-1 d-none d-sm-inline text-white">Users</span>
             </a>
           </li>
@@ -112,11 +122,14 @@
       <section class="html-content">
         <h1>Order Details</h1>
         <div class="container mt-5 table-responsive">
-          <table id="table" class="table mt-5 table-hover table-light text-start align-middle table-bordered">
+          <table
+            id="table"
+            class="table mt-5 table-hover table-light text-start align-middle table-bordered"
+          >
             <thead>
               <tr>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                 User Name
+                  User Name
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Mobile
@@ -154,19 +167,27 @@
                   <%= order.paymentStatus %>
                 </td>
                 <% if(order.orderStatus === "pending"){ %>
-                <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-warning">
+                <td
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-warning"
+                >
                   <%= order.orderStatus %>
                 </td>
                 <% }else if(order.orderStatus === "shipped"){ %>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-info">
+                <td
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-info"
+                >
                   <%= order.orderStatus %>
                 </td>
                 <% }else if(order.orderStatus === "delivered"){ %>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-success">
+                <td
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-success"
+                >
                   <%= order.orderStatus %>
                 </td>
                 <% }else if(order.orderStatus === "cancelled"){ %>
-                  <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-danger">
+                <td
+                  class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-danger"
+                >
                   <%= order.orderStatus %>
                 </td>
                 <% } %>
@@ -300,13 +321,11 @@
                 <div class="card mt-3" style="border-radius: 10px">
                   <div class="card-header px-4 py-5">
                     <h5 class="text-muted mb-0">
-                      Product Details,
+                      Product Details
                       <span style="color: #a8729a"> </span>!
                     </h5>
                   </div>
                   <div class="card-body p-4">
-                    
-
                     <div class="card shadow-0 border mb-4">
                       <div class="card-body">
                         <% order.products.forEach((product)=>{ %>
@@ -368,11 +387,15 @@
                     </div>
 
                     <div class="d-flex justify-content-between pt-2">
-                      <p class="text-muted mb-0">Invoice Number :<%= order._id %> </p>
+                      <p class="text-muted mb-0">
+                        Invoice Number :<%= order._id %>
+                      </p>
                     </div>
 
                     <div class="d-flex justify-content-between">
-                      <p class="text-muted mb-0">Invoice Date : <%= order.orderDate %> </p>
+                      <p class="text-muted mb-0">
+                        Invoice Date : <%= order.orderDate %>
+                      </p>
                       <p class="text-muted mb-0">
                         <span class="fw-bold me-4">Total</span>Rs. <%=
                         order.totalAmount %>

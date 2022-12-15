@@ -55,7 +55,7 @@ module.exports = {
         count,
         Categories,
         wishCount,
-        banners
+        banners,
       });
     } catch {
       console.error();
@@ -77,7 +77,7 @@ module.exports = {
     try {
       session = req.session.userId;
       if (session) {
-        const  banners = await banner.find();
+        const banners = await banner.find();
         const Categories = await category.find();
         const userData = await user.findOne({ email: session });
         const cartData = await cart.find({ userId: userData._id });
@@ -102,7 +102,7 @@ module.exports = {
               count,
               Categories,
               wishCount,
-              banners
+              banners,
             });
           });
       } else {
@@ -826,7 +826,7 @@ module.exports = {
     let invalid;
     const userData = await user.findOne({ email: session });
     console.log(userData);
-    if(userData.permanentAddress.housename !=="" || data.housename){
+    if (userData.permanentAddress.housename !== "" || data.housename) {
       const objId = mongoose.Types.ObjectId(userData._id);
       if (data.coupon) {
         invalid = await coupon.findOne({ couponName: data.coupon });
@@ -836,7 +836,7 @@ module.exports = {
       if (invalid == null) {
         res.json({ invalid: true });
       } else {
-        const discount = await checkCoupon(data, objId); 
+        const discount = await checkCoupon(data, objId);
         if (discount == true) {
           res.json({ coupon: true });
         } else {
@@ -890,7 +890,7 @@ module.exports = {
               var dis = sum * discount[0].discount;
               if (dis > discount[0].maxLimit) {
                 total = sum - 100;
-                dis= 100;
+                dis = 100;
               } else {
                 total = dis;
               }
@@ -1047,8 +1047,8 @@ module.exports = {
           }
         }
       }
-    }else{
-      res.json({address:true});
+    } else {
+      res.json({ address: true });
     }
   },
   verifyPayment: (req, res) => {
@@ -1103,7 +1103,7 @@ module.exports = {
             mobile: "$mobile",
             productItem: "$orderItems.productId",
             productQuantity: "$orderItems.quantity",
-            discount:"$discount"
+            discount: "$discount",
           },
         },
         {
@@ -1121,7 +1121,7 @@ module.exports = {
             mobile: 1,
             productItem: 1,
             productQuantity: 1,
-            discount:1,
+            discount: 1,
             productDetail: { $arrayElemAt: ["$productDetail", 0] },
           },
         },

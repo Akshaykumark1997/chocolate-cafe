@@ -51,7 +51,20 @@ function checkLoginForm(form) {
     password.focus();
     return false;
   }
-
+  if (password.value < 8) {
+    document.getElementById("passwordError").innerHTML =
+      "password should contain 8 characters";
+    password.focus();
+    return false;
+  }
+  const check =
+    /^((?=.*[0-9].*)(?=.*[a-zA-Z])(?!.*\s)[0-9a-zA-Z*$-+?_&=!@%{}/'.]*)$/i;
+  if (check.test(password.value) == false) {
+    document.getElementById("passwordError").innerHTML =
+      "password should contain one special character one number,uppercase letter,lower case letter and number";
+    password.focus();
+    return false;
+  }
   return true;
 }
 
@@ -70,9 +83,8 @@ function addToCart(proId) {
           icon: "success",
           confirmButtonText: "continue",
         }).then(function () {
-          location.reload()
+          location.reload();
         });
-        
       }
       if (response.productExist) {
         Swal.fire({
@@ -80,9 +92,10 @@ function addToCart(proId) {
           icon: "error",
           confirmButtonText: "continue",
         }).then(function () {
-          location.reload()
+          location.reload();
         });
-      }if(response.stock){
+      }
+      if (response.stock) {
         Swal.fire({
           title: "Sorry!!! product out of stock .",
           icon: "error",
@@ -94,25 +107,25 @@ function addToCart(proId) {
     },
   });
 }
-function addToCartWish(proId) { 
+function addToCartWish(proId) {
   const value = "sorry !!! currently out of stock";
   $.ajax({
     url: "/addCart/" + proId,
     method: "get",
-    success: (response) => { 
+    success: (response) => {
       if (response.status) {
         let count = $("#cartCount").html();
         count = parseInt(count) + 1;
         $("#cartCount").html(count);
         Swal.fire({
           title: "Product added to cart!",
-          icon: "success", 
+          icon: "success",
           confirmButtonText: "continue",
         }).then(function () {
           location.reload();
         });
       }
-      
+
       // if (response.stock) {
       //   document.getElementById("message").innerHTML = "Out of stock !!!!!!";
       // }
@@ -200,7 +213,7 @@ function addToWishlist(proId) {
     url: "/addToWishlist/" + proId,
     method: "get",
     success: (response) => {
-      if (response.status) {  
+      if (response.status) {
         let count = $("#wishCount").html();
         count = parseInt(count) + 1;
         $("#wishCount").html(count);
@@ -210,10 +223,10 @@ function addToWishlist(proId) {
           confirmButtonText: "continue",
         });
       }
-      if (response.productExist) { 
+      if (response.productExist) {
         // Swal(resposnse.message);
         Swal.fire({
-          title: "Alredy Exist in wishlist", 
+          title: "Alredy Exist in wishlist",
           icon: "error",
           confirmButtonText: "continue",
         });
