@@ -20,7 +20,7 @@
               Enjoy Your Healthy<br />Delicious Chocolates
             </h2>
             <p data-aos="fade-up" data-aos-delay="100" >
-              <%= banners[0].bannerText %> "<%= banners[0].couponName %>"
+              <%= banners[0]?.bannerText %> "<%= banners[0]?.couponName %>"
             </p>
             <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
               <a
@@ -33,7 +33,7 @@
           </div>
           <div class="col-lg-5 order-1 order-lg-2 text-center text-lg-start">
             <img
-              src="/admin/banners/<%= banners[0]._id %>.jpg"
+              src="/admin/banners/<%= banners[0]?._id %>.jpg"
               class="img-fluid"
               alt=""
               data-aos="zoom-out"

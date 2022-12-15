@@ -28,21 +28,27 @@ const userSchema = new Schema({
   permanentAddress: {
     housename: {
       type: String,
+      default: "",
     },
     area: {
       type: String,
+      default: "",
     },
     landmark: {
       type: String,
+      default: "",
     },
     city: {
       type: String,
+      default: "",
     },
     state: {
       type: String,
+      default: "",
     },
     pincode: {
       type: String,
+      default: "",
     },
   },
   shippingAddress: {

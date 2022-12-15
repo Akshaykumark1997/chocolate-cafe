@@ -172,3 +172,26 @@ function validateEditCoupon(form) {
   }
   return true;
 }
+function validateBanner(form) {
+  let banner = document.getElementById("banner");
+  let image = document.getElementById("image");
+  let bannerText = document.getElementById("bannertext");
+  if (banner.value == "") {
+    document.getElementById("bannerError").innerHTML =
+      "please enter banner name";
+    banner.focus();
+    return false;
+  }
+  if (image.value == "") {
+    document.getElementById("imageError").innerHTML =
+      "please upload image";
+    image.focus();
+    return false;
+  }
+  if (bannerText.value == "") {
+    document.getElementById("bannerTextError").innerHTML = "please enter your bannerText";
+    bannerText.focus();
+    return false;
+  }
+  return true;
+}

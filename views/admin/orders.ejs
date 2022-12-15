@@ -28,7 +28,7 @@
             </a>
           </li>
           <li>
-            <a href="#submenu1" class="nav-link px-0 align-middle">
+            <a href="/admin/orders" class="nav-link px-0 align-middle">
               <img src="/admin/images/orders.svg" alt="" style="width: 1rem" />
               <span class="ms-1 d-none d-sm-inline text-white">Order</span>
             </a>
@@ -83,6 +83,12 @@
             >
           </li>
           <li>
+            <a href="/admin/banner" class="nav-link px-0 align-middle">
+              <img src="/admin/images/banner.svg" alt="" style="width: 1rem" />
+              <span class="ms-1 d-none d-sm-inline text-white">Banners</span></a
+            >
+          </li>
+          <li>
             <a
               href="/admin/userDetails"
               data-bs-toggle="collapse"
@@ -110,7 +116,7 @@
             <thead>
               <tr>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
-                  Name
+                 User Name
                 </th>
                 <th class="col-3 col-md-3 col-lg-3 col-xl-1 text-center">
                   Mobile
@@ -136,7 +142,7 @@
               <% orderDetails.forEach((order)=>{ %>
               <tr>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
-                  <%= order.fullname %>
+                  <%= order.username %>
                 </td>
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.mobile %>
@@ -299,16 +305,7 @@
                     </h5>
                   </div>
                   <div class="card-body p-4">
-                    <div
-                      class="d-flex justify-content-between align-items-center mb-4"
-                    >
-                      <p class="lead fw-normal mb-0" style="color: #a8729a">
-                        Receipt
-                      </p>
-                      <p class="small text-muted mb-0">
-                        Receipt Voucher : 1KAU9-84UIL
-                      </p>
-                    </div>
+                    
 
                     <div class="card shadow-0 border mb-4">
                       <div class="card-body">
@@ -371,11 +368,11 @@
                     </div>
 
                     <div class="d-flex justify-content-between pt-2">
-                      <p class="text-muted mb-0">Invoice Number : 788152</p>
+                      <p class="text-muted mb-0">Invoice Number :<%= order._id %> </p>
                     </div>
 
                     <div class="d-flex justify-content-between">
-                      <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+                      <p class="text-muted mb-0">Invoice Date : <%= order.orderDate %> </p>
                       <p class="text-muted mb-0">
                         <span class="fw-bold me-4">Total</span>Rs. <%=
                         order.totalAmount %>

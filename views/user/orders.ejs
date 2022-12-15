@@ -30,7 +30,7 @@
         <b>delivery expected: </b> <%= order.deliveryDate %>
       </div>
       <div
-        class="col-md-3 justify-content-center d-flex flex-column align-items-center"
+        class="col-md-3 justify-content-center d-flex flex-row align-items-center"
       >
         <a href="/viewOrderProducts/<%= order._id %>"
           ><button
@@ -42,6 +42,52 @@
             View Products
           </button></a
         >
+        <button
+            type="button" 
+            class="btn btn-danger btn-sm mx-2"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal-<%= order._id %>"
+          >
+            Cancel
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModal-<%= order._id %>"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Cancel Payment
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">Cancel your order</div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <a href="/cancelOrder/<%= order._id %>"
+                    ><button type="button" class="btn btn-primary">
+                      Confirm
+                    </button></a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>

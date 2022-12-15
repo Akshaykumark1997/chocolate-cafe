@@ -77,7 +77,7 @@ router.get(
 router.get(
   "/monthlyReport",
   verifyLogin.verifyLoginAdmin,
-  adminLogin.dailyReports
+  adminLogin.monthlyReports
 );
 router.get("/banner", verifyLogin.verifyLoginAdmin, adminLogin.banner);
 router
@@ -88,4 +88,5 @@ router
   .route("/editBanner/:id")
   .get(verifyLogin.verifyLoginAdmin, adminLogin.editBanner)
   .post(verifyLogin.verifyLoginAdmin,adminLogin.postEditBanner); 
+  router.get('/deleteBanner/:id',verifyLogin.verifyLoginAdmin,adminLogin.deleteBanner);
 module.exports = router;

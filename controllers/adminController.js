@@ -49,15 +49,15 @@ module.exports = {
       let session = req.session;
       if (session.adminId) {
         const orderData = await order.find();
-        // console.log(orderData);
+        
         const totalAmount = orderData.reduce((accumulator, object) => {
           return (accumulator += object.totalAmount);
         }, 0);
-        // console.log(totalAmount);
+       
         const OrderToday = await order.find({
           orderDate: moment().format("MMM Do YY"),
         });
-        // console.log(OrderToday);
+        
         const totalOrderToday = OrderToday.reduce((accumulator, object) => {
           return (accumulator += object.totalAmount);
         }, 0);
@@ -90,7 +90,7 @@ module.exports = {
             $lte: end,
           },
         });
-        console.log(amountPendingList);
+        
         const amountPending = amountPendingList.reduce(
           (accumulator, object) => {
             return (accumulator += object.totalAmount);
@@ -234,7 +234,6 @@ module.exports = {
     try {
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
-      console.log(objId);
       products
         .updateOne({ _id: id }, { $set: { isDeleted: true } })
         .then(() => {
@@ -244,8 +243,8 @@ module.exports = {
               { $pull: { product: { productId: objId } } },
               { multi: true }
             )
-            .then((data) => {
-              console.log(data);
+            .then(() => {
+              
               res.redirect("/admin/products");
             });
         });
@@ -394,12 +393,9 @@ module.exports = {
   },
   changeStatus: async (req, res) => {
     try {
-      console.log(req.params.id);
       const id = req.params.id;
-      const data = req.body;
-      console.log(data);
+      const data = req.body;    
       const orderDetails = await order.findOne({ _id: id });
-      console.log(orderDetails);
       const objId = mongoose.Types.ObjectId(id);
       const orderData = await order.aggregate([
         {
@@ -489,11 +485,10 @@ module.exports = {
   addCoupon: (req, res) => {
     try {
       const data = req.body;
-      console.log(data);
       const dis = parseInt(data.discount);
       const max = parseInt(data.max);
       const discount = dis / 100;
-      console.log(discount);
+      
       coupon
         .create({
           couponName: data.coupon,
@@ -501,8 +496,7 @@ module.exports = {
           maxLimit: max,
           expirationTime: data.exdate,
         })
-        .then((data) => {
-          console.log(data);
+        .then(() => {
           res.redirect("/admin/coupons");
         });
     } catch {
@@ -513,8 +507,6 @@ module.exports = {
   editCoupon: (req, res) => {
     const id = req.params.id;
     const data = req.body;
-    console.log(data);
-    console.log(id);
     coupon
       .updateOne(
         { _id: id },
@@ -525,8 +517,8 @@ module.exports = {
           expirationTime: data.exdate,
         }
       )
-      .then((data) => {
-        console.log(data);
+      .then(() => {
+       
         res.redirect("/admin/coupons");
       });
   },
@@ -582,15 +574,15 @@ module.exports = {
   },
   postAddBanner:(req,res)=>{
     const data = req.body;
-    console.log(data);
+    
     const image = req.files.image;
-    console.log(image);
+    
     banner.create({
       banner:data.banner,
       bannerText:data.bannertext,
       couponName:data.couponName
     }).then((bannerData)=>{ 
-      console.log(bannerData);
+     
       let imagename = bannerData._id;
       image.mv(
         path.join(__dirname, "../public/admin/banners/") + imagename + ".jpg",
@@ -615,8 +607,7 @@ module.exports = {
   postEditBanner:(req,res)=>{
     const id = req.params.id;
     const data = req.body;
-    console.log(data);
-    banner.updateOne({
+    banner.updateOne({_id:id},{
       banner:data.banner,
       bannerText:data.bannertext,
       couponName:data.couponName
@@ -630,6 +621,14 @@ module.exports = {
       } else {
         res.redirect("/admin/banner");
       }
+    })
+  },
+  deleteBanner:(req,res)=>{
+    const id = req.params.id;
+    banner.updateOne({_id:id},{$set:{
+      isDeleted:true
+    }}).then(()=>{
+      res.redirect('/admin/banner');
     })
   }
 };

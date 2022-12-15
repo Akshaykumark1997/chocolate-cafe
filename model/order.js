@@ -8,7 +8,7 @@ const orderSchema = new Schema(
       type: ObjectId,
       required: true,
     },
-    fullname: {
+    username: {
       type: String,
       required: true,
     },
