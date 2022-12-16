@@ -984,7 +984,7 @@ module.exports = {
                 orderItems: cartData.product,
                 totalAmount: sum,
                 paymentMethod: data.paymentMethod,
-                orderStatus: "pending",
+                orderStatus: "Pending",
                 orderDate: moment().format("MMM Do YY"),
                 deliveryDate: moment().add(3, "days").format("MMM Do YY"),
               });
@@ -1218,4 +1218,7 @@ module.exports = {
         res.redirect("/orderDetails");
       });
   },
+  about:(req,res)=>{
+    res.render('user/error');
+  }
 };

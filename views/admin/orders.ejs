@@ -166,25 +166,25 @@
                 <td class="col-3 col-md-3 col-lg-3 col-xl-2 text-center">
                   <%= order.paymentStatus %>
                 </td>
-                <% if(order.orderStatus === "pending"){ %>
+                <% if(order.orderStatus === "Pending"){ %>
                 <td
                   class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-warning"
                 >
                   <%= order.orderStatus %>
                 </td>
-                <% }else if(order.orderStatus === "shipped"){ %>
+                <% }else if(order.orderStatus === "Shipped"){ %>
                 <td
                   class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-info"
                 >
                   <%= order.orderStatus %>
                 </td>
-                <% }else if(order.orderStatus === "delivered"){ %>
+                <% }else if(order.orderStatus === "Delivered"){ %>
                 <td
                   class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-success"
                 >
                   <%= order.orderStatus %>
                 </td>
-                <% }else if(order.orderStatus === "cancelled"){ %>
+                <% }else if(order.orderStatus === "Cancelled"){ %>
                 <td
                   class="col-3 col-md-3 col-lg-3 col-xl-2 text-center text-danger"
                 >
@@ -251,10 +251,10 @@
               aria-label="Default select example"
             >
               <option selected><%= order.orderStatus %></option>
-              <option value="pending" name="orderStatus">Pending</option>
-              <option value="shipped" name="orderStatus">Shipped</option>
-              <option value="delivered" name="orderStatus">Delivered</option>
-              <option value="cancelled" name="orderStatus">Cancel</option>
+              <option value="Pending" name="orderStatus">Pending</option>
+              <option value="Shipped" name="orderStatus">Shipped</option>
+              <option value="Delivered" name="orderStatus">Delivered</option>
+              <option value="Cancelled" name="orderStatus">Cancel</option>
             </select>
           </div>
           <div class="mb-3">
@@ -270,8 +270,8 @@
               aria-label="Default select example"
             >
               <option selected><%= order.paymentStatus %></option>
-              <option value="not paid" name="paymentStatus">not paid</option>
-              <option value="paid" name="paymentStatus">paid</option>
+              <option value="Not Paid" name="paymentStatus">Not Paid</option>
+              <option value="Paid" name="paymentStatus">Paid</option>
             </select>
           </div>
 

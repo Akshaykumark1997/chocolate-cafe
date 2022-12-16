@@ -60,7 +60,7 @@ const orderSchema = new Schema(
     },
     orderStatus: {
       type: String,
-      default: "pending",
+      default: "Pending",
     },
     paymentMethod: {
       type: String,
@@ -68,7 +68,7 @@ const orderSchema = new Schema(
     },
     paymentStatus: {
       type: String,
-      default: "not paid",
+      default: "Not Paid",
     },
     orderDate: {
       type: String,

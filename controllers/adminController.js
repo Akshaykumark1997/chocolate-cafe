@@ -48,13 +48,16 @@ module.exports = {
     try {
       let session = req.session;
       if (session.adminId) {
-        const orderData = await order.find();
+        const orderData = await order.find({
+          orderStatus: { $ne: "Cancelled" },
+        });
 
         const totalAmount = orderData.reduce((accumulator, object) => {
           return (accumulator += object.totalAmount);
         }, 0);
 
         const OrderToday = await order.find({
+          orderStatus: { $ne: "Cancelled" },
           orderDate: moment().format("MMM Do YY"),
         });
 
@@ -85,6 +88,7 @@ module.exports = {
         const start = moment().startOf("month");
         const end = moment().endOf("month");
         const amountPendingList = await order.find({
+          orderStatus: { $ne: "Cancelled" },
           createdAt: {
             $gte: start,
             $lte: end,
@@ -418,7 +422,7 @@ module.exports = {
           },
         },
       ]);
-      if (data.orderStatus == "cancelled") {
+      if (data.orderStatus == "Cancelled") {
         for (let i = 0; i < orderData.length; i++) {
           const updatedStock =
             orderData[i].products.stock + orderData[i].quantity;
@@ -435,7 +439,7 @@ module.exports = {
               console.log(data);
             });
         }
-      } else if (orderDetails.orderStatus == "cancelled") {
+      } else if (orderDetails.orderStatus == "Cancelled") {
         for (let i = 0; i < orderData.length; i++) {
           const updatedStock =
             orderData[i].products.stock - orderData[i].quantity;
@@ -504,6 +508,7 @@ module.exports = {
     }
   },
   editCoupon: (req, res) => {
+    try{
     const id = req.params.id;
     const data = req.body;
     coupon
@@ -519,127 +524,176 @@ module.exports = {
       .then(() => {
         res.redirect("/admin/coupons");
       });
+    }catch{
+      console.error();
+      res.render('user/error');
+    }
   },
   salesReports: async (req, res) => {
-    const allOrderDetails = await order.find({
-      paymentStatus: "paid",
-      orderStatus: "delivered",
-    });
-    res.render("admin/salesReports", { allOrderDetails });
+    try {
+      const allOrderDetails = await order.find({
+        paymentStatus: "paid",
+        orderStatus: "delivered",
+      });
+      res.render("admin/salesReports", { allOrderDetails });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   dailyReports: (req, res) => {
-    order
-      .find({
-        $and: [
-          { paymentStatus: "paid", orderStatus: "delivered" },
-          {
-            orderDate: moment().format("MMM Do YY"),
-          },
-        ],
-      })
-      .then((allOrderDetails) => {
-        res.render("admin/salesReports", { allOrderDetails });
-      });
+    try {
+      order
+        .find({
+          $and: [
+            { paymentStatus: "paid", orderStatus: "delivered" },
+            {
+              orderDate: moment().format("MMM Do YY"),
+            },
+          ],
+        })
+        .then((allOrderDetails) => {
+          res.render("admin/salesReports", { allOrderDetails });
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   monthlyReports: (req, res) => {
-    const start = moment().startOf("month");
-    const end = moment().endOf("month");
-    order
-      .find({
-        $and: [
-          { paymentStatus: "paid", orderStatus: "delivered" },
-          {
-            createdAt: {
-              $gte: start,
-              $lte: end,
+    try {
+      const start = moment().startOf("month");
+      const end = moment().endOf("month");
+      order
+        .find({
+          $and: [
+            { paymentStatus: "paid", orderStatus: "delivered" },
+            {
+              createdAt: {
+                $gte: start,
+                $lte: end,
+              },
             },
-          },
-        ],
-      })
-      .then((allOrderDetails) => {
-        res.render("admin/salesReports", { allOrderDetails });
-      });
+          ],
+        })
+        .then((allOrderDetails) => {
+          res.render("admin/salesReports", { allOrderDetails });
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   banner: (req, res) => {
-    banner.find().then((banners) => {
-      res.render("admin/viewBanner", { banners });
-    });
+    try {
+      banner.find().then((banners) => {
+        res.render("admin/viewBanner", { banners });
+      });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   addBanner: (req, res) => {
-    coupon.find().then((coupons) => {
-      res.render("admin/addBanner", { coupons });
-    });
+    try {
+      coupon.find().then((coupons) => {
+        res.render("admin/addBanner", { coupons });
+      });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   postAddBanner: (req, res) => {
-    const data = req.body;
-
-    const image = req.files.image;
-
-    banner
-      .create({
-        banner: data.banner,
-        bannerText: data.bannertext,
-        couponName: data.couponName,
-      })
-      .then((bannerData) => {
-        let imagename = bannerData._id;
-        image.mv(
-          path.join(__dirname, "../public/admin/banners/") + imagename + ".jpg",
-          (err) => {
-            if (!err) {
-              res.redirect("/admin/banner");
-            } else {
-              console.log(err);
-            }
-          }
-        );
-      });
-  },
-  editBanner: (req, res) => {
-    const id = req.params.id;
-    banner.find({ _id: id }).then((banners) => {
-      coupon.find().then((coupons) => {
-        res.render("admin/editBanner", { banners, coupons });
-      });
-    });
-  },
-  postEditBanner: (req, res) => {
-    const id = req.params.id;
-    const data = req.body;
-    banner
-      .updateOne(
-        { _id: id },
-        {
+    try {
+      const data = req.body;
+      const image = req.files.image;
+      banner
+        .create({
           banner: data.banner,
           bannerText: data.bannertext,
           couponName: data.couponName,
-        }
-      )
-      .then(() => {
-        if (req?.files?.image) {
-          const image = req.files.image;
+        })
+        .then((bannerData) => {
+          let imagename = bannerData._id;
           image.mv(
-            path.join(__dirname, "../public/admin/banners/") + id + ".jpg"
+            path.join(__dirname, "../public/admin/banners/") +
+              imagename +
+              ".jpg",
+            (err) => {
+              if (!err) {
+                res.redirect("/admin/banner");
+              } else {
+                console.log(err);
+              }
+            }
           );
-          res.redirect("/admin/banner");
-        } else {
-          res.redirect("/admin/banner");
-        }
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
+  },
+  editBanner: (req, res) => {
+    try {
+      const id = req.params.id;
+      banner.find({ _id: id }).then((banners) => {
+        coupon.find().then((coupons) => {
+          res.render("admin/editBanner", { banners, coupons });
+        });
       });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
+  },
+  postEditBanner: (req, res) => {
+    try {
+      const id = req.params.id;
+      const data = req.body;
+      banner
+        .updateOne(
+          { _id: id },
+          {
+            banner: data.banner,
+            bannerText: data.bannertext,
+            couponName: data.couponName,
+          }
+        )
+        .then(() => {
+          if (req?.files?.image) {
+            const image = req.files.image;
+            image.mv(
+              path.join(__dirname, "../public/admin/banners/") + id + ".jpg"
+            );
+            res.redirect("/admin/banner");
+          } else {
+            res.redirect("/admin/banner");
+          }
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
   deleteBanner: (req, res) => {
-    const id = req.params.id;
-    banner
-      .updateOne(
-        { _id: id },
-        {
-          $set: {
-            isDeleted: true,
-          },
-        }
-      )
-      .then(() => {
-        res.redirect("/admin/banner");
-      });
+    try {
+      const id = req.params.id;
+      banner
+        .updateOne(
+          { _id: id },
+          {
+            $set: {
+              isDeleted: true,
+            },
+          }
+        )
+        .then(() => {
+          res.redirect("/admin/banner");
+        });
+    } catch {
+      console.error();
+      res.render("user/error");
+    }
   },
 };

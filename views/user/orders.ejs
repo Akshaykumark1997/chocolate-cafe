@@ -17,19 +17,19 @@
             </div>
             <div class="col-md-3 d-flex flex-column">
               <strong>Order Status: </strong>
-              <% if(order.orderStatus==="pending" ){ %>
+              <% if(order.orderStatus==="Pending" ){ %>
                 <small class="text-warning">
                   <%= order.orderStatus %>
                 </small><br />
-                <% }else if(order.orderStatus==="shipped" ){ %>
+                <% }else if(order.orderStatus==="Shipped" ){ %>
                   <small class="text-info">
                     <%= order.orderStatus %>
                   </small><br />
-                  <% }else if(order.orderStatus==="delivered" ){ %>
+                  <% }else if(order.orderStatus==="Delivered" ){ %>
                     <small class="text-success">
                       <%= order.orderStatus %>
                     </small><br />
-                    <% }else if(order.orderStatus==="cancelled" ){ %>
+                    <% }else if(order.orderStatus==="Cancelled" ){ %>
                       <small class="text-danger">
                         <%= order.orderStatus %>
                       </small><br />
