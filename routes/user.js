@@ -94,5 +94,5 @@ router.get(
   verifyLogin.verifyLoginUser,
   userLogin.cancelOrder
 );
-// router.get('/about', userLogin.about);
+ router.get('/about', userLogin.about);
 module.exports = router;
