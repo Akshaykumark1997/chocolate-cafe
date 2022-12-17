@@ -1382,6 +1382,6 @@ module.exports = {
     }
   },
   about:(req,res)=>{
-    res.render('user/error500');
+    res.render('user/about',{session ,count,wishCount});
   }
 };

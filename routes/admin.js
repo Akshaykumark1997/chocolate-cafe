@@ -2,10 +2,13 @@ const router = require("express").Router();
 const adminLogin = require("../controllers/adminController");
 const verifyLogin = require("../middleware/Session");
 
+//admin login, dashboard and logout
 router.get("/", adminLogin.getlogin);
 router.post("/adminLogin", adminLogin.postLogin);
 router.get("/logout", adminLogin.getLogout);
 router.get("/adminhome", verifyLogin.verifyLoginAdmin, adminLogin.gethome);
+
+//products list , add, edit and delete products
 router.get("/products", verifyLogin.verifyLoginAdmin, adminLogin.products);
 router
   .route("/addProducts")
@@ -20,6 +23,8 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.deleteProduct
 );
+
+//userlist ,block and unblock user
 router.get(
   "/userDetails",
   verifyLogin.verifyLoginAdmin,
@@ -35,6 +40,8 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.unblockuser
 );
+
+//category list , add, edit and delete category
 router.get("/categories", verifyLogin.verifyLoginAdmin, adminLogin.categories);
 router.post(
   "/addCategory",
@@ -51,12 +58,16 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.deleteCategory
 );
+
+//order list and change order status
 router.get("/orders", verifyLogin.verifyLoginAdmin, adminLogin.orders);
 router.post(
   "/changeStatus/:id",
   verifyLogin.verifyLoginAdmin,
   adminLogin.changeStatus
 );
+
+//coupons , add and edit coupons
 router.get("/coupons", verifyLogin.verifyLoginAdmin, adminLogin.getCoupons);
 router.post("/addCoupon", verifyLogin.verifyLoginAdmin, adminLogin.addCoupon);
 router.post(
@@ -64,6 +75,8 @@ router.post(
   verifyLogin.verifyLoginAdmin,
   adminLogin.editCoupon
 );
+
+//sales reports , daily report ,monthly report and total report
 router.get(
   "/salesReports",
   verifyLogin.verifyLoginAdmin,
@@ -79,6 +92,8 @@ router.get(
   verifyLogin.verifyLoginAdmin,
   adminLogin.monthlyReports
 );
+
+//banner ,add ,edit and delete banner
 router.get("/banner", verifyLogin.verifyLoginAdmin, adminLogin.banner);
 router
   .route("/addBanner")
