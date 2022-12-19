@@ -43,3 +43,6 @@ app.use((req, res, next) => {
 });
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
+app.use((req,res)=>{
+  res.render('user/error');
+})
