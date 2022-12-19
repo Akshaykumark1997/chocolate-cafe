@@ -18,7 +18,7 @@ const banner = require("../model/banner");
 moment().format();
 dotenv.config();
 
-// let session;
+
 var count;
 var wishCount;
 function checkCoupon(data, id) {
@@ -45,7 +45,7 @@ function checkCoupon(data, id) {
 }
 module.exports = {
   guestHome: async (req, res) => {
-    const session = req.session;
+    const session = req.session.userId;
     try {
       const banners = await banner.find();
       const Categories = await category.find();
@@ -118,7 +118,7 @@ module.exports = {
   },
   shop: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const pageNum = req.query.page;
       const perPage = 12;
       let docCount;
@@ -165,7 +165,7 @@ module.exports = {
   },
   shopCategory: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const id = req.params.id;
       const pageNum = req.query.page;
       const perPage = 12;
@@ -206,7 +206,7 @@ module.exports = {
   },
   getCategory: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const id = req.params.id;
       const Categories = await category.find();
       const categoryData = await category.findOne({ _id: id });
@@ -232,7 +232,7 @@ module.exports = {
   },
   postLogin: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       let email = req.body.email;
       const userDetails = await User.findOne({ email: email });
       if (userDetails) {
@@ -284,7 +284,7 @@ module.exports = {
   },
   getSignup: (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       res.render("user/userSignup", { session });
     } catch {
       console.error();
@@ -293,7 +293,7 @@ module.exports = {
   },
   postSignup: (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const data = req.body;
       if (data.password === data.confirmpassword) {
         User.find({
@@ -361,7 +361,7 @@ module.exports = {
   },
   otpSignup: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const data = req.body;
       const verify = await otpsign.find({ otp: data.otp });
       if (verify) {
@@ -391,7 +391,7 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       let cartExist;
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
@@ -432,7 +432,7 @@ module.exports = {
   },
   wishlist: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const userData = await user.findOne({ email: session });
       const userId = mongoose.Types.ObjectId(userData._id);
       const cartData = await cart.findOne({ userId: userData.id });
@@ -481,7 +481,7 @@ module.exports = {
   },
   addToWishlist: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const id = req.params.id;
       // const data = await products.findOne({ _id: id });
       const objId = mongoose.Types.ObjectId(id);
@@ -623,7 +623,7 @@ module.exports = {
   },
   viewCart: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const wishlistDetails = await wishlist.findOne({ userId: userData._id });
@@ -790,7 +790,7 @@ module.exports = {
   },
   viewCheckout: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const productDAta = await cart
@@ -850,7 +850,7 @@ module.exports = {
   },
   account: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const userDetails = await user.findOne({ email: session });
        const wishlistData = await wishlist.findOne({ userId: userDetails._id });
        let wishCount = wishlistData?.product?.length;
@@ -871,7 +871,7 @@ module.exports = {
   },
   editAccount: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const userData = await user.findOne({ email: session });
       res.render("user/editAccount", { userData, session, count, wishCount });
     } catch {
@@ -911,7 +911,7 @@ module.exports = {
   },
   changePassword: (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       res.render("user/changePassword", { session, count, wishCount });
     } catch {
       console.error();
@@ -956,7 +956,7 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const data = req.body;
       console.log(data);
       let invalid;
@@ -1223,7 +1223,7 @@ module.exports = {
   },
   paymentFailure: (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const details = req.body;
       console.log(details);
       res.render("user/paymentFail", { session, count, wishCount });
@@ -1244,7 +1244,7 @@ module.exports = {
   },
   viewOrderProducts:async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
       const userData = await user.findOne({ email: session });
@@ -1312,7 +1312,7 @@ module.exports = {
   },
   orderDetails: async (req, res) => {
     try {
-      const session = req.session;
+      const session = req.session.userId;
       const pageNum = req.query.page;
       const perPage = 8;
       let docCount;
@@ -1407,7 +1407,7 @@ module.exports = {
     }
   },
   about:(req,res)=>{
-    const session = req.session;
+    const session = req.session.userId;
     res.render('user/about',{session ,count,wishCount});
   }
 };
