@@ -18,7 +18,7 @@ const banner = require("../model/banner");
 moment().format();
 dotenv.config();
 
-let session;
+// let session;
 var count;
 var wishCount;
 function checkCoupon(data, id) {
@@ -45,6 +45,7 @@ function checkCoupon(data, id) {
 }
 module.exports = {
   guestHome: async (req, res) => {
+    const session = req.session;
     try {
       const banners = await banner.find();
       const Categories = await category.find();
@@ -64,7 +65,7 @@ module.exports = {
   },
   getLogin: (req, res) => {
     try {
-      session = req.session.userId;
+    const session = req.session.userId;
       if (session) {
         res.redirect("/userhome");
       } else {
@@ -77,7 +78,7 @@ module.exports = {
   },
   gethome: async (req, res) => {
     try {
-      session = req.session.userId;
+      const session = req.session.userId;
       if (session) {
         const banners = await banner.find();
         const Categories = await category.find();
@@ -117,6 +118,7 @@ module.exports = {
   },
   shop: async (req, res) => {
     try {
+      const session = req.session;
       const pageNum = req.query.page;
       const perPage = 12;
       let docCount;
@@ -163,6 +165,7 @@ module.exports = {
   },
   shopCategory: async (req, res) => {
     try {
+      const session = req.session;
       const id = req.params.id;
       const pageNum = req.query.page;
       const perPage = 12;
@@ -203,6 +206,7 @@ module.exports = {
   },
   getCategory: async (req, res) => {
     try {
+      const session = req.session;
       const id = req.params.id;
       const Categories = await category.find();
       const categoryData = await category.findOne({ _id: id });
@@ -228,6 +232,7 @@ module.exports = {
   },
   postLogin: async (req, res) => {
     try {
+      const session = req.session;
       let email = req.body.email;
       const userDetails = await User.findOne({ email: email });
       if (userDetails) {
@@ -269,6 +274,7 @@ module.exports = {
   },
   userLogout: async (req, res) => {
     try {
+      
       req.session.destroy();
       res.redirect("/user");
     } catch {
@@ -278,6 +284,7 @@ module.exports = {
   },
   getSignup: (req, res) => {
     try {
+      const session = req.session;
       res.render("user/userSignup", { session });
     } catch {
       console.error();
@@ -286,6 +293,7 @@ module.exports = {
   },
   postSignup: (req, res) => {
     try {
+      const session = req.session;
       const data = req.body;
       if (data.password === data.confirmpassword) {
         User.find({
@@ -353,6 +361,7 @@ module.exports = {
   },
   otpSignup: async (req, res) => {
     try {
+      const session = req.session;
       const data = req.body;
       const verify = await otpsign.find({ otp: data.otp });
       if (verify) {
@@ -382,6 +391,7 @@ module.exports = {
   },
   viewProduct: async (req, res) => {
     try {
+      const session = req.session;
       let cartExist;
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
@@ -422,6 +432,7 @@ module.exports = {
   },
   wishlist: async (req, res) => {
     try {
+      const session = req.session;
       const userData = await user.findOne({ email: session });
       const userId = mongoose.Types.ObjectId(userData._id);
       const cartData = await cart.findOne({ userId: userData.id });
@@ -470,6 +481,7 @@ module.exports = {
   },
   addToWishlist: async (req, res) => {
     try {
+      const session = req.session;
       const id = req.params.id;
       // const data = await products.findOne({ _id: id });
       const objId = mongoose.Types.ObjectId(id);
@@ -611,6 +623,7 @@ module.exports = {
   },
   viewCart: async (req, res) => {
     try {
+      const session = req.session;
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const wishlistDetails = await wishlist.findOne({ userId: userData._id });
@@ -777,6 +790,7 @@ module.exports = {
   },
   viewCheckout: async (req, res) => {
     try {
+      const session = req.session;
       const userId = req.session.userId;
       const userData = await user.findOne({ email: userId });
       const productDAta = await cart
@@ -836,6 +850,7 @@ module.exports = {
   },
   account: async (req, res) => {
     try {
+      const session = req.session;
       const userDetails = await user.findOne({ email: session });
        const wishlistData = await wishlist.findOne({ userId: userDetails._id });
        let wishCount = wishlistData?.product?.length;
@@ -856,6 +871,7 @@ module.exports = {
   },
   editAccount: async (req, res) => {
     try {
+      const session = req.session;
       const userData = await user.findOne({ email: session });
       res.render("user/editAccount", { userData, session, count, wishCount });
     } catch {
@@ -865,6 +881,7 @@ module.exports = {
   },
   postEditAccount: async (req, res) => {
     try {
+      const session = req.session;
       const data = req.body;
       await user.updateOne(
         { email: session },
@@ -894,6 +911,7 @@ module.exports = {
   },
   changePassword: (req, res) => {
     try {
+      const session = req.session;
       res.render("user/changePassword", { session, count, wishCount });
     } catch {
       console.error();
@@ -902,6 +920,7 @@ module.exports = {
   },
   postChangePassword: async (req, res) => {
     try {
+      const session = req.session;
       const data = req.body;
       if (data.newPassword === data.repeatPassword) {
         const userData = await user.findOne({ email: session });
@@ -937,6 +956,7 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
     try {
+      const session = req.session;
       const data = req.body;
       console.log(data);
       let invalid;
@@ -1203,6 +1223,7 @@ module.exports = {
   },
   paymentFailure: (req, res) => {
     try {
+      const session = req.session;
       const details = req.body;
       console.log(details);
       res.render("user/paymentFail", { session, count, wishCount });
@@ -1213,6 +1234,7 @@ module.exports = {
   },
   orderSuccess: async (req, res) => {
     try {
+      const session = req.session;
       const count = 0;
       res.render("user/orderSuccess", { session, count, wishCount });
     } catch {
@@ -1222,6 +1244,7 @@ module.exports = {
   },
   viewOrderProducts:async (req, res) => {
     try {
+      const session = req.session;
       const id = req.params.id;
       const objId = mongoose.Types.ObjectId(id);
       const userData = await user.findOne({ email: session });
@@ -1289,6 +1312,7 @@ module.exports = {
   },
   orderDetails: async (req, res) => {
     try {
+      const session = req.session;
       const pageNum = req.query.page;
       const perPage = 8;
       let docCount;
@@ -1383,6 +1407,7 @@ module.exports = {
     }
   },
   about:(req,res)=>{
+    const session = req.session;
     res.render('user/about',{session ,count,wishCount});
   }
 };
