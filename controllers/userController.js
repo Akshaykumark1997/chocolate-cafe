@@ -1028,7 +1028,7 @@ module.exports = {
                   orderItems: cartData.product,
                   totalAmount: total,
                   paymentMethod: data.paymentMethod,
-                  orderStatus: "pending",
+                  orderStatus: "Pending",
                   orderDate: moment().format("MMM Do YY"),
                   deliveryDate: moment().add(3, "days").format("MMM Do YY"),
                   discount: dis,
@@ -1310,6 +1310,7 @@ module.exports = {
           docCount = documents;
           return order
             .find({ userId: userData._id })
+            .sort({ orderDate: -1 })
             .skip((pageNum - 1) * perPage)
             .limit(perPage);
         })

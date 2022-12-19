@@ -65,13 +65,13 @@ module.exports = {
           return (accumulator += object.totalAmount);
         }, 0);
         const allOrders = orderData.length;
-        const pendingOrder = await order.find({ orderStatus: "pending" });
+        const pendingOrder = await order.find({ orderStatus: "Pending" });
         const pending = pendingOrder.length;
-        const processingOrder = await order.find({ orderStatus: "shipped" });
+        const processingOrder = await order.find({ orderStatus: "Shipped" });
         const processing = processingOrder.length;
-        const deliveredOrder = await order.find({ orderStatus: "delivered" });
+        const deliveredOrder = await order.find({ orderStatus: "Delivered" });
         const delivered = deliveredOrder.length;
-        const cancelledOrder = await order.find({ orderStatus: "cancelled" });
+        const cancelledOrder = await order.find({ orderStatus: "Cancelled" });
         const cancelled = cancelledOrder.length;
         const cod = await order.find({ paymentMethod: "COD" });
         const codOrder = cod.length;
@@ -82,8 +82,8 @@ module.exports = {
         const activeUsers = await user.find({ isBlocked: false }).count();
         const product = await products.find({ isDeleted: false }).count();
         const allOrderDetails = await order.find({
-          paymentStatus: "paid",
-          orderStatus: "delivered",
+          paymentStatus: "Paid",
+          orderStatus: "Delivered",
         });
         const start = moment().startOf("month");
         const end = moment().endOf("month");
@@ -385,6 +385,7 @@ module.exports = {
               as: "user",
             },
           },
+          { $sort: { orderDate: -1 } },
         ])
         .then((orderDetails) => {
           res.render("admin/orders", { orderDetails });
@@ -532,8 +533,8 @@ module.exports = {
   salesReports: async (req, res) => {
     try {
       const allOrderDetails = await order.find({
-        paymentStatus: "paid",
-        orderStatus: "delivered",
+        paymentStatus: "Paid",
+        orderStatus: "Delivered",
       });
       res.render("admin/salesReports", { allOrderDetails });
     } catch {
@@ -546,7 +547,7 @@ module.exports = {
       order
         .find({
           $and: [
-            { paymentStatus: "paid", orderStatus: "delivered" },
+            { paymentStatus: "Paid", orderStatus: "Delivered" },
             {
               orderDate: moment().format("MMM Do YY"),
             },
@@ -567,7 +568,7 @@ module.exports = {
       order
         .find({
           $and: [
-            { paymentStatus: "paid", orderStatus: "delivered" },
+            { paymentStatus: "Paid", orderStatus: "Delivered" },
             {
               createdAt: {
                 $gte: start,
