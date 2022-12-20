@@ -880,7 +880,7 @@ module.exports = {
     }
   },
   postEditAccount: async (req, res) => {
-    // try {
+    try {
       const session = req.session.userId;
       const data = req.body;
       await user.updateOne(
@@ -904,10 +904,10 @@ module.exports = {
         }
       );
       res.redirect("/account");
-    // } catch {
-    //   console.error();
-    //   res.render("user/error500");
-    // }
+    } catch {
+      console.error();
+      res.render("user/error500");
+    }
   },
   changePassword: (req, res) => {
     try {
