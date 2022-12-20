@@ -23,7 +23,7 @@ app.set("view engine", "ejs");
 
 app.use(cookieParser());
 dbconnect.dbconnect();
-app.listen(process.env.PORTNO, () => {
+app.listen(process.env.PORTNO, '127.0.0.1', () => {
   console.log("server started listening to port");
 });
 app.use(
