@@ -1397,7 +1397,7 @@ module.exports = {
           });
       }
       order
-        .updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
+        .updateOne({ _id: data }, { $set: { orderStatus: "Cancelled" } })
         .then(() => {
           res.redirect("/orderDetails");
         });
