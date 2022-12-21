@@ -957,6 +957,18 @@ module.exports = {
               },
             ])
             .exec();
+           let sum;
+           let discount;
+           if(data.total){
+            sum = parseInt(data.total);
+            discount= parseInt(data.coupon)
+           }else{
+            sum = productData.reduce((accumulator, object) => {
+              return accumulator + object.productPrice;
+            }, 0);
+            discount = 0;
+           }
+           console.log(sum);
           count = productData.length;
           if (data.checkbox === "permanentAddress") {
             const orderData = await order.create({
@@ -972,12 +984,12 @@ module.exports = {
                 pincode: userData.permanentAddress.pincode,
               },
               orderItems: cartData.product,
-              totalAmount: parseInt(data.total),
+              totalAmount: sum,
               paymentMethod: data.paymentMethod,
               orderStatus: "Pending",
               orderDate: moment().format("MMM Do YY"),
               deliveryDate: moment().add(3, "days").format("MMM Do YY"),
-              discount: parseInt(data.coupon),
+              discount:discount ,
             });
             const amount = orderData.totalAmount * 100;
             const _id = orderData._id;
@@ -1044,12 +1056,12 @@ module.exports = {
                 pincode: userData.shippingAddress.pincode,
               },
               orderItems: cartData.product,
-              totalAmount: parseInt(data.total),
+              totalAmount: sum,
               paymentMethod: data.paymentMethod,
               orderStatus: "Pending",
               orderDate: moment().format("MMM Do YY"),
               deliveryDate: moment().add(3, "days").format("MMM Do YY"),
-              discount: parseInt(data.coupon),
+              discount: discount,
             });
             const amount = orderData.totalAmount * 100;
             const _id = orderData._id;
