@@ -102,8 +102,8 @@ module.exports = {
           0
         );
         res.render("admin/adminDashboard", {
-          totalAmount,
-          totalOrderToday,
+          totalAmount:Math.ceil(totalAmount),
+          totalOrderToday:Math.ceil(totalOrderToday),
           allOrders,
           pending,
           processing,
@@ -114,7 +114,7 @@ module.exports = {
           activeUsers,
           product,
           allOrderDetails,
-          amountPending,
+          amountPending:Math.ceil(amountPending),
         });
       } else {
         res.redirect("/admin");
