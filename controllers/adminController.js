@@ -517,7 +517,7 @@ module.exports = {
         { _id: id },
         {
           couponName: data.coupon,
-          discount: data.discoun,
+          discount: data.discoun /100,
           maxLimit: data.max,
           expirationTime: data.exdate,
         }

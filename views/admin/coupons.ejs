@@ -327,11 +327,11 @@
                                   >Discount(In percentage)</label
                                 >
                                 <input
-                                  type="number"
+                                  type="num"
                                   class="form-control"
                                   id="discount"
                                   name="discount"
-                                  value="<%= coupons.discount %>"
+                                  value="<%= coupons.discount*100 %>"
                                   aria-describedby="emailHelp"
                                 />
                                 <p id="discountsError" style="color: red"></p>
