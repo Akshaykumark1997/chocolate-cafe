@@ -390,6 +390,16 @@
                       <p class="text-muted mb-0">
                         Invoice Number :<%= order._id %>
                       </p>
+                      <% if(order.discount){ %>
+                  <p class="text-muted mb-0">
+                    <span class="fw-bold me-4">Discount</span>Rs. <%=
+                    order.discount %>
+                  </p>
+                  <% }else{ %>
+                  <p class="text-muted mb-0">
+                    <span class="fw-bold me-4">Discount</span> --
+                  </p>
+                  <% } %>
                     </div>
 
                     <div class="d-flex justify-content-between">

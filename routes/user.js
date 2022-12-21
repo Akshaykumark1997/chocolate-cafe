@@ -118,4 +118,6 @@ router.get(
 );
 //about page
 router.get("/about", userLogin.about);
+
+router.post("/checkCoupon", verifyLogin.verifyLoginUser, userLogin.checkCoupon);
 module.exports = router;

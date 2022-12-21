@@ -132,7 +132,7 @@
                 <div class="form-outline mt-3">
                   <input
                     type="text"
-                    id="coupon" name="coupon"
+                    id="coupon" 
                     class="form-control form-control-lg"
                   />
                   <label class="form-label" for="coupon" 
@@ -140,27 +140,30 @@
                   >
                 </div>
                 <div>
-                  <!-- <button type="submit" id="coupon" class="btn btn-outline-none">Apply</button> -->
+                  <button type="button" id="coupon" class="btn btn-outline-none" onclick="check()">Apply</button>
                 </div>
               </div>
               
             </li>
-             <!-- <li
+             <li
               class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3"
             >
               <div>
-                <strong>Discount Applied</strong>
+                <strong>Discount Applied(Rs)</strong>
               </div>
-              <span id="total">Rs.<%= sum %></span>
+              <span id="discount"></span>
+              <input type="hidden" name="coupon" id="dis">
+              <input type="hidden" name="couponName" id="couponName">
             </li>
-              -->
+             
             <li
               class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3"
             >
               <div>
-                <strong>Total Amount</strong>
+                <strong>Total Amount (Rs)</strong>
               </div>
-              <span id="total">Rs.<%= sum %></span>
+              <span id="total"><%= sum %></span>
+              <input type="hidden" name="total" id="final">
             </li>
           </ul>
         </div>
@@ -276,5 +279,54 @@
         }
       },
     });
+  }
+
+  function check(){
+    let coupon = document.getElementById("coupon").value;
+    let total = document.getElementById("total").innerHTML;
+    console.log(coupon);
+    $.ajax({
+      url:'/checkCoupon',
+      data:{
+        coupon,
+        total
+      },
+      method:'post',
+      success:(response)=>{
+        console.log(response);
+        if(response.user){
+             Swal.fire({
+          title: "Coupon already used!",
+          icon: "error",
+          confirmButtonText: "continue",
+          })
+        }else if(response.coupons){
+             Swal.fire({
+          title: "Coupon Applied!",
+          icon: "success",
+          confirmButtonText: "continue",
+          }).then(()=>{
+             document.getElementById("discount").innerHTML = response.discountAmount;
+             document.getElementById("dis").value = response.discountAmount;
+             document.getElementById("couponName").value = response.couponName;
+             document.getElementById("total").innerHTML = total - response.discountAmount ;
+              document.getElementById("final").value = total - response.discountAmount ;
+          })
+         
+        }else if(response.invalid){
+          Swal.fire({
+          title: "invalid!",
+          icon: "error",
+          confirmButtonText: "continue",
+          })
+        }else if(response.purchase){
+          Swal.fire({
+          title: "Minimum purchase 100!",
+          icon: "error",
+          confirmButtonText: "continue",
+          })
+        }
+      }
+    })
   }
 </script>
