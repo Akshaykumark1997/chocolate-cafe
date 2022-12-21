@@ -530,6 +530,12 @@ module.exports = {
       res.render('user/error');
     }
   },
+  deleteCoupon:(req,res)=>{
+    const id=req.params.id;
+    coupon.deleteOne({_id:id}).then(()=>{
+      res.redirect('/admin/coupons');
+    })
+  },
   salesReports: async (req, res) => {
     try {
       const allOrderDetails = await order.find({

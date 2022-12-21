@@ -76,6 +76,9 @@ router.post(
   adminLogin.editCoupon
 );
 
+//delete coupon 
+router.get('/deleteCoupon/:id',verifyLogin.verifyLoginAdmin,adminLogin.deleteCoupon);
+
 //sales reports , daily report ,monthly report and total report
 router.get(
   "/salesReports",
